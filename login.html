@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login e Cadastro - EmpowerLearn</title>
+    <link rel="stylesheet" href="../EmpowerLearn/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="../EmpowerLearn/imagens/Logo.PNG" alt="EmpowerLearn Logo">
+                <h1>EmpowerLearn</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="../EmpowerLearn/index.html">Início</a></li>
+                    <li><a href="../EmpowerLearn/sobre.html">Sobre Nós</a></li>
+                    <li><a href="../EmpowerLearn/como-funcionna.html">Como Funciona</a></li>
+                    <li><a href="../EmpowerLearn/diferenciais.html">Diferenciais</a></li>
+                    <li><a href="../EmpowerLearn/contato.html">Contato</a></li>
+                    <li><a href="../EmpowerLearn/login.html">Login</a></li>
+                </ul>
+                <div class="burger">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="auth-container" class="section-padded">
+            <div class="auth-box">
+                <div class="auth-tabs">
+                    <button class="tab-button active" data-tab="login">Login</button>
+                    <button class="tab-button" data-tab="cadastro">Cadastrar</button>
+                </div>
+
+                <div id="login-form" class="auth-form active">
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <label for="login-email">E-mail</label>
+                            <input type="email" id="login-email" name="login-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-senha">Senha</label>
+                            <input type="password" id="login-senha" name="login-senha" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Entrar</button>
+                    </form>
+                </div>
+
+                <div id="cadastro-form" class="auth-form hidden">
+                    <div class="form-group">
+                        <label for="tipo-cadastro">Você é:</label>
+                        <select id="tipo-cadastro" name="tipo-cadastro" required>
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="aluno">Aluno</option>
+                            <option value="professor">Professor</option>
+                            <option value="instituicao">Instituição</option>
+                        </select>
+                    </div>
+
+                    <form id="form-aluno" action="#" method="POST" class="cadastro-subform">
+                        <div id="aluno-message" class="form-message hidden"></div>
+                        <div class="form-group">
+                            <label for="aluno-nome">Nome Completo</label>
+                            <input type="text" id="aluno-nome" name="aluno-nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aluno-nascimento">Data de Nascimento</label>
+                            <input type="date" id="aluno-nascimento" name="aluno-nascimento" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aluno-email">E-mail</label>
+                            <input type="email" id="aluno-email" name="aluno-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aluno-cep">CEP</label>
+                            <input type="text" id="aluno-cep" name="aluno-cep" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aluno-sexo">Sexo</label>
+                            <select id="aluno-sexo" name="aluno-sexo" required>
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="feminino">Feminino</option>
+                                <option value="outro">Prefiro não informar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="aluno-senha">Senha</label>
+                            <input type="password" id="aluno-senha" name="aluno-senha" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aluno-confirmar-senha">Confirmar Senha</label>
+                            <input type="password" id="aluno-confirmar-senha" name="aluno-confirmar-senha" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Cadastrar como Aluno</button>
+                    </form>
+
+                    <form id="form-professor" action="#" method="POST" class="cadastro-subform hidden">
+                        <div id="professor-message" class="form-message hidden"></div>
+                        <div class="form-group">
+                            <label for="prof-nome">Nome Completo</label>
+                            <input type="text" id="prof-nome" name="prof-nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prof-email">E-mail</label>
+                            <input type="email" id="prof-email" name="prof-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aluno-cep">CEP</label>
+                            <input type="text" id="aluno-cep" name="aluno-cep" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prof-materia">Qual a matéria que leciona?</label>
+                            <input type="text" id="prof-materia" name="prof-materia" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prof-multiplas-materias">Leciona mais de uma matéria? (Se sim, quais?)</label>
+                            <textarea id="prof-multiplas-materias" name="prof-multiplas-materias" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="prof-didatica">Qual sua forma didática?</label>
+                            <textarea id="prof-didatica" name="prof-didatica" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="prof-experiencia">Anos de experiência (ex: 5)</label>
+                            <input type="number" id="prof-experiencia" name="prof-experiencia" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prof-senha">Senha</label>
+                            <input type="password" id="prof-senha" name="prof-senha" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prof-confirmar-senha">Confirmar Senha</label>
+                            <input type="password" id="prof-confirmar-senha" name="prof-confirmar-senha" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Cadastrar como Professor</button>
+                    </form>
+
+                    <form id="form-instituicao" action="#" method="POST" class="cadastro-subform hidden">
+                        <div id="instituicao-message" class="form-message hidden"></div>
+                        <div class="form-group">
+                            <label for="inst-nome">Nome da Instituição</label>
+                            <input type="text" id="inst-nome" name="inst-nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inst-email">E-mail</label>
+                            <input type="email" id="inst-email" name="inst-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aluno-cep">CEP</label>
+                            <input type="text" id="aluno-cep" name="aluno-cep" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inst-senha">Senha</label>
+                            <input type="password" id="inst-senha" name="inst-senha" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inst-confirmar-senha">Confirmar Senha</label>
+                            <input type="password" id="inst-confirmar-senha" name="inst-confirmar-senha" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Cadastrar como Instituição</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 EmpowerLearn. Todos os direitos reservados.</p>
+            <div class="social-links">
+                <a href="https://www.instagram.com/empowerlearn.teach/" target="_blank">Instagram</a> |
+                <a href="https://wa.me/5544988094397" target="_blank">WhatsApp</a> |
+                <a href="mailto:empowerlearn.teach@gmail.com">E-mail</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../EmpowerLearn/js/script.js"></script>
+    <script src="../EmpowerLearn/js/login.js"></script>
+</body>
+</html>

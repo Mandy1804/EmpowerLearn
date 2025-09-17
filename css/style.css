@@ -758,3 +758,108 @@ footer .container {
         transform: translateX(0px);
     }
 }
+
+/* Estilização da Tela de Login e Cadastro (login.html) */
+.auth-box {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-light);
+    max-width: 500px;
+    margin: 40px auto;
+    border: 1px solid var(--border-light);
+    transition: all 0.5s ease;
+}
+
+.auth-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.auth-tabs .tab-button {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-light);
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.auth-tabs .tab-button.active {
+    color: var(--primary-purple);
+    border-bottom-color: var(--vibrant-purple);
+}
+
+.auth-tabs .tab-button:hover {
+    color: var(--primary-purple);
+}
+
+.auth-form {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.auth-form.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+.auth-form.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cadastro-subform {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.cadastro-subform.hidden {
+    display: none;
+}
+
+/* Campos de Formulário */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 1em;
+    color: var(--text-light);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--vibrant-purple);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    outline: none;
+}
+
+.auth-box .btn-primary {
+    width: 100%;
+    font-size: 1.1em;
+    padding: 15px 0;
+    margin-top: 15px;
+}
