@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
 
                 try {
-                    const response = await fetch('http://localhost:8080/h2-console', {
+                    const response = await fetch('http://localhost:8080/api/professores', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
