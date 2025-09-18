@@ -1,5 +1,5 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Lógica para alternar entre Login e Cadastro
+document.addEventListener('DOMContentLoaded', function () {
+    // Alternância entre Login e Cadastro
     const tabButtons = document.querySelectorAll('.tab-button');
     const authForms = document.querySelectorAll('.auth-form');
 
@@ -7,82 +7,119 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', () => {
             const tab = button.dataset.tab;
 
-            // Desativa todos os botões e formulários
             tabButtons.forEach(btn => btn.classList.remove('active'));
-            authForms.forEach(form => form.classList.remove('active'));
-            authForms.forEach(form => form.classList.add('hidden'));
+            authForms.forEach(form => {
+                form.classList.remove('active');
+                form.classList.add('hidden');
+            });
 
-            // Ativa o botão e o formulário clicados
             button.classList.add('active');
             document.getElementById(`${tab}-form`).classList.remove('hidden');
             document.getElementById(`${tab}-form`).classList.add('active');
         });
     });
 
-    // Lógica para alternar entre os formulários de cadastro
+    // Alternância entre tipos de cadastro
     const tipoCadastroSelect = document.getElementById('tipo-cadastro');
     const cadastroSubforms = document.querySelectorAll('.cadastro-subform');
 
     tipoCadastroSelect.addEventListener('change', (e) => {
         const tipo = e.target.value;
 
-        // Esconde todos os subformulários de cadastro
         cadastroSubforms.forEach(form => {
             form.classList.add('hidden');
-            form.querySelector('.form-message').classList.add('hidden'); // Oculta mensagens ao trocar de formulário
+            const messageDiv = form.querySelector('.form-message');
+            if (messageDiv) messageDiv.classList.add('hidden');
         });
 
-        // Mostra o formulário correspondente
         if (tipo) {
             document.getElementById(`form-${tipo}`).classList.remove('hidden');
         }
     });
 
-    // Lógica de validação e envio dos formulários de cadastro
+    // Validação e envio dos formulários
     const forms = document.querySelectorAll('.cadastro-subform');
-    const emailsCadastrados = ['joao@email.com', 'maria@email.com']; // Simulação de um banco de dados de e-mails já cadastrados
+    const emailsCadastrados = ['joao@email.com', 'maria@email.com']; // Simulado
 
     forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Impede o envio padrão do formulário
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
 
             const emailInput = form.querySelector('input[type="email"]');
-            const email = emailInput.value;
-            const senhaInput = form.querySelector('input[type="password"]');
-            const confirmarSenhaInput = form.querySelector('input[type="password"]:nth-of-type(2)');
+            const senhaInputs = form.querySelectorAll('input[type="password"]');
+            const senhaInput = senhaInputs[0];
+            const confirmarSenhaInput = senhaInputs[1];
             const messageDiv = form.querySelector('.form-message');
 
-            // 1. Validar se o e-mail já existe
+            if (!emailInput || !senhaInput || !confirmarSenhaInput || !messageDiv) {
+                console.error("Erro: campos não encontrados no formulário.");
+                return;
+            }
+
+            const email = emailInput.value;
+
+            // Valida se e-mail já está cadastrado (mock)
             if (emailsCadastrados.includes(email)) {
                 showMessage(messageDiv, 'error', 'Este e-mail já está cadastrado. Tente outro.');
                 return;
             }
 
-            // 2. Validar se as senhas são iguais
+            // Valida se as senhas coincidem
             if (senhaInput.value !== confirmarSenhaInput.value) {
                 showMessage(messageDiv, 'error', 'As senhas não coincidem. Por favor, verifique.');
                 return;
             }
 
-            // Se tudo estiver OK, simular o envio do formulário
-            // Aqui você enviaria os dados para um servidor
-            // e trataria a resposta
-
+            // Cadastro do professor (envio para o backend)
             if (form.id === 'form-professor') {
-                showMessage(messageDiv, 'success', 'Cadastro realizado com sucesso! Enviamos um e-mail para que você conclua o processo. Por favor, verifique sua caixa de entrada.');
-            } else {
-                showMessage(messageDiv, 'success', 'Cadastro realizado com sucesso! Bem-vindo à EmpowerLearn!');
-            }
+                const professorData = {
+                    nome: document.getElementById('prof-nome').value,
+                    email: document.getElementById('prof-email').value,
+                    senha: senhaInput.value,
+                    telefone: "", // Adicionar campo se quiser
+                    especialidade: document.getElementById('prof-materia').value,
+                    formacao: document.getElementById('prof-didatica').value,
+                    experiencia: document.getElementById('prof-experiencia').value,
+                    status: "ATIVO",
+                    dataCadastro: new Date().toISOString().split('T')[0],
+                };
 
-            // Opcional: Limpar os campos do formulário após o sucesso
-            form.reset();
+                try {
+                    const response = await fetch('http://localhost:8080/h2-console', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(professorData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        showMessage(messageDiv, 'error', `Erro: ${errorData.message || response.statusText}`);
+                        return;
+                    }
+
+                    showMessage(messageDiv, 'success', 'Cadastro realizado com sucesso!');
+                    form.reset();
+
+                } catch (error) {
+                    console.error(error);
+                    showMessage(messageDiv, 'error', 'Erro ao conectar com o servidor.');
+                }
+
+            } else {
+                // Outros cadastros (aluno, instituição)
+                showMessage(messageDiv, 'success', 'Cadastro realizado com sucesso!');
+                form.reset();
+            }
         });
     });
 
+    // Função para mostrar mensagens
     function showMessage(element, type, message) {
         element.textContent = message;
         element.classList.remove('hidden', 'success', 'error');
         element.classList.add(type);
-        element.style.display = 'block'; // Garante que a div seja exibida
+        element.style.display = 'block';
     }
 });
