@@ -114,7 +114,52 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+// js/login.js (Adicione este bloco no final do seu código JS, 
+// mas antes da função showMessage)
 
+// ----------------------------------------------------
+// 3. Lógica de Login Simulado (MOCK)
+// ----------------------------------------------------
+const loginForm = document.querySelector('#login-form form');
+const messageDivLogin = document.getElementById('login-form').querySelector('.form-message');
+
+// Adiciona uma div de mensagem temporária no formulário de login se ela não existir no HTML
+if (!messageDivLogin) {
+    const tempDiv = document.createElement('div');
+    tempDiv.classList.add('form-message', 'hidden');
+    tempDiv.setAttribute('id', 'login-message'); // Adiciona um ID para referenciar
+    loginForm.prepend(tempDiv); // Coloca a mensagem antes dos campos
+}
+
+loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Seleciona o elemento de mensagem atualizado
+    const currentMessageDiv = document.getElementById('login-message');
+    
+    const emailInput = document.getElementById('login-email');
+    const senhaInput = document.getElementById('login-senha');
+    
+    const email = emailInput.value;
+    const senha = senhaInput.value;
+    
+    // Credenciais Mock (Falsas)
+    const MOCK_EMAIL = 'teste@gmail.com';
+    const MOCK_SENHA = 'teste';
+    const PAGINA_DESTINO = '../EmpowerLearn/dashboard.html'; // Nome da página pós-login
+
+    if (email === MOCK_EMAIL && senha === MOCK_SENHA) {
+        showMessage(currentMessageDiv, 'success', 'Login bem-sucedido! Redirecionando...');
+        
+        // Simulação de delay para mostrar a mensagem antes de redirecionar
+        setTimeout(() => {
+            window.location.href = PAGINA_DESTINO; 
+        }, 1500); // Redireciona após 1.5 segundos
+        
+    } else {
+        showMessage(currentMessageDiv, 'error', 'E-mail ou senha incorretos.');
+    }
+});
     // Função para mostrar mensagens
     function showMessage(element, type, message) {
         element.textContent = message;

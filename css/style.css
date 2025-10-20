@@ -769,6 +769,39 @@ footer .container {
     margin: 40px auto;
     border: 1px solid var(--border-light);
     transition: all 0.5s ease;
+    /* Estilos para Mensagens de Feedback no Formulário */
+.form-message {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    display: none; /* Escondido por padrão, controlado pelo JS */
+}
+
+.form-message.hidden {
+    display: none !important;
+}
+
+.form-message.success {
+    background-color: rgba(39, 174, 96, 0.1); /* Fundo verde suave */
+    color: var(--accent-green);
+    border-color: var(--accent-green);
+}
+
+.form-message.error {
+    background-color: rgba(231, 76, 60, 0.1); /* Fundo vermelho suave */
+    color: #E74C3C; /* Vermelho mais forte */
+    border-color: #E74C3C;
+}
+
+/* Garante que o input de CEP e Experiência tenham largura total no form */
+#aluno-cep, #prof-cep, #prof-experiencia, #inst-cep {
+    /* Já devem ter 100% de largura, mas forçamos aqui */
+    width: 100%;
+}
 }
 
 .auth-tabs {
