@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login e Cadastro - EmpowerLearn</title>
-    <link rel="stylesheet" href="../EmpowerLearn/css/style.css">   
+    <link rel="stylesheet" href="../EmpowerLearn/css/style.css"> 	
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -43,22 +43,23 @@
                 </div>
 
                 <div id="login-form" class="auth-form active">
+                    <!-- A CORREÇÃO FOI FEITA AQUI: A TAG <form> ENGLOBA TODOS OS CAMPOS DE LOGIN -->
                     <form action="#" method="POST">
                         <div class="form-message hidden" id="login-message"></div> 
-        
-        <div class="form-group">
-            <label for="login-email">E-mail</label>
-            <input type="email" id="login-email" name="login-email" required>
-              </div>
-              </form>
-        </div>
-                   
+                        
+                        <div class="form-group">
+                            <label for="login-email">E-mail</label>
+                            <input type="email" id="login-email" name="login-email" required>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="login-senha">Senha</label>
                             <input type="password" id="login-senha" name="login-senha" required>
                         </div>
+                        
                         <button type="submit" class="btn-primary">Entrar</button>
                     </form>
+                    <!-- FIM DA CORREÇÃO NO FORMULÁRIO DE LOGIN -->
                 </div>
 
                 <div id="cadastro-form" class="auth-form hidden">
@@ -72,7 +73,7 @@
                         </select>
                     </div>
 
-                    <form id="form-aluno" action="#" method="POST" class="cadastro-subform">
+                    <form id="form-aluno" action="#" method="POST" class="cadastro-subform hidden">
                         <div id="aluno-message" class="form-message hidden"></div>
                         <div class="form-group">
                             <label for="aluno-nome">Nome Completo</label>
@@ -191,8 +192,7 @@
         </div>
     </footer>
 
-  
-     <script src="../EmpowerLearn/js/script.js"></script>
-     <script src="js/login.js" defer></script>
+    <script src="../EmpowerLearn/js/script.js"></script>
+    <script src="js/login.js" defer></script>
 </body>
 </html>

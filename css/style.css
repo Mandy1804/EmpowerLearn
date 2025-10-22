@@ -5,12 +5,13 @@
     /* Cores */
     --primary-purple: #4A00B7; /* Azul Arroxeado Profundo */
     --vibrant-purple: #8B5CF6; /* Roxo Vibrante */
-    --light-gray: #F0F2F5;     /* Cinza Suave para fundos */
+    --light-gray: #F0F2F5;/* Cinza Suave para fundos */
     --white: #FFFFFF;
-    --text-dark: #300090;      /* Azul Secundário para texto principal */
-    --text-light: #555555;     /* Cinza mais claro para texto secundário */
-    --accent-green: #27AE60;   /* Verde para botões de sucesso ou destaque (opcional) */
-    --border-light: #E0E0E0;   /* Bordas mais claras */
+    --text-dark: #300090; /* Azul Secundário para texto principal */
+    --text-light: #555555; /* Cinza mais claro para texto secundário */
+    --accent-green: #27AE60; /* Verde para botões de sucesso ou destaque (opcional) */
+    --border-light: #E0E0E0; /* Bordas mais claras */
+    --danger-color: #E74C3C;   /* Vermelho para erros */
 
     /* Sombras */
     --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
@@ -30,7 +31,18 @@ body {
     color: var(--text-light);
     background-color: var(--white);
     scroll-behavior: smooth;
+
+    /* CORREÇÃO DO RODAPÉ ADESIVO (STICKY FOOTER) */
+    display: flex; 
+    flex-direction: column;
+    min-height: 100vh;
 }
+
+/* Adicionado para garantir que o conteúdo principal empurre o rodapé */
+main {
+    flex-grow: 1; 
+}
+
 
 .container {
     max-width: 1200px;
@@ -555,7 +567,7 @@ footer {
     text-align: center;
     padding: 30px 0;
     font-size: 0.95em;
-    margin-top: 60px; /* Espaço para o conteúdo acima */
+    /* Removido o margin-top fixo, pois o flex-grow já resolve */
 }
 
 footer .container {
@@ -769,7 +781,9 @@ footer .container {
     margin: 40px auto;
     border: 1px solid var(--border-light);
     transition: all 0.5s ease;
-    /* Estilos para Mensagens de Feedback no Formulário */
+} /* <-- CHAVE DE FECHAMENTO CORRIGIDA AQUI */
+
+/* CORREÇÃO DO ANINHAMENTO: Estes estilos estavam dentro do .auth-box */
 .form-message {
     padding: 12px;
     border-radius: 8px;
@@ -802,7 +816,8 @@ footer .container {
     /* Já devem ter 100% de largura, mas forçamos aqui */
     width: 100%;
 }
-}
+/* FIM DA CORREÇÃO DE ANINHAMENTO */
+
 
 .auth-tabs {
     display: flex;

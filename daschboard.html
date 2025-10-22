@@ -3,34 +3,593 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EmpowerLearn</title>
-    <link rel="stylesheet" href="../EmpowerLearn/css/style.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>EmpowerLearn - Painel do Usuário</title>
+    <link rel="stylesheet" href="css/style.css"> 
+    
+    <style>
+        /* CSS INTERNO CORRIGIDO - FINAL E ESTÁVEL */
+       
+        body {
+            /* Mantém o flex para layout lateral */
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--light-gray); 
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            position: relative; 
+        }
+
+        /* ----------------------------------- */
+        /* Sidebar Styles (FIXO NO DESKTOP) */
+        /* ----------------------------------- */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary-purple); 
+            color: var(--white);
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            
+            position: fixed; 
+            left: 0;
+            top: 0; 
+            height: 100vh;
+            z-index: 900; 
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            padding-bottom: 30px;
+            font-size: 1.8em; 
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 0 20px;
+        }
+
+        .sidebar-nav {
+            flex-grow: 1;
+            padding: 20px 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            text-decoration: none;
+            color: var(--white);
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover {
+            background-color: var(--vibrant-purple); 
+        }
+
+        .sidebar-link svg {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            stroke: var(--white);
+            stroke-width: 2;
+        }
+
+        /* Logout button style */
+        .sidebar-logout {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+        }
+        
+        .sidebar-logout .sidebar-link {
+            color: var(--danger-color, #E74C3C); 
+            font-weight: 600;
+        }
+
+        /* Menu Hamburguer do Dashboard (Visível apenas em Mobile) */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            color: var(--primary-purple);
+            font-size: 2em;
+            cursor: pointer;
+        }
+
+
+        /* ----------------------------------- */
+        /* Main Content Styles */
+        /* ----------------------------------- */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            background-color: var(--light-gray);
+            /* Margem para o conteúdo não ficar por baixo do menu fixo */
+            margin-left: 280px; 
+            width: calc(100% - 280px); 
+        }
+        
+        /* ----------------------------------- */
+        /* Seção de Busca (Frase Impactante + Lupa) */
+        /* ----------------------------------- */
+        .search-hero {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 40px;
+        }
+        
+        .search-hero h1 {
+            color: var(--text-dark); 
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .search-hero p {
+            color: var(--text-light);
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .search-icon {
+            background-color: var(--vibrant-purple); 
+            padding: 20px; 
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+
+        .search-icon:hover {
+            transform: scale(1.05);
+            background-color: var(--primary-purple);
+        }
+
+        .search-icon svg {
+            width: 30px; 
+            height: 30px;
+            stroke: var(--white);
+            stroke-width: 2.5;
+            vertical-align: middle;
+        }
+        
+        /* ----------------------------------- */
+        /* Professor Card Grid */
+        /* ----------------------------------- */
+        .professor-header {
+             color: var(--text-dark); 
+             font-size: 1.8em;
+             margin-bottom: 20px;
+        }
+        
+        .professor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .professor-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .prof-avatar {
+            background-color: var(--primary-purple); 
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-right: 15px;
+        }
+        
+        .prof-badge {
+            background-color: var(--vibrant-purple); 
+            display: inline-block;
+            color: var(--white);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        /* ----------------------------------- */
+        /* Modal de Filtros (ESTILO MODERNO) */
+        /* ----------------------------------- */
+        .filter-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Fundo mais escuro */
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .filter-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+            border: 2px solid var(--vibrant-purple); /* Borda de destaque */
+        }
+        
+        .filter-modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-content h2 {
+            color: var(--primary-purple);
+            margin-top: 0;
+            border-bottom: 2px solid var(--vibrant-purple);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1.8em;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 12px; /* Aumenta o padding */
+            border: 1px solid var(--border-light);
+            border-radius: 8px; /* Canto mais arredondado */
+            box-sizing: border-box;
+            color: var(--text-dark);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .filter-group select:focus, .filter-group input:focus {
+            border-color: var(--vibrant-purple);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); /* Sombra roxa no foco */
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end; /* Alinha botões à direita */
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .modal-actions button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        #close-filter, #clear-filter {
+            background-color: transparent; /* Botões secundários como link/outline */
+            color: var(--text-light);
+            border: 2px solid var(--border-light);
+        }
+        
+        #clear-filter:hover {
+             background-color: var(--light-gray);
+        }
+
+        #apply-filter {
+            background-color: var(--vibrant-purple);
+            color: var(--white);
+        }
+
+        #apply-filter:hover {
+            background-color: var(--primary-purple);
+        }
+
+        /* ----------------------------------- */
+        /* Responsividade (Mobile) */
+        /* ----------------------------------- */
+        @media (max-width: 768px) {
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .sidebar {
+                /* Escondido no mobile, abre com JS */
+                width: 70%; 
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                /* Remove a margem no mobile para ocupar a tela toda */
+                margin-left: 0;
+                width: 100%; 
+                padding-top: 70px; /* Espaço para o ícone de menu */
+            }
+            
+            .sidebar-logo {
+                display: block;
+                text-align: left;
+                margin-left: 30px;
+            }
+            
+            .sidebar-logout {
+                display: block;
+            }
+
+            .professor-grid {
+                 /* Uma coluna em telas pequenas */
+                grid-template-columns: 1fr; 
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .modal-actions button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    
-        <section id="why-empowerlearn" class="section-highlight">
-            <div class="container">
-                <h3>Por que escolher a EmpowerLearn?</h3>
-                <p>Resolvemos os desafios da contratação tradicional, oferecendo qualidade, agilidade e confiança.</p>
-                <a href="../EmpowerLearn/diferenciais.html" class="btn-primary">Ver Nossos Diferenciais</a>
-            </div>
-        </section>
-    </main>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 EmpowerLearn. Todos os direitos reservados.</p>
-            <div class="social-links">
-                <a href="https://www.instagram.com/empowerlearn.teach/" target="_blank">Instagram</a> |
-                <a href="https://wa.me/5544988094397" target="_blank">WhatsApp</a> |
-                <a href="mailto:empowerlearn.teach@gmail.com">E-mail</a>
+    <div class="menu-toggle" id="menu-toggle">
+        &#9776; 
+    </div>
+
+    <aside class="sidebar" id="sidebar-menu">
+        <div class="sidebar-top">
+            <div class="sidebar-logo">EmpowerLearn</div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-link active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Consultar Perfil
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    Ver Curtidas
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Histórico de Perfis
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-logout">
+            <a href="#" class="sidebar-link" id="logout-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                Sair
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <div class="search-hero">
+            <h1>Encontre o Match Perfeito para o seu Aprendizado.</h1>
+            <p>Utilize o filtro para buscar professores por matéria, didática, idade e mais.</p>
+            
+            <div class="search-container">
+                <div class="search-icon" id="open-filter-modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg>
+                </div>
             </div>
         </div>
-    </footer>
 
-    <script src="../EmpowerLearn/js/script.js"></script>
-    <script src="js/login.js" defer></script>
+        
+        <h2 class="professor-header">Sugestões de Professores para Você</h2>
+        
+        <div class="professor-grid">
+            
+            <div class="professor-card">
+                <div class="prof-header">
+                    <div class="prof-avatar">M</div>
+                    <div class="prof-info">
+                        <h3>Prof. Maria Silva</h3>
+                        <p>Especialista em Matemática e Física</p>
+                    </div>
+                </div>
+                <span class="prof-badge">Matemática Avançada</span>
+                <p style="margin-top: 10px;">Didática: Aprendizado por projetos e exemplos práticos.</p>
+            </div>
+
+            <div class="professor-card">
+                <div class="prof-header">
+                    <div class="prof-avatar">J</div>
+                    <div class="prof-info">
+                        <h3>Prof. João Santos</h3>
+                        <p>Especialista em Língua Portuguesa</p>
+                    </div>
+                </div>
+                <span class="prof-badge">Redação e Gramática</span>
+                <p style="margin-top: 10px;">Didática: Aulas interativas e foco na interpretação de texto.</p>
+            </div>
+
+            <div class="professor-card">
+                <div class="prof-header">
+                    <div class="prof-avatar">A</div>
+                    <div class="prof-info">
+                        <h3>Profa. Ana Costa</h3>
+                        <p>Especialista em História Geral e Filosofia</p>
+                    </div>
+                </div>
+                <span class="prof-badge">História Moderna</span>
+                <p style="margin-top: 10px;">Didática: Debates e análise crítica de documentos históricos.</p>
+            </div>
+            
+            </div>
+
+    </main>
+
+    <div class="filter-modal" id="filter-modal">
+        <div class="modal-content">
+            <h2>Filtros de Busca</h2>
+            
+            <div class="filter-group">
+                <label for="filter-sexo">Sexo:</label>
+                <select id="filter-sexo">
+                    <option value="">Todos</option>
+                    <option value="F">Feminino</option>
+                    <option value="M">Masculino</option>
+                    <option value="O">Outro</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="filter-idade">Idade (Mínima):</label>
+                <input type="number" id="filter-idade" min="18" max="99" value="18">
+            </div>
+            
+            <div class="filter-group">
+                <label for="filter-materia">Matéria:</label>
+                <select id="filter-materia">
+                    <option value="">Todas</option>
+                    <option value="matematica">Matemática</option>
+                    <option value="portugues">Português</option>
+                    <option value="historia">História</option>
+                    <option value="geografia">Geografia</option>
+                    <option value="fisica">Física</option>
+                    <option value="quimica">Química</option>
+                    <option option value="ingles">Inglês</option>
+                    <option value="informatica">Informática</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="filter-didatica">Forma Didática:</label>
+                <select id="filter-didatica">
+                    <option value="">Todas</option>
+                    <option value="pratica">Foco Prático/Laboratório</option>
+                    <option value="teorica">Foco Teórico/Aprofundamento</option>
+                    <option value="debate">Debates e Discussões</option>
+                    <option value="projetos">Aprendizado por Projetos</option>
+                    <option value="gamificacao">Gamificação</option>
+                </select>
+            </div>
+            
+            <div class="modal-actions">
+                <button id="close-filter">Fechar</button>
+                <button id="clear-filter">Limpar Filtros</button>
+                <button id="apply-filter">Aplicar Filtros</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // JavaScript para o Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutButton = document.getElementById('logout-button');
+            const openFilterModal = document.getElementById('open-filter-modal');
+            const closeFilterButton = document.getElementById('close-filter');
+            const filterModal = document.getElementById('filter-modal');
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar-menu');
+
+            // 1. Lógica de Logout com Confirmação
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const confirmation = window.confirm("Você tem certeza de que quer sair? (Clique em OK para sair)");
+                    
+                    if (confirmation) {
+                        window.location.href = 'index.html'; 
+                    }
+                });
+            }
+
+            // 2. Lógica do Modal de Filtros
+            if (openFilterModal && filterModal && closeFilterButton) {
+                openFilterModal.addEventListener('click', function() {
+                    filterModal.classList.add('active');
+                });
+
+                closeFilterButton.addEventListener('click', function() {
+                    filterModal.classList.remove('active');
+                });
+                
+                filterModal.addEventListener('click', function(e) {
+                    if (e.target.id === 'filter-modal') {
+                        filterModal.classList.remove('active');
+                    }
+                });
+
+                document.getElementById('clear-filter').addEventListener('click', function() {
+                    document.getElementById('filter-sexo').value = "";
+                    document.getElementById('filter-idade').value = 18;
+                    document.getElementById('filter-materia').value = "";
+                    document.getElementById('filter-didatica').value = "";
+                    alert('Filtros limpos. (Em produção, aqui você faria uma nova busca na API)');
+                });
+
+                document.getElementById('apply-filter').addEventListener('click', function() {
+                    filterModal.classList.remove('active');
+                    alert('Filtros aplicados. (Em produção, o app faria uma busca filtrada)');
+                });
+            }
+
+            // 3. Lógica do Menu Mobile (Sidebar)
+            if (menuToggle && sidebar) {
+                 // Abre/Fecha a sidebar no clique
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+
+                 // Fecha a sidebar ao clicar em um link (opcional, mas boa UX)
+                const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('active');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
