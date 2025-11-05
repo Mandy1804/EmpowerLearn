@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmpowerLearn - Histórico</title>
+    <link rel="stylesheet" href="css/style.css"> 
+    
+    <style>
+        /* CSS INTERNO CORRIGIDO - Layout e Cores do Dashboard */
+       
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--light-gray); 
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            position: relative; 
+        }
+
+        /* ----------------------------------- */
+        /* Sidebar Styles (FIXO NO DESKTOP) */
+        /* ----------------------------------- */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary-purple); 
+            color: var(--white);
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            
+            position: fixed; 
+            left: 0;
+            top: 0; 
+            height: 100vh;
+            z-index: 900; 
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            padding-bottom: 30px;
+            font-size: 1.8em; 
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 0 20px;
+        }
+
+        .sidebar-nav {
+            flex-grow: 1;
+            padding: 20px 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            text-decoration: none;
+            color: var(--white);
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: var(--vibrant-purple); 
+        }
+
+        .sidebar-link svg {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            stroke: var(--white);
+            stroke-width: 2;
+        }
+
+        /* Logout button style */
+        .sidebar-logout {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+        }
+        
+        .sidebar-logout .sidebar-link {
+            color: var(--danger-color, #E74C3C); 
+            font-weight: 600;
+        }
+
+        /* Menu Hamburguer (Mobile) */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            color: var(--primary-purple);
+            font-size: 2em;
+            cursor: pointer;
+        }
+
+
+        /* ----------------------------------- */
+        /* Main Content Styles */
+        /* ----------------------------------- */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            background-color: var(--light-gray);
+            margin-left: 280px; 
+            width: calc(100% - 280px); 
+        }
+        
+        .main-content h1 {
+            color: var(--text-dark); 
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+        
+        .main-content p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        /* ----------------------------------- */
+        /* Histórico de Perfis */
+        /* ----------------------------------- */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--white);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-light);
+            transition: box-shadow 0.3s;
+        }
+
+        .history-item:hover {
+            box-shadow: var(--shadow-medium);
+        }
+
+        .profile-info h4 {
+            color: var(--primary-purple);
+            margin: 0 0 5px 0;
+            font-size: 1.1em;
+        }
+
+        .profile-info p {
+            color: var(--text-light);
+            margin: 0;
+            font-size: 0.9em;
+        }
+
+        .visit-date {
+            color: var(--vibrant-purple);
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .view-btn {
+            background-color: var(--vibrant-purple);
+            color: var(--white);
+            padding: 8px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .view-btn:hover {
+            background-color: var(--primary-purple);
+        }
+
+
+        /* ----------------------------------- */
+        /* Responsividade (Mobile) */
+        /* ----------------------------------- */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .sidebar {
+                width: 70%; 
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%; 
+                padding-top: 70px;
+            }
+            
+            .sidebar-logo {
+                display: block;
+            }
+            
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .visit-date, .view-btn {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-toggle" id="menu-toggle">
+        &#9776; 
+    </div>
+
+    <aside class="sidebar" id="sidebar-menu">
+        <div class="sidebar-top">
+            <div class="sidebar-logo">EmpowerLearn</div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Consultar Perfil
+                </a>
+                <a href="ver-curtidas.html" class="sidebar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    Ver Curtidas
+                </a>
+                <a href="historico-perfis.html" class="sidebar-link active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Histórico de Perfis
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-logout">
+            <a href="#" class="sidebar-link" id="logout-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                Sair
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <h1>Seu Histórico de Visualização</h1>
+        <p>Aqui você encontra os últimos perfis de professores que visitou.</p>
+
+        <ul class="history-list">
+            
+            <li class="history-item">
+                <div class="profile-info">
+                    <h4>Prof. Maria Silva (Matemática)</h4>
+                    <p>Didática: Aprendizado por projetos e exemplos práticos.</p>
+                </div>
+                <span class="visit-date">Visitado: Hoje, 13:45</span>
+                <a href="#" class="view-btn">Ver Perfil</a>
+            </li>
+
+            <li class="history-item">
+                <div class="profile-info">
+                    <h4>Prof. João Santos (Português)</h4>
+                    <p>Didática: Aulas interativas e foco na interpretação.</p>
+                </div>
+                <span class="visit-date">Visitado: Ontem, 10:20</span>
+                <a href="#" class="view-btn">Ver Perfil</a>
+            </li>
+
+            <li class="history-item">
+                <div class="profile-info">
+                    <h4>Prof. Ana Costa (História)</h4>
+                    <p>Didática: Debates e análise crítica de documentos.</p>
+                </div>
+                <span class="visit-date">Visitado: 2 dias atrás</span>
+                <a href="#" class="view-btn">Ver Perfil</a>
+            </li>
+
+            </ul>
+    </main>
+
+
+    <script>
+        // JavaScript para as funções do Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutButton = document.getElementById('logout-button');
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar-menu');
+
+            // 1. Lógica de Logout com Confirmação
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const confirmation = window.confirm("Você tem certeza de que quer sair? (Clique em OK para sair)");
+                    
+                    if (confirmation) {
+                        // Redireciona para a página inicial
+                        window.location.href = 'index.html'; 
+                    }
+                });
+            }
+
+            // 2. Lógica do Menu Mobile (Sidebar)
+            if (menuToggle && sidebar) {
+                 // Abre/Fecha a sidebar no clique
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+
+                 // Fecha a sidebar ao clicar em um link
+                const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('active');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

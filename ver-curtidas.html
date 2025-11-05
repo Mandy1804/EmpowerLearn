@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmpowerLearn - Perfis Curtidos</title>
+    <link rel="stylesheet" href="css/style.css"> 
+    
+    <style>
+        /* CSS INTERNO CORRIGIDO - Layout e Cores do Dashboard */
+       
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--light-gray); 
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            position: relative; 
+        }
+
+        /* ----------------------------------- */
+        /* Sidebar Styles (FIXO NO DESKTOP) */
+        /* ----------------------------------- */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary-purple); 
+            color: var(--white);
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            
+            position: fixed; 
+            left: 0;
+            top: 0; 
+            height: 100vh;
+            z-index: 900; 
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            padding-bottom: 30px;
+            font-size: 1.8em; 
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 0 20px;
+        }
+
+        .sidebar-nav {
+            flex-grow: 1;
+            padding: 20px 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            text-decoration: none;
+            color: var(--white);
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: var(--vibrant-purple); 
+        }
+
+        .sidebar-link svg {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            stroke: var(--white);
+            stroke-width: 2;
+        }
+
+        /* Logout button style */
+        .sidebar-logout {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+        }
+        
+        .sidebar-logout .sidebar-link {
+            color: var(--danger-color, #E74C3C); 
+            font-weight: 600;
+        }
+
+        /* Menu Hamburguer (Mobile) */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            color: var(--primary-purple);
+            font-size: 2em;
+            cursor: pointer;
+        }
+
+
+        /* ----------------------------------- */
+        /* Main Content Styles */
+        /* ----------------------------------- */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            background-color: var(--light-gray);
+            margin-left: 280px; 
+            width: calc(100% - 280px); 
+        }
+        
+        .main-content h1 {
+            color: var(--text-dark); 
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+        
+        .main-content p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        /* ----------------------------------- */
+        /* Professor Card Grid (Reutilizado) */
+        /* ----------------------------------- */
+        .professor-header {
+             color: var(--text-dark); 
+             font-size: 1.8em;
+             margin-bottom: 20px;
+        }
+        
+        .professor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .professor-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .professor-card:hover {
+             box-shadow: var(--shadow-medium);
+        }
+
+        .prof-avatar {
+            background-color: var(--primary-purple); 
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-right: 15px;
+        }
+        
+        .prof-badge {
+            background-color: var(--vibrant-purple); 
+            display: inline-block;
+            color: var(--white);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        /* Botão de Remover/Descurtir */
+        .remove-btn {
+            background-color: var(--danger-color, #E74C3C);
+            color: var(--white);
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+        .remove-btn:hover {
+            background-color: #C0392B;
+        }
+
+
+        /* ----------------------------------- */
+        /* Responsividade (Mobile) */
+        /* ----------------------------------- */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .sidebar {
+                width: 70%; 
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%; 
+                padding-top: 70px;
+            }
+            
+            .sidebar-logo {
+                display: block;
+            }
+            
+            .professor-grid {
+                grid-template-columns: 1fr; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-toggle" id="menu-toggle">
+        &#9776; 
+    </div>
+
+    <aside class="sidebar" id="sidebar-menu">
+        <div class="sidebar-top">
+            <div class="sidebar-logo">EmpowerLearn</div>
+            
+            <nav class="sidebar-nav">
+                <a href="../EmpowerLearn/daschboard.html" class="sidebar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Consultar Perfil
+                </a>
+                <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    Ver Curtidas
+                </a>
+                <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Histórico de Perfis
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-logout">
+            <a href="#" class="sidebar-link" id="logout-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                Sair
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <h1>Seus Professores Curtidos</h1>
+        <p>Estes são os perfis que você marcou como favoritos. Fale com eles quando quiser!</p>
+
+        <div class="professor-grid">
+            
+            <div class="professor-card">
+                <div class="prof-header">
+                    <div class="prof-avatar">L</div>
+                    <div class="prof-info">
+                        <h3>Prof. Luana Pereira</h3>
+                        <p>Especialista em Língua Inglesa</p>
+                    </div>
+                </div>
+                <span class="prof-badge">Inglês Conversação</span>
+                <p style="margin-top: 10px;">Didática: Foco na fluência e uso de mídia interativa.</p>
+                <button class="remove-btn">Remover Favorito</button>
+            </div>
+
+            <div class="professor-card">
+                <div class="prof-header">
+                    <div class="prof-avatar">C</div>
+                    <div class="prof-info">
+                        <h3>Prof. Carlos Rocha</h3>
+                        <p>Especialista em Química Orgânica</p>
+                    </div>
+                </div>
+                <span class="prof-badge">Química para Vestibular</span>
+                <p style="margin-top: 10px;">Didática: Resolução de exercícios e mapas conceituais.</p>
+                <button class="remove-btn">Remover Favorito</button>
+            </div>
+            
+            </div>
+    </main>
+
+
+    <script>
+        // JavaScript para as funções do Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutButton = document.getElementById('logout-button');
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar-menu');
+
+            // 1. Lógica de Logout com Confirmação
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const confirmation = window.confirm("Você tem certeza de que quer sair? (Clique em OK para sair)");
+                    
+                    if (confirmation) {
+                        // Redireciona para a página inicial
+                        window.location.href = 'index.html'; 
+                    }
+                });
+            }
+
+            // 2. Lógica do Menu Mobile (Sidebar)
+            if (menuToggle && sidebar) {
+                 // Abre/Fecha a sidebar no clique
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+
+                 // Fecha a sidebar ao clicar em um link
+                const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('active');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
