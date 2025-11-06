@@ -32,7 +32,6 @@ body {
     background-color: var(--white);
     scroll-behavior: smooth;
 
-    /* CORREÇÃO DO RODAPÉ ADESIVO (STICKY FOOTER) */
     display: flex; 
     flex-direction: column;
     min-height: 100vh;
