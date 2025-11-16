@@ -6,10 +6,9 @@
     <title>EmpowerLearn - Painel do Usuário</title>
     <link rel="stylesheet" href="../EmpowerLearn/css/style.css"> 
 
-    
     <style>
+        /* O CSS foi unificado na tag <style> para garantir a coesão do dashboard */
         
-       
         body {
             /* Mantém o flex para layout lateral */
             display: flex;
@@ -49,6 +48,9 @@
             font-weight: 700;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             margin: 0 20px;
+            display: block; /* Garante que o link ocupe todo o espaço */
+            color: var(--white);
+            text-decoration: none;
         }
 
         .sidebar-nav {
@@ -67,7 +69,7 @@
             cursor: pointer;
         }
 
-        .sidebar-link:hover {
+        .sidebar-link:hover, .sidebar-link.active {
             background-color: var(--vibrant-purple); 
         }
 
@@ -309,7 +311,7 @@
         }
         
         #clear-filter:hover {
-             background-color: var(--light-gray);
+            background-color: var(--light-gray);
         }
 
         #apply-filter {
@@ -381,10 +383,10 @@
 
     <aside class="sidebar" id="sidebar-menu">
         <div class="sidebar-top">
-            <div class="sidebar-logo">EmpowerLearn</div>
+            <a href="dashboard.html" class="sidebar-logo">EmpowerLearn</a>
             
             <nav class="sidebar-nav">
-                <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link active">
+                <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Consultar Perfil
                 </a>
@@ -425,42 +427,6 @@
         
         <div class="professor-grid">
             
-            <div class="professor-card">
-                <div class="prof-header">
-                    <div class="prof-avatar">M</div>
-                    <div class="prof-info">
-                        <h3>Prof. Maria Silva</h3>
-                        <p>Especialista em Matemática e Física</p>
-                    </div>
-                </div>
-                <span class="prof-badge">Matemática Avançada</span>
-                <p style="margin-top: 10px;">Didática: Aprendizado por projetos e exemplos práticos.</p>
-            </div>
-
-            <div class="professor-card">
-                <div class="prof-header">
-                    <div class="prof-avatar">J</div>
-                    <div class="prof-info">
-                        <h3>Prof. João Santos</h3>
-                        <p>Especialista em Língua Portuguesa</p>
-                    </div>
-                </div>
-                <span class="prof-badge">Redação e Gramática</span>
-                <p style="margin-top: 10px;">Didática: Aulas interativas e foco na interpretação de texto.</p>
-            </div>
-
-            <div class="professor-card">
-                <div class="prof-header">
-                    <div class="prof-avatar">A</div>
-                    <div class="prof-info">
-                        <h3>Profa. Ana Costa</h3>
-                        <p>Especialista em História Geral e Filosofia</p>
-                    </div>
-                </div>
-                <span class="prof-badge">História Moderna</span>
-                <p style="margin-top: 10px;">Didática: Debates e análise crítica de documentos históricos.</p>
-            </div>
-            
             </div>
 
     </main>
@@ -468,6 +434,11 @@
     <div class="filter-modal" id="filter-modal">
         <div class="modal-content">
             <h2>Filtros de Busca</h2>
+            
+            <div class="filter-group">
+                <label for="filter-nome">Nome do Professor:</label>
+                <input type="text" id="filter-nome" placeholder="Digite o nome ou parte dele">
+            </div>
             
             <div class="filter-group">
                 <label for="filter-sexo">Sexo:</label>
@@ -521,7 +492,107 @@
 
 
     <script>
-        // JavaScript para o Dashboard
+        const API_URL = 'http://localhost:8080/api/professores';
+        
+        // ----------------------------------------------------
+        // FUNÇÃO 1: RENDERIZA OS CARDS NA TELA
+        // ----------------------------------------------------
+        function renderProfessors(professores) {
+            const grid = document.querySelector('.professor-grid');
+            grid.innerHTML = ''; 
+
+            if (!professores || professores.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: var(--text-dark);">Nenhum professor encontrado com os filtros selecionados.</p>';
+                return;
+            }
+            
+            professores.forEach(prof => {
+                const card = document.createElement('div');
+                card.className = 'professor-card';
+                
+                // Mapeamento dos campos da entidade Professor
+                const especialidade = prof.especialidade || 'Não informada';
+                const didatica = prof.didatica || 'Padrão';
+
+                // NOVO: CONSTRÓI A LOCALIZAÇÃO USANDO CIDADE/ESTADO/PAÍS
+                const cidade = prof.cidade || 'N/A';
+                const estado = prof.estado || '';
+                const pais = prof.pais || '';
+
+                let localizacaoDisplay = "Localização não informada";
+                if (cidade !== 'N/A') {
+                    // Formato: Cidade/Estado - PAÍS
+                    localizacaoDisplay = `${cidade}${estado ? '/' + estado : ''}${pais ? ' - ' + pais : ''}`;
+                }
+                
+                card.innerHTML = `
+                    <div class="prof-header">
+                        <div class="prof-avatar">${prof.nome ? prof.nome.charAt(0) : '?'}</div>
+                        <div class="prof-info">
+                            <h3>Prof. ${prof.nome || 'Nome Desconhecido'}</h3>
+                            <p>Especialista em ${especialidade}</p>
+                        </div>
+                    </div>
+                    <span class="prof-badge">${didatica}</span>
+                    <p style="margin-top: 10px;">Experiência: ${prof.experiencia || '0'} anos</p>
+                    <p>Localização: ${localizacaoDisplay}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+
+        // ----------------------------------------------------
+        // FUNÇÃO 2: EXECUTA A BUSCA NA API
+        // ----------------------------------------------------
+        async function performSearch(filters = {}) {
+            let url = `${API_URL}/search?`;
+            
+            // Adiciona filtros de texto
+            if (filters.nome) url += `nome=${encodeURIComponent(filters.nome)}&`;
+            // Assumindo que a matéria é mapeada para 'especialidade' na API
+            if (filters.materia) url += `especialidade=${encodeURIComponent(filters.materia)}&`;
+            // NOTE: Outros filtros de idade, sexo e didática precisam de lógica Java/API para funcionar
+            
+            // Remove o '&' final se houver
+            url = url.endsWith('&') ? url.slice(0, -1) : url;
+            
+            // Se não houver filtros, usa a rota /search sem parâmetros
+            if (url.endsWith('search?')) {
+                url = url.slice(0, -7); // Remove ?search
+                url += 'search';
+            }
+
+            console.log("Chamando API:", url);
+
+            try {
+                const response = await fetch(url);
+
+                if (response.status === 204 || response.status === 404) { 
+                    renderProfessors(null);
+                    return;
+                }
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API Error:', errorText);
+                    alert(`❌ Erro na API: ${response.status}. Verifique o console do IntelliJ.`);
+                    return;
+                }
+
+                const professores = await response.json();
+                renderProfessors(professores);
+
+            } catch (error) {
+                console.error('Erro de conexão:', error);
+                alert('❌ Erro de rede: O Back-End está offline ou o CORS está bloqueando.');
+            }
+        }
+
+
+        // ----------------------------------------------------
+        // LÓGICA DE EVENTOS (ON LOAD)
+        // ----------------------------------------------------
         document.addEventListener('DOMContentLoaded', function() {
             const logoutButton = document.getElementById('logout-button');
             const openFilterModal = document.getElementById('open-filter-modal');
@@ -529,21 +600,22 @@
             const filterModal = document.getElementById('filter-modal');
             const menuToggle = document.getElementById('menu-toggle');
             const sidebar = document.getElementById('sidebar-menu');
+            
+            // 1. Chamada inicial para carregar todos os professores ao abrir a página
+            performSearch(); 
 
-            // 1. Lógica de Logout com Confirmação
+            // 2. Lógica de Logout com Confirmação (Mantida)
             if (logoutButton) {
                 logoutButton.addEventListener('click', function(e) {
                     e.preventDefault();
-                    
                     const confirmation = window.confirm("Você tem certeza de que quer sair? (Clique em OK para sair)");
-                    
                     if (confirmation) {
                         window.location.href = 'index.html'; 
                     }
                 });
             }
-
-            // 2. Lógica do Modal de Filtros
+            
+            // 3. Lógica do Modal de Filtros
             if (openFilterModal && filterModal && closeFilterButton) {
                 openFilterModal.addEventListener('click', function() {
                     filterModal.classList.add('active');
@@ -559,28 +631,38 @@
                     }
                 });
 
+                // AÇÃO DE APLICAR FILTROS (CHAMADA REAL À API)
+                document.getElementById('apply-filter').addEventListener('click', function() {
+                    const filtros = {
+                        nome: document.getElementById('filter-nome').value,
+                        materia: document.getElementById('filter-materia').value,
+                        // Os demais filtros (sexo, idade, didática) seriam adicionados aqui
+                    };
+                    
+                    performSearch(filtros); // Chama a API
+                    filterModal.classList.remove('active');
+                });
+                
+                // AÇÃO DE LIMPAR FILTROS
                 document.getElementById('clear-filter').addEventListener('click', function() {
+                    // Limpa os campos visuais
+                    document.getElementById('filter-nome').value = "";
                     document.getElementById('filter-sexo').value = "";
                     document.getElementById('filter-idade').value = 18;
                     document.getElementById('filter-materia').value = "";
                     document.getElementById('filter-didatica').value = "";
-                    alert('Filtros limpos. (Em produção, aqui você faria uma nova busca na API)');
-                });
-
-                document.getElementById('apply-filter').addEventListener('click', function() {
+                    
+                    performSearch(); // Executa busca sem filtros
                     filterModal.classList.remove('active');
-                    alert('Filtros aplicados. (Em produção, o app faria uma busca filtrada)');
+                    alert('Filtros limpos e busca reiniciada.');
                 });
             }
 
-            // 3. Lógica do Menu Mobile (Sidebar)
+            // 4. Lógica do Menu Mobile (Sidebar - Mantida)
             if (menuToggle && sidebar) {
-                 // Abre/Fecha a sidebar no clique
-                menuToggle.addEventListener('click', function() {
+                 menuToggle.addEventListener('click', function() {
                     sidebar.classList.toggle('active');
                 });
-
-                 // Fecha a sidebar ao clicar em um link (opcional, mas boa UX)
                 const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
                 sidebarLinks.forEach(link => {
                     link.addEventListener('click', () => {

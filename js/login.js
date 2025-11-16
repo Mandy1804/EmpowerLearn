@@ -1,216 +1,216 @@
-document.addEventListener('DOMContentLoaded', function () {
+const API_BASE_URL = 'http://localhost:8080/api';
+const PAGINA_DESTINO = 'dashboard.html';
 
-    // --- VARIÁVEIS DE CONFIGURAÇÃO E ELEMENTOS ---
-    
-    // ENDPOINT BASE DA API: Onde seu Spring Boot está rodando
-    const API_BASE_URL = 'http://localhost:8080/api';
-    const PAGINA_DESTINO = 'daschboard.html'; // Corrigido para dashboard.html
-    
-    // REMOVIDO: MOCK_EMAIL e MOCK_SENHA e emailsCadastrados (Não precisamos mais simular)
-    
+document.addEventListener('DOMContentLoaded', function () {
     const tabButtons = document.querySelectorAll('.tab-button');
     const authForms = document.querySelectorAll('.auth-form');
     const tipoCadastroSelect = document.getElementById('tipo-cadastro');
     const cadastroSubforms = document.querySelectorAll('.cadastro-subform');
     const loginForm = document.querySelector('#login-form form');
     const allCadastroForms = document.querySelectorAll('.cadastro-subform');
+    const messageDivLogin = document.getElementById('login-message');
+    
+    // --- FUNÇÕES AUXILIARES ---
 
-    // Seleciona a div de mensagem que já existe no HTML
-    const messageDivLogin = document.getElementById('login-message'); 
-
-    // ----------------------------------------------------
-    // 1. FUNÇÃO AUXILIAR: Mostrar Mensagens de Feedback
-    // ----------------------------------------------------
     function showMessage(element, type, message) {
-        element.textContent = message;
-        element.classList.remove('hidden', 'success', 'error');
-        element.classList.add(type);
-        element.style.display = 'block';
+        const messageDiv = element.querySelector('.form-message') || element;
+        if (messageDiv) {
+            messageDiv.textContent = message;
+            messageDiv.classList.remove('hidden', 'success', 'error');
+            messageDiv.classList.add(type);
+            messageDiv.style.display = 'block';
+        }
     }
 
+    async function handleLogin(email, senha) {
+        // Rotas que precisamos tentar. A ordem importa. Vamos tentar Professor, Aluno, Instituição.
+        const endpoints = [
+            'professores',
+            'alunos',
+            'instituicoes'
+        ];
+        
+        let success = false;
+        let userData = null;
+
+        for (const entity of endpoints) {
+            try {
+                const endpoint = `${API_BASE_URL}/${entity}/login`;
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                if (response.ok) {
+                    userData = await response.json();
+                    success = true;
+                    break;
+                }
+            } catch (error) {
+                console.error(`Erro ao tentar login em ${entity}:`, error);
+                // Continua para o próximo endpoint
+            }
+        }
+
+        if (success && userData && userData.id) {
+            // SALVA O ID DO USUÁRIO LOGADO para uso na página ver-perfil.html
+            localStorage.setItem('userId', userData.id);
+            localStorage.setItem('userType', userData.tipo); // Opcional, se o backend retornar o tipo
+            
+            showMessage(messageDivLogin, 'success', 'Login bem-sucedido! Redirecionando...');
+            
+            setTimeout(() => {
+                window.location.href = PAGINA_DESTINO; 
+            }, 1000); 
+
+        } else if (userData && userData.message === 'Credenciais inválidas.') {
+             showMessage(messageDivLogin, 'error', 'E-mail ou senha inválidos.');
+        } else {
+             showMessage(messageDivLogin, 'error', 'E-mail ou senha inválidos. Tente novamente.');
+        }
+    }
 
     // ----------------------------------------------------
-    // 2. LÓGICA PRINCIPAL: Troca de Abas (Mantida)
+    // A. LÓGICA DE EVENTOS E ABAS
     // ----------------------------------------------------
+
+    // 1. Troca de Abas
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
             const tab = button.dataset.tab;
-
             tabButtons.forEach(btn => btn.classList.remove('active'));
-            authForms.forEach(form => {
-                form.classList.remove('active');
-                form.classList.add('hidden');
-            });
-
+            authForms.forEach(form => form.classList.add('hidden'));
             button.classList.add('active');
             document.getElementById(`${tab}-form`).classList.remove('hidden');
             document.getElementById(`${tab}-form`).classList.add('active');
             
             if (tab === 'cadastro') {
                 cadastroSubforms.forEach(form => form.classList.add('hidden'));
-                if (tipoCadastroSelect.value) {
-                    document.getElementById(`form-${tipoCadastroSelect.value}`).classList.remove('hidden');
+                const tipo = tipoCadastroSelect.value;
+                if (tipo) {
+                    document.getElementById(`form-${tipo}`).classList.remove('hidden');
                 }
             }
         });
     });
 
-
-    // ----------------------------------------------------
-    // 3. LÓGICA DE TROCA DE SUB-FORMULÁRIOS (Mantida)
-    // ----------------------------------------------------
+    // 2. Troca de Tipo de Cadastro
     tipoCadastroSelect.addEventListener('change', (e) => {
         const tipo = e.target.value;
-
-        cadastroSubforms.forEach(form => {
-            form.classList.add('hidden');
-            const messageDiv = form.querySelector('.form-message');
-            if (messageDiv) messageDiv.classList.add('hidden');
-        });
-
+        cadastroSubforms.forEach(form => form.classList.add('hidden'));
         if (tipo) {
             document.getElementById(`form-${tipo}`).classList.remove('hidden');
         }
     });
 
-
-    // ----------------------------------------------------
-    // 4. LÓGICA DE LOGIN REAL (CHAMADA À API)
-    // ----------------------------------------------------
+    // 3. Submissão do Login
     if (loginForm) {
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault(); 
-            
             const email = document.getElementById('login-email').value;
             const senha = document.getElementById('login-senha').value;
-            
-            // NOTE: A Lógica abaixo tenta logar APENAS como Professor. 
-            // Em uma app completa, você teria que tentar Aluno, Professor E Instituição
-            // ou ter um endpoint /login universal.
-            
-            try {
-                // Tenta login como Professor: /api/professores/login
-                const response = await fetch(`${API_BASE_URL}/professores/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, senha: senha })
-                });
-
-                if (response.ok) {
-                    // Login bem-sucedido!
-                    showMessage(messageDivLogin, 'success', 'Login bem-sucedido! Redirecionando...');
-                    
-                    // Em um projeto real, você armazenaria o token de segurança retornado aqui.
-                    
-                    setTimeout(() => {
-                        window.location.href = PAGINA_DESTINO; 
-                    }, 1000); 
-
-                } else if (response.status === 401) {
-                    // 401: Unauthorized (Não Autorizado - Senha/Email Incorreto)
-                    showMessage(messageDivLogin, 'error', 'E-mail ou senha inválidos. Tente novamente.');
-                } else {
-                    // Outros erros (500, etc.)
-                    showMessage(messageDivLogin, 'error', 'Erro desconhecido ao tentar logar. Verifique o servidor.');
-                }
-                
-            } catch (error) {
-                console.error('Erro de conexão:', error);
-                showMessage(messageDivLogin, 'error', 'Erro de rede: Não foi possível conectar à API.');
-            }
+            await handleLogin(email, senha);
         });
     }
 
-
     // ----------------------------------------------------
-    // 5. LÓGICA DE CADASTRO REAL (CHAMADA À API)
+    // B. LÓGICA DE CADASTRO (API)
     // ----------------------------------------------------
-    allCadastroForms.forEach(form => {
-        form.addEventListener('submit', async function (e) {
-            e.preventDefault();
+    
+    // Função genérica de envio de cadastro
+    async function submitRegistration(e, entityPath, formFields) {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const messageDiv = form.querySelector('.form-message');
+        const senha = formFields.senha.value;
+        const confirmarSenha = formFields.confirmarSenha.value;
 
-            const emailInput = form.querySelector('input[type="email"]');
-            const senhaInput = form.querySelector('input[type="password"]');
-            // Assume que o segundo input type=password é o Confirmar Senha
-            const confirmarSenhaInput = form.querySelectorAll('input[type="password"]')[1]; 
-            const messageDiv = form.querySelector('.form-message');
+        if (senha !== confirmarSenha) {
+            return showMessage(messageDiv, 'error', 'As senhas não coincidem. Por favor, verifique.');
+        }
+        
+        // Simples validação de CEP antes de chamar a API (opcional, mas bom UX)
+        const cepValue = formFields.cep.value.replace(/\D/g, ''); 
+        if (cepValue.length !== 8) {
+             return showMessage(messageDiv, 'error', 'O CEP deve conter 8 dígitos.');
+        }
 
-            if (senhaInput.value !== confirmarSenhaInput.value) {
-                return showMessage(messageDiv, 'error', 'As senhas não coincidem. Por favor, verifique.');
-            }
+        const dataToSend = {
+            // Campos comuns
+            nome: formFields.nome.value,
+            email: formFields.email.value,
+            senha: senha,
+            cep: cepValue,
+            dataCadastro: new Date().toISOString().split('T')[0],
             
-            // --- Mapeamento do Front-End para a API Java ---
-            let dataToSend = {};
-            let endpoint = '';
-            let successMessage = '';
+            // Campos específicos (assumindo que o back-end está pronto)
+            ...formFields.specificData
+        };
 
-            if (form.id === 'form-professor') {
-                endpoint = `${API_BASE_URL}/professores`;
-                successMessage = 'Cadastro de Professor realizado com sucesso!';
-                dataToSend = {
-                    nome: document.getElementById('prof-nome').value,
-                    email: document.getElementById('prof-email').value,
-                    cep: document.getElementById('prof-cep').value,
-                    senha: senhaInput.value,
-                    especialidade: document.getElementById('prof-materia').value,
-                    // REMOVIDO: multiplasMaterias (O backend precisa de um getter para ele, se não o tiver)
-                    didatica: document.getElementById('prof-didatica').value,
-                    experiencia: document.getElementById('prof-experiencia').value,
-                    status: "ATIVO",
-                    dataCadastro: new Date().toISOString().split('T')[0],
-                };
-            } else if (form.id === 'form-aluno') {
-                endpoint = `${API_BASE_URL}/alunos`;
-                successMessage = 'Cadastro de Aluno realizado com sucesso!';
-                dataToSend = {
-                    nome: document.getElementById('aluno-nome').value,
-                    email: document.getElementById('aluno-email').value,
-                    cep: document.getElementById('aluno-cep').value,
-                    senha: senhaInput.value,
-                    dataNascimento: document.getElementById('aluno-nascimento').value,
-                    sexo: document.getElementById('aluno-sexo').value,
-                    dataCadastro: new Date().toISOString().split('T')[0],
-                };
-            } else if (form.id === 'form-instituicao') {
-                endpoint = `${API_BASE_URL}/instituicoes`;
-                successMessage = 'Cadastro de Instituição realizado com sucesso!';
-                dataToSend = {
-                    nome: document.getElementById('inst-nome').value,
-                    email: document.getElementById('inst-email').value,
-                    cep: document.getElementById('inst-cep').value,
-                    senha: senhaInput.value,
-                    dataCadastro: new Date().toISOString().split('T')[0],
-                };
+        try {
+            const response = await fetch(`${API_BASE_URL}/${entityPath}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dataToSend)
+            });
+
+            if (response.ok) {
+                showMessage(messageDiv, 'success', 'Cadastro realizado com sucesso! Faça login.');
+                form.reset();
+            } else {
+                const errorText = await response.text();
+                showMessage(messageDiv, 'error', errorText || `Erro ${response.status}: Falha no cadastro.`);
             }
-            
-            // Envio para a API
-            if (endpoint) {
-                try {
-                    const response = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(dataToSend)
-                    });
+        } catch (error) {
+            console.error('Erro de conexão:', error);
+            showMessage(messageDiv, 'error', 'Erro de rede: Não foi possível conectar à API.');
+        }
+    }
 
-                    if (response.ok) {
-                        showMessage(messageDiv, 'success', successMessage);
-                        form.reset();
-                    } else {
-                        // Tenta obter erro do Back-End (ex: Email já existe)
-                        // A API Java envia uma string simples no erro, então lemos como texto:
-                        const errorText = await response.text();
-                        let errorMessage = errorText || 'Erro no servidor. Verifique o console.';
-                        
-                        // Garante que o erro do Java (ex: 'Erro: Este e-mail já está cadastrado.') seja exibido
-                        showMessage(messageDiv, 'error', errorMessage);
-                    }
-
-                } catch (error) {
-                    console.error('Erro de conexão:', error);
-                    showMessage(messageDiv, 'error', 'Erro de rede: Não foi possível conectar à API.');
-                }
+    // 1. Cadastro de ALUNO
+    document.getElementById('form-aluno').addEventListener('submit', async function(e) {
+        submitRegistration(e, 'alunos', {
+            nome: document.getElementById('aluno-nome'),
+            email: document.getElementById('aluno-email'),
+            senha: document.getElementById('aluno-senha'),
+            confirmarSenha: document.getElementById('aluno-confirmar-senha'),
+            cep: document.getElementById('aluno-cep'),
+            specificData: {
+                dataNascimento: document.getElementById('aluno-nascimento').value,
+                sexo: document.getElementById('aluno-sexo').value,
             }
         });
     });
 
+    // 2. Cadastro de PROFESSOR
+    document.getElementById('form-professor').addEventListener('submit', async function(e) {
+        submitRegistration(e, 'professores', {
+            nome: document.getElementById('prof-nome'),
+            email: document.getElementById('prof-email'),
+            senha: document.getElementById('prof-senha'),
+            confirmarSenha: document.getElementById('prof-confirmar-senha'),
+            cep: document.getElementById('prof-cep'),
+            specificData: {
+                especialidade: document.getElementById('prof-materia').value,
+                multiplasMaterias: document.getElementById('prof-multiplas-materias').value,
+                didatica: document.getElementById('prof-didatica').value,
+                experiencia: parseInt(document.getElementById('prof-experiencia').value),
+            }
+        });
+    });
+
+    // 3. Cadastro de INSTITUIÇÃO
+    document.getElementById('form-instituicao').addEventListener('submit', async function(e) {
+        submitRegistration(e, 'instituicoes', {
+            nome: document.getElementById('inst-nome'),
+            email: document.getElementById('inst-email'),
+            senha: document.getElementById('inst-senha'),
+            confirmarSenha: document.getElementById('inst-confirmar-senha'),
+            cep: document.getElementById('inst-cep'),
+            specificData: {
+                // Instituição não tem campos específicos adicionais no momento (como materia/didatica)
+            }
+        });
+    });
 });

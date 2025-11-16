@@ -5,10 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EmpowerLearn - Meu Perfil</title>
     <link rel="stylesheet" href="../EmpowerLearn/css/style.css"> 
-    
+
     <style>
-        /* CSS INTERNO CORRIGIDO - Layout e Estilo do Dashboard */
-       
+        /* Estilos estruturais adaptados do Dashboard para garantir que o layout fique FIXO */
+        :root {
+            --primary-purple: #4A00B7; 
+            --vibrant-purple: #8B5CF6; 
+            --light-gray: #F0F2F5;
+            --white: #FFFFFF;
+            --text-dark: #300090;
+            --text-light: #555555;
+            --danger-color: #E74C3C;
+            --border-light: #E0E0E0;
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
         body {
             display: flex;
             min-height: 100vh;
@@ -19,9 +30,7 @@
             position: relative; 
         }
 
-        /* ----------------------------------- */
-        /* Sidebar Styles */
-        /* ----------------------------------- */
+        /* Sidebar, Main Content, Links: (Estrutura de Layout) */
         .sidebar {
             width: 280px;
             background-color: var(--primary-purple); 
@@ -31,7 +40,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            
             position: fixed; 
             left: 0;
             top: 0; 
@@ -39,44 +47,27 @@
             z-index: 900; 
             transition: transform 0.3s ease-in-out;
         }
-
-        .sidebar-logo {
-            text-align: center;
-            padding-bottom: 30px;
-            font-size: 1.8em; 
-            font-weight: 700;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            margin: 0 20px;
-        }
-
-        .sidebar-nav {
+        .sidebar-logo { color: var(--white); text-decoration: none; text-align: center; padding-bottom: 30px; font-size: 1.8em; font-weight: 700; display: block; border-bottom: 1px solid rgba(255, 255, 255, 0.2); margin: 0 20px; }
+        .sidebar-nav { flex-grow: 1; padding: 20px 0; }
+        .sidebar-link { display: flex; align-items: center; padding: 15px 30px; text-decoration: none; color: var(--white); transition: background-color 0.3s, color 0.3s; font-size: 0.95em; cursor: pointer; }
+        .sidebar-link:hover, .sidebar-link.active { background-color: var(--vibrant-purple); }
+        .main-content {
             flex-grow: 1;
-            padding: 20px 0;
+            padding: 30px;
+            background-color: var(--light-gray);
+            margin-left: 280px; 
+            width: calc(100% - 280px); 
         }
 
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 15px 30px;
-            text-decoration: none;
-            color: var(--white);
-            transition: background-color 0.3s, color 0.3s;
-            font-size: 1em;
-            cursor: pointer;
-        }
-
-        .sidebar-link:hover, .sidebar-link.active {
-            background-color: var(--vibrant-purple); 
-        }
-
-        .sidebar-link svg {
+    .sidebar-link svg {
             margin-right: 15px;
             width: 20px;
             height: 20px;
             stroke: var(--white);
             stroke-width: 2;
         }
-
+        
+              /* Logout button style */
         .sidebar-logout {
             border-top: 1px solid rgba(255, 255, 255, 0.2);
             padding-top: 20px;
@@ -87,110 +78,60 @@
             font-weight: 600;
         }
 
-        .menu-toggle {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1001;
-            color: var(--primary-purple);
-            font-size: 2em;
-            cursor: pointer;
-        }
-
-
-        /* ----------------------------------- */
-        /* Main Content Styles */
-        /* ----------------------------------- */
-        .main-content {
-            flex-grow: 1;
-            padding: 30px;
-            background-color: var(--light-gray);
-            margin-left: 280px; 
-            width: calc(100% - 280px); 
-        }
-        
-        /* ----------------------------------- */
-        /* Profile Form/Card Styles */
-        /* ----------------------------------- */
-        .profile-card {
+        /* PERFIL CARD STYLES */
+        .profile-container {
+            max-width: 800px;
+            margin: 50px auto;
             background-color: var(--white);
-            padding: 40px;
             border-radius: 12px;
             box-shadow: var(--shadow-medium);
-            max-width: 800px; /* Limita a largura do formulário */
-            margin: 0 auto;
-        }
-        
-        .profile-card h1 {
-            color: var(--primary-purple);
-            border-bottom: 2px solid var(--vibrant-purple);
-            padding-bottom: 10px;
-            margin-top: 0;
-            margin-bottom: 30px;
+            padding: 40px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="date"],
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            box-sizing: border-box;
-            color: var(--text-dark);
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: var(--vibrant-purple);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); 
-            outline: none;
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-        
-        /* Photo Upload Area */
-        .photo-upload-container {
+        .profile-header {
             display: flex;
             align-items: center;
-            gap: 20px;
             margin-bottom: 30px;
+            border-bottom: 2px solid var(--border-light);
+            padding-bottom: 20px;
         }
-        
+
         .profile-avatar {
-            width: 100px;
-            height: 100px;
+            background-color: var(--primary-purple); 
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            background-color: var(--vibrant-purple);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--white);
-            font-size: 2em;
+            font-size: 2rem;
             font-weight: 700;
-            flex-shrink: 0; /* Não encolhe */
-            border: 4px solid var(--white);
-            box-shadow: 0 0 0 2px var(--vibrant-purple);
+            margin-right: 25px;
+            flex-shrink: 0;
+            overflow: hidden; 
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
 
-        .upload-btn {
-            background-color: var(--vibrant-purple);
+        .profile-info h1 { margin: 0; color: var(--primary-purple); font-size: 2em; }
+        .profile-info p { margin: 5px 0 0; color: var(--text-light); font-size: 1em; }
+        .profile-details h2 { color: var(--text-dark); font-size: 1.4em; margin-top: 30px; padding-bottom: 10px; border-bottom: 1px solid var(--border-light); margin-bottom: 20px; }
+        .detail-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--border-light); }
+        .detail-label { font-weight: 600; color: var(--text-dark); }
+        .detail-value { color: var(--text-light); text-align: right; max-width: 50%; word-wrap: break-word; }
+
+        /* NOVO ESTILO PARA O BOTÃO DE EXCLUSÃO */
+        .delete-button-container {
+            text-align: right;
+            margin-top: 50px;
+        }
+        .btn-delete {
+            background-color: var(--danger-color);
             color: var(--white);
             padding: 10px 20px;
             border: none;
@@ -199,57 +140,11 @@
             font-weight: 600;
             transition: background-color 0.3s;
         }
-        .upload-btn:hover {
-            background-color: var(--primary-purple);
+        .btn-delete:hover {
+            background-color: #B03A2E;
         }
-        
-        .form-actions {
-            text-align: right;
-            margin-top: 30px;
-        }
-
-        .save-btn {
-            background-color: var(--vibrant-purple);
-            color: var(--white);
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: background-color 0.3s;
-        }
-        .save-btn:hover {
-            background-color: var(--primary-purple);
-        }
-
-
-        /* ----------------------------------- */
-        /* Responsividade (Mobile) */
-        /* ----------------------------------- */
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-            .sidebar {
-                width: 70%; 
-                transform: translateX(-100%);
-            }
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            .main-content {
-                margin-left: 0;
-                width: 100%; 
-                padding-top: 70px;
-            }
-            .photo-upload-container {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .profile-card {
-                padding: 20px;
-            }
-        }
+        /* Responsividade (Mantida) */
+        @media (max-width: 768px) { .main-content { margin-left: 0; width: 100%; padding-top: 20px; } .sidebar { transform: translateX(-100%); } }
     </style>
 </head>
 <body>
@@ -258,16 +153,16 @@
         &#9776; 
     </div>
 
+   
     <aside class="sidebar" id="sidebar-menu">
         <div class="sidebar-top">
             <div class="sidebar-logo">EmpowerLearn</div>
-            
-            <nav class="sidebar-nav">
-              <a href="../EmpowerLearn/daschboard.html" class="sidebar-link active">
+        
+                <a href="../EmpowerLearn/daschboard.html" class="sidebar-link active">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Consultar Perfil
                 </a>
-                <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link ">
+                <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                     Ver Curtidas
                 </a>
@@ -287,138 +182,268 @@
     </aside>
 
     <main class="main-content">
-        
-        <div class="profile-card">
-            <h1>Meu Perfil de Usuário</h1>
-            
-            <form id="profile-form">
-                <div class="photo-upload-container">
-                    <div class="profile-avatar" id="avatar-placeholder">AR</div>
-                    
-                    <div>
-                        <input type="file" id="profile-photo" accept="image/*" style="display: none;">
-                        <button type="button" class="upload-btn" onclick="document.getElementById('profile-photo').click()">
+        <div class="profile-container">
+            <div id="loading-message" style="text-align: center; color: var(--primary-purple);">Carregando dados do perfil...</div>
+            <div id="profile-data" style="display: none;">
+                
+                <div class="profile-header">
+                    <div class="profile-avatar" id="prof-initial"></div>
+                    <div class="profile-info">
+                        <h1 id="prof-name"></h1>
+                        <p id="prof-email"></p>
+                    </div>
+                    <div class="photo-upload-container" style="margin-left: auto;">
+                        <input type="file" id="profile-photo-input" accept="image/*" style="display: none;">
+                        <button type="button" class="upload-btn" id="upload-button">
                             Carregar Nova Foto
                         </button>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" value="Amanda Rodrigues Camargo" disabled>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="form-group">
-                        <label for="data-nascimento">Data de Nascimento (Idade: 20 anos)</label>
-                        <input type="date" id="data-nascimento" value="2005-04-18" disabled>
+                <div class="profile-details profile-details-personal">
+                    <h2>Informações Pessoais</h2>
+                    <div class="detail-item">
+                        <span class="detail-label">Localização:</span>
+                        <span class="detail-value" id="prof-localizacao"></span>
                     </div>
+                    <div class="detail-item">
+                        <span class="detail-label">CEP:</span>
+                        <span class="detail-value" id="prof-cep"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Data de Cadastro:</span>
+                        <span class="detail-value" id="prof-cadastro"></span>
+                    </div>
+                    <div class="detail-item detail-nascimento" style="display: none;">
+                        <span class="detail-label">Data de Nascimento:</span>
+                        <span class="detail-value" id="aluno-nascimento"></span>
+                    </div>
+                    <div class="detail-item detail-sexo" style="display: none;">
+                        <span class="detail-label">Sexo:</span>
+                        <span class="detail-value" id="aluno-sexo"></span>
+                    </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="localizacao">Localização</label>
-                        <input type="text" id="localizacao" value="Brasil/PR" disabled>
+
+                <div class="profile-details profile-details-professional">
+                    <h2>Detalhes Profissionais</h2>
+                    <div class="detail-item">
+                        <span class="detail-label">Especialidade:</span>
+                        <span class="detail-value" id="prof-especialidade"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Experiência (anos):</span>
+                        <span class="detail-value" id="prof-experiencia"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Forma Didática:</span>
+                        <span class="detail-value" id="prof-didatica"></span>
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="curso">Cursando</label>
-                    <input type="text" id="curso" value="Análise e Desenvolvimento de Sistemas" disabled>
+                <div class="delete-button-container">
+                    <button class="btn-delete" id="delete-profile-button">
+                        Excluir Conta Permanentemente
+                    </button>
                 </div>
                 
-                <div class="form-group">
-                    <label for="biografia">Biografia (O que quero aprender, objetivos, etc.)</label>
-                    <textarea id="biografia" placeholder="Escreva sobre seus objetivos de aprendizado, quais matérias mais gosta, e o que procura na EmpowerLearn..."></textarea>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="submit" class="save-btn">Salvar Alterações</button>
-                </div>
-            </form>
+            </div>
         </div>
-
     </main>
 
-
     <script>
-        // JavaScript para as funções do Dashboard e Perfil
-        document.addEventListener('DOMContentLoaded', function() {
-            const logoutButton = document.getElementById('logout-button');
-            const menuToggle = document.getElementById('menu-toggle');
-            const sidebar = document.getElementById('sidebar-menu');
-            const profileForm = document.getElementById('profile-form');
+        const API_BASE_URL = 'http://localhost:8080/api';
+        const loadingMessage = document.getElementById('loading-message');
+        const profileData = document.getElementById('profile-data');
+        
+        const userId = localStorage.getItem('userId');
+        const userType = localStorage.getItem('userType'); 
 
-            // 1. Lógica de Logout com Confirmação
-            if (logoutButton) {
-                logoutButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const confirmation = window.confirm("Você tem certeza de que quer sair? (Clique em OK para sair)");
-                    
-                    if (confirmation) {
-                        window.location.href = 'index.html'; 
-                    }
-                });
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            } catch (e) {
+                return dateString;
             }
+        }
 
-            // 2. Lógica do Menu Mobile (Sidebar)
-            if (menuToggle && sidebar) {
-                menuToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('active');
-                });
-                const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
-                sidebarLinks.forEach(link => {
-                    link.addEventListener('click', () => {
-                        if (window.innerWidth <= 768) {
-                            sidebar.classList.remove('active');
-                        }
-                    });
-                });
+        async function fetchUserData() {
+            if (!userId || !userType) {
+                loadingMessage.innerText = '❌ Sessão expirada. Redirecionando para o Login.';
+                alert("Você precisa estar logado para acessar esta página.");
+                window.location.href = 'login.html'; 
+                return;
             }
             
-            // 3. Lógica do Formulário de Perfil (Simulação de Salvamento)
-            profileForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+            // CONSTRÓI A URL DINÂMICA: Ex: /api/alunos/10
+            const url = `${API_BASE_URL}/${userType}s/${userId}`;
+            
+            try {
+                const response = await fetch(url);
+
+                if (response.status === 404) {
+                    loadingMessage.innerText = `❌ Perfil de ${userType} não encontrado. ID inválido.`;
+                    return;
+                }
+                if (!response.ok) {
+                    throw new Error(`Erro ${response.status}: Falha ao carregar o perfil.`);
+                }
+
+                const userData = await response.json();
+                renderProfile(userData, userType);
                 
-                const biografiaText = document.getElementById('biografia').value;
+            } catch (error) {
+                console.error('Erro ao buscar perfil:', error);
+                loadingMessage.innerText = '❌ Erro ao carregar perfil. Verifique o servidor.';
+                loadingMessage.style.color = 'var(--danger-color, #E74C3C)';
+            }
+        }
+
+        function renderProfile(data, type) {
+            
+            const principalName = data.nome || data.nomeInstituicao || 'Usuário';
+            
+            const cidade = data.cidade || 'N/A';
+            const estado = data.estado || '';
+            const pais = data.pais || '';
+
+            let localizacaoDisplay = "Localização não informada";
+            
+            if (cidade !== 'N/A') {
+                localizacaoDisplay = `${cidade}${estado ? '/' + estado : ''} - ${pais || 'BRASIL'}`;
+            }
+
+            // LÓGICA DA FOTO/AVATAR
+            const avatarElement = document.getElementById('prof-initial');
+            if (data.fotoUrl && data.fotoUrl.startsWith('/uploads/')) { 
+                avatarElement.innerHTML = `<img src="${data.fotoUrl}" alt="Foto de Perfil">`;
+            } else {
+                avatarElement.innerHTML = principalName.charAt(0);
+            }
+
+            document.getElementById('prof-initial').innerText = principalName.charAt(0);
+            document.getElementById('prof-name').innerText = (type === 'professor' ? 'Prof. ' : '') + principalName;
+            document.getElementById('prof-email').innerText = data.email || 'N/A';
+            
+            document.getElementById('prof-localizacao').innerText = localizacaoDisplay;
+            document.getElementById('prof-cep').innerText = data.cep || 'N/A';
+            document.getElementById('prof-cadastro').innerText = formatDate(data.dataCadastro);
+            
+            
+            const professionalSection = document.querySelector('.profile-details-professional');
+            const detailNascimento = document.querySelector('.detail-nascimento');
+            const detailSexo = document.querySelector('.detail-sexo');
+            
+            professionalSection.style.display = 'none';
+            detailNascimento.style.display = 'none';
+            detailSexo.style.display = 'none';
+
+
+            if (type === 'professor') {
+                professionalSection.style.display = 'block';
+                document.getElementById('prof-especialidade').innerText = data.especialidade || 'N/A';
+                document.getElementById('prof-experiencia').innerText = data.experiencia !== undefined ? data.experiencia : '0';
+                document.getElementById('prof-didatica').innerText = data.didatica || 'Não informada';
                 
-                // Em um projeto real, esta biografia seria enviada a um servidor e salva em um banco de dados.
-                // Como estamos usando apenas HTML/CSS/JS, vamos simular o salvamento.
-                
-                if (biografiaText.trim() === '') {
-                     alert('Por favor, preencha sua biografia antes de salvar.');
+            } else if (type === 'aluno') {
+                detailNascimento.style.display = 'flex';
+                detailSexo.style.display = 'flex';
+                document.getElementById('aluno-nascimento').innerText = formatDate(data.dataNascimento);
+                document.getElementById('aluno-sexo').innerText = data.sexo || 'N/A';
+            }
+
+
+            loadingMessage.style.display = 'none';
+            profileData.style.display = 'block';
+        }
+
+        // NOVO: FUNÇÃO PARA EXCLUIR O PERFIL
+        async function deleteProfile() {
+            if (!confirm(`Tem certeza que deseja EXCLUIR sua conta permanentemente? Esta ação é irreversível.`)) {
+                return;
+            }
+            
+            try {
+                const url = `${API_BASE_URL}/${userType}s/${userId}`;
+                const response = await fetch(url, { method: 'DELETE' });
+
+                if (response.status === 204) {
+                    alert('✅ Conta excluída com sucesso! Redirecionando.');
+                    localStorage.removeItem('userId'); 
+                    localStorage.removeItem('userType');
+                    window.location.href = 'index.html';
+                } else if (response.status === 404) {
+                    alert('❌ Erro: Perfil não encontrado no servidor.');
                 } else {
-                     alert('✨ Perfil Salvo com Sucesso! (Sua biografia será persistida no banco de dados.)');
-                     
-                     // Se você quiser que eu lembre esta biografia no contexto das nossas futuras conversas,
-                     // é só me dizer: "Lembre-se que a biografia da Amanda é [COLE A BIOGRAFIA AQUI]".
+                    alert('❌ Falha na exclusão. Verifique o servidor.');
                 }
-            });
-            
-            // 4. Lógica de Upload de Foto (Exibe no placeholder)
-            const profilePhotoInput = document.getElementById('profile-photo');
-            const avatarPlaceholder = document.getElementById('avatar-placeholder');
-            
-            profilePhotoInput.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        // Cria uma tag <img> para a foto
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.style.width = '100%';
-                        img.style.height = '100%';
-                        img.style.objectFit = 'cover';
-                        img.style.borderRadius = '50%';
-                        
-                        // Remove o texto placeholder e adiciona a imagem
-                        avatarPlaceholder.innerHTML = ''; 
-                        avatarPlaceholder.appendChild(img);
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
+            } catch (error) {
+                console.error('Erro ao deletar:', error);
+                alert('❌ Erro de rede ao tentar excluir a conta.');
+            }
+        }
+        
+        // Lógica de Eventos
+        document.getElementById('logout-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            const confirmation = window.confirm("Você tem certeza de que quer sair?");
+            if (confirmation) {
+                localStorage.removeItem('userId'); 
+                localStorage.removeItem('userType');
+                window.location.href = 'index.html'; 
+            }
         });
+        
+        // Liga o botão de Exclusão à nova função
+        document.getElementById('delete-profile-button').addEventListener('click', deleteProfile);
+
+        // Liga o botão de Upload à nova função (adicionada no guia anterior)
+        const profilePhotoInput = document.getElementById('profile-photo-input');
+        const uploadButton = document.getElementById('upload-button');
+        
+        if (uploadButton && profilePhotoInput) {
+            uploadButton.addEventListener('click', function() {
+                profilePhotoInput.click();
+            });
+
+            profilePhotoInput.addEventListener('change', async function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const uploadUrl = `${API_BASE_URL}/${userType}s/${userId}/upload-foto`; 
+
+                uploadButton.innerText = 'Enviando...';
+                uploadButton.disabled = true;
+
+                try {
+                    const response = await fetch(uploadUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        alert('✅ Foto de perfil salva com sucesso!');
+                        fetchUserData(); // Recarrega os dados para exibir a nova foto
+                    } else {
+                        alert('❌ Falha ao carregar a foto no servidor.');
+                    }
+                } catch (error) {
+                    alert('❌ Erro de rede durante o upload.');
+                } finally {
+                    uploadButton.innerText = 'Carregar Nova Foto';
+                    uploadButton.disabled = false;
+                }
+            });
+        }
+        
+        // Inicia a busca dos dados ao carregar a página
+        document.addEventListener('DOMContentLoaded', fetchUserData);
+        
     </script>
 </body>
 </html>
