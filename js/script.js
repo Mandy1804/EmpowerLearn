@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ... dentro da função document.addEventListener('DOMContentLoaded', function() { ...
-
+    
     // --- VARIÁVEIS DO UPLOAD ---
     const uploadButton = document.getElementById('upload-button');
     const profilePhotoInput = document.getElementById('profile-photo-input');
@@ -91,6 +90,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Você pode adicionar outras funcionalidades JS aqui, como validação de formulários,
-    // carrosséis, etc., no futuro.
+
 });

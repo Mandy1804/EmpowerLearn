@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function handleLogin(email, senha) {
-        // Rotas que precisamos tentar. A ordem importa. Vamos tentar Professor, Aluno, Instituição.
+        
         const endpoints = [
             'professores',
             'alunos',
@@ -49,14 +49,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (error) {
                 console.error(`Erro ao tentar login em ${entity}:`, error);
-                // Continua para o próximo endpoint
+               
             }
         }
 
         if (success && userData && userData.id) {
             // SALVA O ID DO USUÁRIO LOGADO para uso na página ver-perfil.html
             localStorage.setItem('userId', userData.id);
-            localStorage.setItem('userType', userData.tipo); // Opcional, se o backend retornar o tipo
+            localStorage.setItem('userType', userData.tipo); 
             
             showMessage(messageDivLogin, 'success', 'Login bem-sucedido! Redirecionando...');
             
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return showMessage(messageDiv, 'error', 'As senhas não coincidem. Por favor, verifique.');
         }
         
-        // Simples validação de CEP antes de chamar a API (opcional, mas bom UX)
+       
         const cepValue = formFields.cep.value.replace(/\D/g, ''); 
         if (cepValue.length !== 8) {
              return showMessage(messageDiv, 'error', 'O CEP deve conter 8 dígitos.');
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
             cep: cepValue,
             dataCadastro: new Date().toISOString().split('T')[0],
             
-            // Campos específicos (assumindo que o back-end está pronto)
+            // Campos específicos 
             ...formFields.specificData
         };
 
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
             confirmarSenha: document.getElementById('inst-confirmar-senha'),
             cep: document.getElementById('inst-cep'),
             specificData: {
-                // Instituição não tem campos específicos adicionais no momento (como materia/didatica)
+             
             }
         });
     });

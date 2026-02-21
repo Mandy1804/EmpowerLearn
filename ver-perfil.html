@@ -269,97 +269,96 @@
             }
         }
 
-        async function fetchUserData() {
-            if (!userId || !userType) {
-                loadingMessage.innerText = '❌ Sessão expirada. Redirecionando para o Login.';
-                alert("Você precisa estar logado para acessar esta página.");
-                window.location.href = 'login.html'; 
-                return;
-            }
-            
-            // CONSTRÓI A URL DINÂMICA: Ex: /api/alunos/10
-            const url = `${API_BASE_URL}/${userType}s/${userId}`;
-            
-            try {
-                const response = await fetch(url);
+      async function fetchUserData() {
+    if (!userId || !userType) {
+        loadingMessage.innerText = '❌ Sessão expirada. Redirecionando para o Login.';
+        alert("Você precisa estar logado para acessar esta página.");
+        window.location.href = 'login.html'; 
+        return;
+    }
+    
+    // CONSTRÓI A URL DINÂMICA
+    const url = `${API_BASE_URL}/${userType}s/${userId}`;
+    console.log("Chamando API em:", url); // Log para ver se o endereço está correto
 
-                if (response.status === 404) {
-                    loadingMessage.innerText = `❌ Perfil de ${userType} não encontrado. ID inválido.`;
-                    return;
-                }
-                if (!response.ok) {
-                    throw new Error(`Erro ${response.status}: Falha ao carregar o perfil.`);
-                }
+    try {
+        const response = await fetch(url);
 
-                const userData = await response.json();
-                renderProfile(userData, userType);
-                
-            } catch (error) {
-                console.error('Erro ao buscar perfil:', error);
-                loadingMessage.innerText = '❌ Erro ao carregar perfil. Verifique o servidor.';
-                loadingMessage.style.color = 'var(--danger-color, #E74C3C)';
-            }
+        if (!response.ok) {
+            throw new Error(`Erro ${response.status}: Falha ao carregar o perfil.`);
         }
 
-        function renderProfile(data, type) {
-            
-            const principalName = data.nome || data.nomeInstituicao || 'Usuário';
-            
-            const cidade = data.cidade || 'N/A';
-            const estado = data.estado || '';
-            const pais = data.pais || '';
+        const userData = await response.json();
+        
+        // --- LOG CRUCIAL: Verifique no F12 se o campo fotoUrl aparece aqui ---
+        console.log("Dados do usuário carregados:", userData); 
+        
+        renderProfile(userData, userType);
+        
+    } catch (error) {
+        console.error('Erro ao buscar perfil:', error);
+        loadingMessage.innerText = '❌ Erro ao carregar perfil. Verifique o servidor.';
+    }
+}
 
-            let localizacaoDisplay = "Localização não informada";
-            
-            if (cidade !== 'N/A') {
-                localizacaoDisplay = `${cidade}${estado ? '/' + estado : ''} - ${pais || 'BRASIL'}`;
-            }
+      function renderProfile(data, type) {
+    // 1. Define o nome principal (Professor, Aluno ou Instituição)
+    const principalName = data.nome || data.nomeInstituicao || 'Usuário';
+    
+    // 2. LÓGICA DA FOTO/AVATAR (CORRIGIDA)
+    const avatarElement = document.getElementById('prof-initial');
 
-            // LÓGICA DA FOTO/AVATAR
-            const avatarElement = document.getElementById('prof-initial');
-            if (data.fotoUrl && data.fotoUrl.startsWith('/uploads/')) { 
-                avatarElement.innerHTML = `<img src="${data.fotoUrl}" alt="Foto de Perfil">`;
-            } else {
-                avatarElement.innerHTML = principalName.charAt(0);
-            }
+    if (data.fotoUrl && data.fotoUrl.startsWith('/uploads/')) { 
+        // Adicionamos o API_BASE_URL para que o navegador busque em localhost:8080
+        avatarElement.innerHTML = `<img src="${API_BASE_URL}${data.fotoUrl}" alt="Foto de Perfil">`;
+    } else {
+        // Se não houver foto, exibe a inicial do nome
+        avatarElement.innerText = principalName.charAt(0);
+    }
 
-            document.getElementById('prof-initial').innerText = principalName.charAt(0);
-            document.getElementById('prof-name').innerText = (type === 'professor' ? 'Prof. ' : '') + principalName;
-            document.getElementById('prof-email').innerText = data.email || 'N/A';
-            
-            document.getElementById('prof-localizacao').innerText = localizacaoDisplay;
-            document.getElementById('prof-cep').innerText = data.cep || 'N/A';
-            document.getElementById('prof-cadastro').innerText = formatDate(data.dataCadastro);
-            
-            
-            const professionalSection = document.querySelector('.profile-details-professional');
-            const detailNascimento = document.querySelector('.detail-nascimento');
-            const detailSexo = document.querySelector('.detail-sexo');
-            
-            professionalSection.style.display = 'none';
-            detailNascimento.style.display = 'none';
-            detailSexo.style.display = 'none';
+    // 3. Preenchimento dos demais campos básicos
+    document.getElementById('prof-name').innerText = (type === 'professor' ? 'Prof. ' : '') + principalName;
+    document.getElementById('prof-email').innerText = data.email || 'N/A';
+    
+    // 4. Lógica de Localização
+    const cidade = data.cidade || 'N/A';
+    const estado = data.estado || '';
+    const pais = data.pais || '';
+    let localizacaoDisplay = "Localização não informada";
+    
+    if (cidade !== 'N/A') {
+        localizacaoDisplay = `${cidade}${estado ? '/' + estado : ''} - ${pais || 'BRASIL'}`;
+    }
+    document.getElementById('prof-localizacao').innerText = localizacaoDisplay;
+    document.getElementById('prof-cep').innerText = data.cep || 'N/A';
+    document.getElementById('prof-cadastro').innerText = formatDate(data.dataCadastro);
+    
+    // 5. Alternância entre detalhes de Professor e Aluno
+    const professionalSection = document.querySelector('.profile-details-professional');
+    const detailNascimento = document.querySelector('.detail-nascimento');
+    const detailSexo = document.querySelector('.detail-sexo');
+    
+    professionalSection.style.display = 'none';
+    detailNascimento.style.display = 'none';
+    detailSexo.style.display = 'none';
 
+    if (type === 'professor') {
+        professionalSection.style.display = 'block';
+        document.getElementById('prof-especialidade').innerText = data.especialidade || 'N/A';
+        document.getElementById('prof-experiencia').innerText = data.experiencia !== undefined ? data.experiencia : '0';
+        document.getElementById('prof-didatica').innerText = data.didatica || 'Não informada';
+        
+    } else if (type === 'aluno') {
+        detailNascimento.style.display = 'flex';
+        detailSexo.style.display = 'flex';
+        document.getElementById('aluno-nascimento').innerText = formatDate(data.dataNascimento);
+        document.getElementById('aluno-sexo').innerText = data.sexo || 'N/A';
+    }
 
-            if (type === 'professor') {
-                professionalSection.style.display = 'block';
-                document.getElementById('prof-especialidade').innerText = data.especialidade || 'N/A';
-                document.getElementById('prof-experiencia').innerText = data.experiencia !== undefined ? data.experiencia : '0';
-                document.getElementById('prof-didatica').innerText = data.didatica || 'Não informada';
-                
-            } else if (type === 'aluno') {
-                detailNascimento.style.display = 'flex';
-                detailSexo.style.display = 'flex';
-                document.getElementById('aluno-nascimento').innerText = formatDate(data.dataNascimento);
-                document.getElementById('aluno-sexo').innerText = data.sexo || 'N/A';
-            }
-
-
-            loadingMessage.style.display = 'none';
-            profileData.style.display = 'block';
-        }
-
-        // NOVO: FUNÇÃO PARA EXCLUIR O PERFIL
+    loadingMessage.style.display = 'none';
+    profileData.style.display = 'block';
+}
+        // FUNÇÃO PARA EXCLUIR O PERFIL
         async function deleteProfile() {
             if (!confirm(`Tem certeza que deseja EXCLUIR sua conta permanentemente? Esta ação é irreversível.`)) {
                 return;

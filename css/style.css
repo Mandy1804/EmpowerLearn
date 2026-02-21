@@ -1,17 +1,17 @@
-/* Importar fonte do Google Fonts: Poppins (moderna e versátil) */
+/* Importar fonte do Google Fonts: Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
-    /* Cores */
-    --primary-purple: #4A00B7; /* Azul Arroxeado Profundo */
-    --vibrant-purple: #8B5CF6; /* Roxo Vibrante */
-    --light-gray: #F0F2F5;/* Cinza Suave para fundos */
+    
+    --primary-purple: #4A00B7; 
+    --vibrant-purple: #8B5CF6; 
+    --light-gray: #F0F2F5;
     --white: #FFFFFF;
-    --text-dark: #300090; /* Azul Secundário para texto principal */
-    --text-light: #555555; /* Cinza mais claro para texto secundário */
-    --accent-green: #27AE60; /* Verde para botões de sucesso ou destaque (opcional) */
-    --border-light: #E0E0E0; /* Bordas mais claras */
-    --danger-color: #E74C3C;   /* Vermelho para erros */
+    --text-dark: #300090; 
+    --text-light: #555555; 
+    --accent-green: #27AE60; 
+    --border-light: #E0E0E0; 
+    --danger-color: #E74C3C;   
 
     /* Sombras */
     --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
@@ -74,7 +74,7 @@ header .container {
 .logo img {
     height: 45px; /* Tamanho da logo */
     margin-right: 12px;
-    border-radius: 50%; /* Se a logo for um ícone redondo */
+    border-radius: 50%; 
 }
 
 .logo h1 {
@@ -100,7 +100,7 @@ nav .nav-links a {
     font-size: 1.05em;
     transition: color 0.3s ease, transform 0.3s ease;
     position: relative;
-    padding-bottom: 5px; /* Espaço para o underline */
+    padding-bottom: 5px; 
 }
 
 nav .nav-links a::after {
@@ -119,18 +119,18 @@ nav .nav-links a:hover::after {
 }
 
 nav .nav-links a:hover {
-    color: var(--vibrant-purple); /* Altera a cor do texto no hover também */
+    color: var(--vibrant-purple); 
 }
 
 /* Menu Hamburguer (Mobile) */
 .burger {
-    display: none; /* Escondido por padrão em telas maiores */
+    display: none; 
     cursor: pointer;
     flex-direction: column;
     justify-content: space-around;
     width: 30px;
     height: 25px;
-    z-index: 1001; /* Garante que fique por cima do menu */
+    z-index: 1001; 
 }
 
 .burger div {
@@ -201,7 +201,7 @@ nav .nav-links a:hover {
     min-height: 550px;
     display: flex;
     align-items: center;
-    overflow: hidden; /* Para garantir que a imagem não ultrapasse */
+    overflow: hidden; 
 }
 
 .hero-section .container {
@@ -209,7 +209,7 @@ nav .nav-links a:hover {
     justify-content: space-between;
     align-items: center;
     gap: 40px;
-    flex-wrap: wrap; /* Para quebra de linha em telas menores */
+    flex-wrap: wrap; 
 }
 
 .hero-content {
@@ -255,7 +255,7 @@ nav .nav-links a:hover {
     padding: 80px 0;
     text-align: center;
     box-shadow: var(--shadow-light);
-    margin-bottom: 40px; /* Espaço para o conteúdo abaixo */
+    margin-bottom: 40px; 
 }
 
 .page-hero h2 {
@@ -319,7 +319,7 @@ h3 {
     text-align: center;
     flex: 1;
     min-width: 300px;
-    max-width: 45%; /* Aproximadamente metade da largura */
+    max-width: 45%; 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid var(--border-light);
 }
@@ -342,13 +342,13 @@ h3 {
 }
 
 
-/* Seção de Destaque (Why EmpowerLearn na Home) */
+/* Seção de Destaque */
 .section-highlight {
     background: linear-gradient(45deg, var(--vibrant-purple) 0%, var(--primary-purple) 100%);
     color: var(--white);
     text-align: center;
     padding: 80px 0;
-    margin-top: 40px; /* Espaçamento da seção anterior */
+    margin-top: 40px; 
 }
 
 .section-highlight h3 {
@@ -369,7 +369,7 @@ h3 {
     display: flex;
     align-items: center;
     gap: 60px;
-    flex-wrap: wrap; /* Permite quebra de linha em telas menores */
+    flex-wrap: wrap; 
     margin-bottom: 40px;
 }
 
@@ -566,7 +566,7 @@ footer {
     text-align: center;
     padding: 30px 0;
     font-size: 0.95em;
-    /* Removido o margin-top fixo, pois o flex-grow já resolve */
+    
 }
 
 footer .container {
@@ -595,7 +595,7 @@ footer .container {
 /* Responsividade */
 @media (max-width: 1024px) {
     .hero-section .container {
-        flex-direction: column-reverse; /* Imagem acima do texto no mobile */
+        flex-direction: column-reverse;
         text-align: center;
     }
 
@@ -629,7 +629,7 @@ footer .container {
     }
 
     .section-cards .card {
-        max-width: 80%; /* Ajuste para não serem muito pequenos */
+        max-width: 80%;
     }
 }
 
@@ -660,7 +660,7 @@ footer .container {
     }
 
     nav .nav-links li {
-        opacity: 0; /* Esconde os itens até o menu ser ativado */
+        opacity: 0; 
         margin: 25px 0;
     }
 
@@ -688,7 +688,7 @@ footer .container {
     .btn-primary, .btn-secondary {
         padding: 12px 20px;
         font-size: 0.9em;
-        margin-bottom: 15px; /* Espaçamento entre botões */
+        margin-bottom: 15px; 
         margin-right: 0;
     }
 
@@ -711,7 +711,7 @@ footer .container {
     }
 
     .steps-grid, .advantages-grid, .contact-details-grid {
-        grid-template-columns: 1fr; /* Uma coluna em telas menores */
+        grid-template-columns: 1fr; 
     }
 
     .step-item, .advantage-item, .contact-item {
@@ -780,9 +780,9 @@ footer .container {
     margin: 40px auto;
     border: 1px solid var(--border-light);
     transition: all 0.5s ease;
-} /* <-- CHAVE DE FECHAMENTO CORRIGIDA AQUI */
+} 
 
-/* CORREÇÃO DO ANINHAMENTO: Estes estilos estavam dentro do .auth-box */
+
 .form-message {
     padding: 12px;
     border-radius: 8px;
@@ -791,7 +791,7 @@ footer .container {
     text-align: center;
     border: 1px solid transparent;
     transition: all 0.3s ease;
-    display: none; /* Escondido por padrão, controlado pelo JS */
+    display: none; 
 }
 
 .form-message.hidden {
@@ -799,23 +799,23 @@ footer .container {
 }
 
 .form-message.success {
-    background-color: rgba(39, 174, 96, 0.1); /* Fundo verde suave */
+    background-color: rgba(39, 174, 96, 0.1); 
     color: var(--accent-green);
     border-color: var(--accent-green);
 }
 
 .form-message.error {
-    background-color: rgba(231, 76, 60, 0.1); /* Fundo vermelho suave */
-    color: #E74C3C; /* Vermelho mais forte */
+    background-color: rgba(231, 76, 60, 0.1); 
+    color: #E74C3C; 
     border-color: #E74C3C;
 }
 
 /* Garante que o input de CEP e Experiência tenham largura total no form */
 #aluno-cep, #prof-cep, #prof-experiencia, #inst-cep {
-    /* Já devem ter 100% de largura, mas forçamos aqui */
+  
     width: 100%;
 }
-/* FIM DA CORREÇÃO DE ANINHAMENTO */
+
 
 
 .auth-tabs {
