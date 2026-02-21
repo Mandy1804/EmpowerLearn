@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: empowerlearn-mysql
+    restart: always
+    environment:
+      # Nome do banco de dados que o Spring Boot vai usar
+      MYSQL_DATABASE: empowerlearn_db
+
+      # Credenciais para o Spring Boot se conectar
+      MYSQL_USER: empoweruser
+      MYSQL_PASSWORD: empowerpass
+
+      # Senha de administração ROOT
+      MYSQL_ROOT_PASSWORD: root
+
+    ports:
+      # Mapeia a porta 3306 do contêiner para a porta 3306 da sua máquina
+      - "3306:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    # Essencial para conexões do Java/MySQL
+    command: --default-authentication-plugin=mysql_native_password
+
+    networks:
+      - empower-network
+
+networks:
+  empower-network:
+
+volumes:
+  mysql_data:
