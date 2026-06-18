@@ -1,187 +1,179 @@
-# EmpowerLearn
+# 🎓 EmpowerLearn
 
-## Sobre o Projeto
+> Plataforma educacional desenvolvida para conectar professores, alunos e instituições de ensino de forma rápida, segura e eficiente.
 
-A EmpowerLearn é uma plataforma educacional desenvolvida para conectar professores, alunos e instituições de ensino de forma rápida, segura e eficiente.
-
-O sistema permite o cadastro e autenticação de diferentes tipos de usuários, consulta de perfis de professores, visualização de curtidas, histórico de acessos e navegação por páginas institucionais que apresentam a proposta da plataforma.
-
----
-
-## Objetivo
-
-Facilitar a conexão entre profissionais da educação e instituições de ensino, reduzindo a burocracia dos processos de contratação e ampliando as oportunidades para professores e alunos.
+![Badge](https://img.shields.io/badge/Status-Concluído-brightgreen)
+![Badge](https://img.shields.io/badge/Java-17-orange)
+![Badge](https://img.shields.io/badge/Spring%20Boot-3.x-green)
+![Badge](https://img.shields.io/badge/Web-Responsivo-blue)
 
 ---
 
-# Tecnologias Utilizadas
+## 📋 Sobre o Projeto
 
-## Frontend (Web)
+A **EmpowerLearn** é uma plataforma digital voltada para o setor educacional, criada para facilitar o recrutamento de professores e promover conexões entre profissionais da educação, alunos e instituições de ensino.
 
-- HTML5
-- CSS3
-- JavaScript
-- Design Responsivo
-
-## Backend (API)
-
-- Java
-- Spring Boot
-- Spring Web
-- Spring Data JPA
-- Maven
+A plataforma busca reduzir a burocracia dos processos de contratação, oferecendo uma experiência moderna, intuitiva e eficiente para todos os usuários.
 
 ---
 
-# Estrutura do Projeto
+## ✨ Funcionalidades
 
-## Frontend
+### 👨‍🏫 Professores
 
-### Páginas
+* Cadastro e autenticação
+* Criação de perfil profissional
+* Cadastro de especialidades e experiência
+* Upload de foto de perfil
+* Visualização de oportunidades
 
-- index.html
-- login.html
-- sobre.html
-- contato.html
-- como-funcionna.html
-- diferenciais.html
-- daschboard.html
-- historico-perfis.html
-- ver-perfil.html
-- ver-curtidas.html
+### 🎓 Alunos
 
-### Pastas
+* Cadastro e login
+* Consulta de perfis de professores
+* Busca por profissionais qualificados
 
-- css/
-- js/
-- imagens/
+### 🏫 Instituições
 
----
+* Cadastro e autenticação
+* Busca de professores por perfil
+* Consulta de informações profissionais
 
-## Backend
+### 🌐 Plataforma
 
-### Config
-
-- WebConfig.java
-
-### Controllers
-
-- AlunoController.java
-- ProfessorController.java
-- InstituicaoController.java
-
-### Models
-
-- Aluno.java
-- Professor.java
-- Instituicao.java
-
-### Repositories
-
-- AlunoRepository.java
-- ProfessorRepository.java
-- InstituicaoRepository.java
-
-### Services
-
-- CepService.java
-
-### Classe Principal
-
-- EmpowerLearnApiApplication.java
+* Página institucional
+* Página Sobre Nós
+* Página Como Funciona
+* Página de Diferenciais
+* Página de Contato
+* Dashboard do usuário
+* Histórico de perfis visualizados
+* Sistema de curtidas
+* Consulta de perfis
 
 ---
 
-# Funcionalidades
+## 🛠️ Tecnologias Utilizadas
 
-## Usuários
+### Front-end
+
+* HTML5
+* CSS3
+* JavaScript
+* Design Responsivo
+* Local Storage
+
+### Back-end
+
+* Java 17
+* Spring Boot
+* Spring Data JPA
+* Maven
+* API REST
+
+---
+
+## 🚀 Como Executar o Projeto
+
+### Pré-requisitos
+
+* Java 17+
+* Maven
+* IDE Java (IntelliJ IDEA ou VS Code)
+
+---
+
+## 📁 Estrutura do Projeto
+
+```text
+EmpowerLearn/
+├── css/
+├── js/
+├── imagens/
+│
+├── index.html
+├── login.html
+├── sobre.html
+├── contato.html
+├── como-funcionna.html
+├── diferenciais.html
+├── daschboard.html
+├── historico-perfis.html
+├── ver-perfil.html
+├── ver-curtidas.html
+│
+├── empowerlearn-api/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── br/com/empowerlearn/
+│   │   │   │       ├── config/
+│   │   │   │       │   └── WebConfig.java
+│   │   │   │       │
+│   │   │   │       ├── controller/
+│   │   │   │       │   ├── AlunoController.java
+│   │   │   │       │   ├── ProfessorController.java
+│   │   │   │       │   └── InstituicaoController.java
+│   │   │   │       │
+│   │   │   │       ├── model/
+│   │   │   │       │   ├── Aluno.java
+│   │   │   │       │   ├── Professor.java
+│   │   │   │       │   └── Instituicao.java
+│   │   │   │       │
+│   │   │   │       ├── repository/
+│   │   │   │       │   ├── AlunoRepository.java
+│   │   │   │       │   ├── ProfessorRepository.java
+│   │   │   │       │   └── InstituicaoRepository.java
+│   │   │   │       │
+│   │   │   │       ├── service/
+│   │   │   │       │   └── CepService.java
+│   │   │   │
+│   │   │   └── EmpowerLearnApiApplication.java
+│   │   │
+│   │   └── resources/
+│   │       └── application.properties
+│   │
+│   ├── pom.xml
+│   ├── mvnw
+│   └── docker-compose.yml
+│
+└── README.md
+```
+
+---
+
+## 🔌 Principais Endpoints da API
 
 ### Alunos
 
-- Cadastro
-- Login
-- Consulta de professores
+| Método | Endpoint          |
+| ------ | ----------------- |
+| POST   | /api/alunos       |
+| POST   | /api/alunos/login |
 
 ### Professores
 
-- Cadastro
-- Login
-- Gerenciamento de perfil
-- Upload de foto
+| Método | Endpoint                          |
+| ------ | --------------------------------- |
+| POST   | /api/professores                  |
+| POST   | /api/professores/login            |
+| POST   | /api/professores/{id}/upload-foto |
 
 ### Instituições
 
-- Cadastro
-- Login
-- Busca de professores
+| Método | Endpoint                |
+| ------ | ----------------------- |
+| POST   | /api/instituicoes       |
+| POST   | /api/instituicoes/login |
 
 ---
 
-## Plataforma
+## 🎯 Objetivo
 
-- Página inicial institucional
-- Página sobre a empresa
-- Página de diferenciais
-- Página de contato
-- Explicação de funcionamento da plataforma
-- Visualização de perfis
-- Histórico de perfis visitados
-- Visualização de curtidas
-- Dashboard do usuário
+Promover a qualidade da educação através da tecnologia, conectando talentos e oportunidades de forma acessível, eficiente e segura.
 
 ---
 
-# Integração Frontend e Backend
+## 📄 Licença
 
-O frontend realiza requisições para a API através do endereço:
-
-```javascript
-http://localhost:8080/api
-```
-
-As operações incluem:
-
-- Login
-- Cadastro
-- Consulta de perfis
-- Upload de foto de perfil
-- Busca de informações dos usuários
-
----
-
-# Como Executar
-
-## Backend
-
-1. Abrir o projeto Java.
-2. Executar a classe:
-
-```java
-EmpowerLearnApiApplication
-```
-
-3. A API ficará disponível em:
-
-```
-http://localhost:8080
-```
-
----
-
-## Frontend
-
-1. Abrir os arquivos HTML em um navegador.
-2. Certificar-se de que a API está em execução.
-3. Utilizar a página:
-
-```
-index.html
-```
-
-como ponto de entrada da aplicação.
-
----
-
-# Equipe
-
-Projeto desenvolvido para a Escola de TI, com foco na aplicação de conceitos de desenvolvimento web, programação orientada a objetos, integração frontend/backend e boas práticas de engenharia de software.
+Projeto acadêmico desenvolvido para escola de TI.
