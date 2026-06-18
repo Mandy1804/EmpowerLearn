@@ -27,7 +27,7 @@ A plataforma busca reduzir a burocracia dos processos de contratação, oferecen
 * Upload de foto de perfil
 * Visualização de oportunidades
 
-### 🎓 Alunos
+### 🎓 Alunos/Pais
 
 * Cadastro e login
 * Consulta de perfis de professores
@@ -73,7 +73,6 @@ A plataforma busca reduzir a burocracia dos processos de contratação, oferecen
 
 ---
 
-## 🚀 Como Executar o Projeto
 
 ### Pré-requisitos
 
