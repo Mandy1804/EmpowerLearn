@@ -192,11 +192,18 @@
                         <h1 id="prof-name"></h1>
                         <p id="prof-email"></p>
                     </div>
-                    <div class="photo-upload-container" style="margin-left: auto;">
+                    <div class="photo-upload-container" style="margin-left: auto; display: flex; flex-direction: column; gap: 12px; align-items: stretch; min-width: 200px;">
                         <input type="file" id="profile-photo-input" accept="image/*" style="display: none;">
-                        <button type="button" class="upload-btn" id="upload-button">
+                        <button type="button" class="upload-btn" id="upload-button" style="width: 100%; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--primary-purple); background-color: var(--white); color: var(--primary-purple); font-weight: 600; cursor: pointer; transition: background-color 0.2s;">
                             Carregar Nova Foto
                         </button>
+                        <div id="curriculo-container" style="display: none; flex-direction: column; gap: 6px;">
+                            <input type="file" id="curriculo-input" style="display: none;">
+                            <button type="button" class="upload-btn" id="curriculo-button" style="width: 100%; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--primary-purple); background-color: var(--white); color: var(--primary-purple); font-weight: 600; cursor: pointer; transition: background-color 0.2s;">
+                                Anexar Currículo
+                            </button>
+                            <a id="curriculo-link" href="#" target="_blank" style="display: none; text-align: center; color: var(--primary-purple); font-size: 0.85em; text-decoration: underline;">Ver currículo atual</a>
+                        </div>
                     </div>
                 </div>
 
@@ -239,6 +246,14 @@
                         <span class="detail-label">Forma Didática:</span>
                         <span class="detail-value" id="prof-didatica"></span>
                     </div>
+                    <div class="detail-item" style="flex-direction: column; align-items: flex-start;">
+                        <span class="detail-label" style="margin-bottom: 8px;">Biografia:</span>
+                        <textarea id="prof-biografia-input" maxlength="280" rows="4" style="width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 0.95em; font-family: inherit; resize: vertical; color: var(--text-dark);" placeholder="Conte um pouco sobre sua trajetoria, especialidades e metodo de ensino..."></textarea>
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 8px;">
+                            <span id="bio-char-count" style="font-size: 0.8em; color: var(--text-light);">0/280</span>
+                            <button type="button" class="upload-btn" id="salvar-bio-button" style="padding: 8px 16px; border-radius: 8px; border: 1px solid var(--primary-purple); background-color: var(--white); color: var(--primary-purple); font-weight: 600; cursor: pointer;">Salvar Biografia</button>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="delete-button-container">
@@ -253,6 +268,11 @@
 
     <script>
         const API_BASE_URL = 'http://localhost:8080/api';
+
+        function getEntityPlural(tipo) {
+            const mapa = { 'professor': 'professores', 'aluno': 'alunos', 'instituicao': 'instituicoes' };
+            return mapa[tipo] || (tipo + 's');
+        }
         const loadingMessage = document.getElementById('loading-message');
         const profileData = document.getElementById('profile-data');
         
@@ -278,7 +298,7 @@
     }
     
     // CONSTRÓI A URL DINÂMICA
-    const url = `${API_BASE_URL}/${userType}s/${userId}`;
+    const url = `${API_BASE_URL}/${getEntityPlural(userType)}/${userId}`;
     console.log("Chamando API em:", url); // Log para ver se o endereço está correto
 
     try {
@@ -310,7 +330,8 @@
 
     if (data.fotoUrl && data.fotoUrl.startsWith('/uploads/')) { 
         // Adicionamos o API_BASE_URL para que o navegador busque em localhost:8080
-        avatarElement.innerHTML = `<img src="${API_BASE_URL}${data.fotoUrl}" alt="Foto de Perfil">`;
+        const SERVER_BASE_URL = 'http://localhost:8080';
+avatarElement.innerHTML = `<img src="${SERVER_BASE_URL}${data.fotoUrl}" alt="Foto de Perfil">`;
     } else {
         // Se não houver foto, exibe a inicial do nome
         avatarElement.innerText = principalName.charAt(0);
@@ -319,6 +340,17 @@
     // 3. Preenchimento dos demais campos básicos
     document.getElementById('prof-name').innerText = (type === 'professor' ? 'Prof. ' : '') + principalName;
     document.getElementById('prof-email').innerText = data.email || 'N/A';
+
+    // Exibe o link do curriculo, se o professor ja tiver um cadastrado
+    const curriculoLinkEl = document.getElementById('curriculo-link');
+    if (curriculoLinkEl) {
+        if (type === 'professor' && data.curriculoUrl) {
+            curriculoLinkEl.href = 'http://localhost:8080' + data.curriculoUrl;
+            curriculoLinkEl.style.display = 'inline';
+        } else {
+            curriculoLinkEl.style.display = 'none';
+        }
+    }
     
     // 4. Lógica de Localização
     const cidade = data.cidade || 'N/A';
@@ -347,7 +379,14 @@
         document.getElementById('prof-especialidade').innerText = data.especialidade || 'N/A';
         document.getElementById('prof-experiencia').innerText = data.experiencia !== undefined ? data.experiencia : '0';
         document.getElementById('prof-didatica').innerText = data.didatica || 'Não informada';
-        
+
+        const bioInput = document.getElementById('prof-biografia-input');
+        const bioCharCount = document.getElementById('bio-char-count');
+        if (bioInput) {
+            bioInput.value = data.biografia || '';
+            bioCharCount.innerText = bioInput.value.length + '/280';
+        }
+
     } else if (type === 'aluno') {
         detailNascimento.style.display = 'flex';
         detailSexo.style.display = 'flex';
@@ -365,7 +404,7 @@
             }
             
             try {
-                const url = `${API_BASE_URL}/${userType}s/${userId}`;
+                const url = `${API_BASE_URL}/${getEntityPlural(userType)}/${userId}`;
                 const response = await fetch(url, { method: 'DELETE' });
 
                 if (response.status === 204) {
@@ -401,6 +440,52 @@
         // Liga o botão de Upload à nova função (adicionada no guia anterior)
         const profilePhotoInput = document.getElementById('profile-photo-input');
         const uploadButton = document.getElementById('upload-button');
+
+        // Lógica do botão de Currículo (apenas para Professor)
+        const curriculoContainer = document.getElementById('curriculo-container');
+        const curriculoInput = document.getElementById('curriculo-input');
+        const curriculoButton = document.getElementById('curriculo-button');
+        const curriculoLink = document.getElementById('curriculo-link');
+
+        if (userType === 'professor' && curriculoContainer) {
+            curriculoContainer.style.display = 'flex';
+
+            curriculoButton.addEventListener('click', function() {
+                curriculoInput.click();
+            });
+
+            curriculoInput.addEventListener('change', async function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const uploadUrl = `${API_BASE_URL}/${getEntityPlural(userType)}/${userId}/upload-curriculo`;
+
+                curriculoButton.innerText = 'Enviando...';
+                curriculoButton.disabled = true;
+
+                try {
+                    const response = await fetch(uploadUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        alert('Curriculo salvo com sucesso!');
+                        fetchUserData();
+                    } else {
+                        alert('Falha ao carregar o curriculo no servidor.');
+                    }
+                } catch (error) {
+                    alert('Erro de rede durante o upload do curriculo.');
+                } finally {
+                    curriculoButton.innerText = 'Anexar Curriculo';
+                    curriculoButton.disabled = false;
+                }
+            });
+        }
         
         if (uploadButton && profilePhotoInput) {
             uploadButton.addEventListener('click', function() {
@@ -414,7 +499,7 @@
                 const formData = new FormData();
                 formData.append('file', file);
                 
-                const uploadUrl = `${API_BASE_URL}/${userType}s/${userId}/upload-foto`; 
+                const uploadUrl = `${API_BASE_URL}/${getEntityPlural(userType)}/${userId}/upload-foto`; 
 
                 uploadButton.innerText = 'Enviando...';
                 uploadButton.disabled = true;
@@ -440,6 +525,44 @@
             });
         }
         
+        // Logica da Biografia (apenas Professor)
+        document.addEventListener('input', function(event) {
+            if (event.target && event.target.id === 'prof-biografia-input') {
+                const count = event.target.value.length;
+                const counter = document.getElementById('bio-char-count');
+                if (counter) counter.innerText = count + '/280';
+            }
+        });
+
+        document.addEventListener('click', async function(event) {
+            if (event.target && event.target.id === 'salvar-bio-button') {
+                const bioInput = document.getElementById('prof-biografia-input');
+                const botao = event.target;
+                const textoOriginal = botao.innerText;
+                botao.innerText = 'Salvando...';
+                botao.disabled = true;
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/${getEntityPlural(userType)}/${userId}/biografia`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ biografia: bioInput.value })
+                    });
+
+                    if (response.ok) {
+                        alert('Biografia salva com sucesso!');
+                    } else {
+                        alert('Falha ao salvar a biografia.');
+                    }
+                } catch (error) {
+                    alert('Erro de rede ao salvar a biografia.');
+                } finally {
+                    botao.innerText = textoOriginal;
+                    botao.disabled = false;
+                }
+            }
+        });
+
         // Inicia a busca dos dados ao carregar a página
         document.addEventListener('DOMContentLoaded', fetchUserData);
         

@@ -1,0 +1,12 @@
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/EmpowerLearnApiApplication.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/config/WebConfig.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/controller/AlunoController.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/controller/InstituicaoController.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/controller/ProfessorController.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/model/Aluno.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/model/Instituicao.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/model/Professor.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/repository/AlunoRepository.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/repository/InstituicaoRepository.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/repository/ProfessorRepository.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/service/CepService.java

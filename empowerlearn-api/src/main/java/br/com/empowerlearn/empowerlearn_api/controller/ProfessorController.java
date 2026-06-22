@@ -40,6 +40,13 @@ public class ProfessorController {
             return new ResponseEntity<>("Erro: Este e-mail já está cadastrado.", HttpStatus.BAD_REQUEST);
         }
 
+        if (professor.getDataNascimento() != null) {
+            int idade = java.time.Period.between(professor.getDataNascimento(), java.time.LocalDate.now()).getYears();
+            if (idade < 18) {
+                return new ResponseEntity<>("Erro: É necessário ter pelo menos 18 anos para se cadastrar como professor.", HttpStatus.BAD_REQUEST);
+            }
+        }
+
         try {
             JsonNode endereco = cepService.buscarEnderecoPorCep(professor.getCep());
 
@@ -71,7 +78,7 @@ public class ProfessorController {
 
         // MUITO IMPORTANTE: Define o diretório de uploads
         // Certifique-se de que este caminho C:\\temp\\uploads realmente existe na sua máquina!
-        String uploadDir = "C:\\temp\\empowerlearn\\uploads";
+        String uploadDir = System.getProperty("user.dir") + File.separator + "uploads";
 
         try {
             // Garante que o diretório exista (se for o primeiro upload)
@@ -98,6 +105,62 @@ public class ProfessorController {
         } catch (Exception e) {
             System.err.println("Erro durante o upload: " + e.getMessage());
             return new ResponseEntity<>("Erro ao salvar foto: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // ========================================================
+    // ENDPOINT: UPLOAD DE CURRICULO (POST /api/professores/{id}/upload-curriculo)
+    // ========================================================
+    @PostMapping("/{id}/upload-curriculo")
+    public ResponseEntity<String> uploadCurriculo(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+
+        if (file.isEmpty()) {
+            return new ResponseEntity<>("Nenhum arquivo enviado.", HttpStatus.BAD_REQUEST);
+        }
+
+        String uploadDir = System.getProperty("user.dir") + File.separator + "uploads";
+
+        try {
+            Path directoryPath = Paths.get(uploadDir);
+            Files.createDirectories(directoryPath);
+
+            String fileName = "curriculo_" + id + "_" + file.getOriginalFilename();
+            Path copyLocation = Paths.get(uploadDir + File.separator + fileName);
+
+            Files.copy(file.getInputStream(), copyLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            Professor professor = professorRepository.findById(id).orElseThrow(() -> new RuntimeException("Professor não encontrado."));
+
+            String curriculoUrl = "/uploads/" + fileName;
+            professor.setCurriculoUrl(curriculoUrl);
+            professorRepository.save(professor);
+
+            return new ResponseEntity<>(curriculoUrl, HttpStatus.OK);
+
+        } catch (Exception e) {
+            System.err.println("Erro durante o upload do curriculo: " + e.getMessage());
+            return new ResponseEntity<>("Erro ao salvar curriculo: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // ========================================================
+    // ENDPOINT: ATUALIZAR BIOGRAFIA (PUT /api/professores/{id}/biografia)
+    // ========================================================
+    @PutMapping("/{id}/biografia")
+    public ResponseEntity<?> atualizarBiografia(@PathVariable Long id, @RequestBody java.util.Map<String, String> body) {
+        String novaBiografia = body.get("biografia");
+
+        if (novaBiografia != null && novaBiografia.length() > 280) {
+            return new ResponseEntity<>("Biografia excede o limite de 280 caracteres.", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            Professor professor = professorRepository.findById(id).orElseThrow(() -> new RuntimeException("Professor nao encontrado."));
+            professor.setBiografia(novaBiografia);
+            professorRepository.save(professor);
+            return new ResponseEntity<>(professor, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Erro ao atualizar biografia: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

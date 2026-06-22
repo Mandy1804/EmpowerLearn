@@ -22,6 +22,11 @@ public class Professor {
     // ===================================
     // CAMPO NOVO: URL da Foto (para persistência)
     private String fotoUrl;
+    private String curriculoUrl;
+    @jakarta.persistence.Column(length = 280)
+    private String biografia;
+    private LocalDate dataNascimento;
+    private String sexo;
     // ===================================
 
     // CAMPOS DE LOCALIZAÇÃO (CEP Service)
@@ -84,6 +89,38 @@ public class Professor {
 
     public void setFotoUrl(String fotoUrl) {
         this.fotoUrl = fotoUrl;
+    }
+
+    public String getCurriculoUrl() {
+        return curriculoUrl;
+    }
+
+    public void setCurriculoUrl(String curriculoUrl) {
+        this.curriculoUrl = curriculoUrl;
+    }
+
+    public String getBiografia() {
+        return biografia;
+    }
+
+    public void setBiografia(String biografia) {
+        this.biografia = biografia;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
     // GETTERS E SETTERS DA LOCALIZAÇÃO

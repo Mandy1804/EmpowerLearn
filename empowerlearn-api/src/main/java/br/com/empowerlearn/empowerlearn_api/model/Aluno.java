@@ -27,6 +27,7 @@ public class Aluno {
     private String pais;
 
     private LocalDate dataCadastro;
+    private String fotoUrl;
 
     // Construtor padrão (necessário para JPA)
     public Aluno() {}
@@ -53,4 +54,6 @@ public class Aluno {
     public void setEstado(String estado) { this.estado = estado; }
     public String getPais() { return pais; }
     public void setPais(String pais) { this.pais = pais; }
+    public String getFotoUrl() { return fotoUrl; }
+    public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
 }

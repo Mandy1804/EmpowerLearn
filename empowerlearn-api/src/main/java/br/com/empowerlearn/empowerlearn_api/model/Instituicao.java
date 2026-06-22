@@ -27,6 +27,7 @@ public class Instituicao {
     // ===================================
 
     private LocalDate dataCadastro;
+    private String fotoUrl;
 
     // Construtor padrão (necessário para JPA)
     public Instituicao() {}
@@ -105,5 +106,13 @@ public class Instituicao {
 
     public void setPais(String pais) {
         this.pais = pais;
+    }
+
+    public String getFotoUrl() {
+        return fotoUrl;
+    }
+
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
     }
 }
