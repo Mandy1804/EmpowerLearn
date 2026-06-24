@@ -9,4 +9,6 @@
 /Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/repository/AlunoRepository.java
 /Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/repository/InstituicaoRepository.java
 /Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/repository/ProfessorRepository.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/security/JwtService.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/security/SecurityConfig.java
 /Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/service/CepService.java

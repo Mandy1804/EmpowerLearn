@@ -1,5 +1,5 @@
 const API_BASE_URL = 'http://localhost:8080/api';
-const PAGINA_DESTINO = 'dashboard.html';
+const PAGINA_DESTINO = 'daschboard.html';
 
 document.addEventListener('DOMContentLoaded', function () {
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -43,7 +43,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 if (response.ok) {
-                    userData = await response.json();
+                    const resposta = await response.json();
+                    const chave = Object.keys(resposta).find(k => k !== "token");
+                    userData = resposta[chave];
+                    userData.token = resposta.token;
                     success = true;
                     break;
                 }
@@ -56,7 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (success && userData && userData.id) {
             // SALVA O ID DO USUÁRIO LOGADO para uso na página ver-perfil.html
             localStorage.setItem('userId', userData.id);
-            localStorage.setItem('userType', userData.tipo); 
+            localStorage.setItem('userType', userData.tipo);
+            localStorage.setItem('token', userData.token);
             
             showMessage(messageDivLogin, 'success', 'Login bem-sucedido! Redirecionando...');
             

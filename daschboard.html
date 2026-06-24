@@ -9,7 +9,6 @@
     <style>
     
         body {
-            /* Mantém o flex para layout lateral */
             display: flex;
             min-height: 100vh;
             background-color: var(--light-gray); 
@@ -20,7 +19,7 @@
         }
 
         /* ----------------------------------- */
-        /* Sidebar Styles (FIXO NO DESKTOP) */
+        /* Sidebar */
         /* ----------------------------------- */
         .sidebar {
             width: 280px;
@@ -31,7 +30,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            
             position: fixed; 
             left: 0;
             top: 0; 
@@ -52,10 +50,7 @@
             text-decoration: none;
         }
 
-        .sidebar-nav {
-            flex-grow: 1;
-            padding: 20px 0;
-        }
+        .sidebar-nav { flex-grow: 1; padding: 20px 0; }
 
         .sidebar-link {
             display: flex;
@@ -80,7 +75,6 @@
             stroke-width: 2;
         }
 
-        /* Logout button style */
         .sidebar-logout {
             border-top: 1px solid rgba(255, 255, 255, 0.2);
             padding-top: 20px;
@@ -91,7 +85,6 @@
             font-weight: 600;
         }
 
-        /* Menu Hamburguer do Dashboard (Visível apenas em Mobile) */
         .menu-toggle {
             display: none;
             position: fixed;
@@ -103,21 +96,19 @@
             cursor: pointer;
         }
 
-
         /* ----------------------------------- */
-        /* Main Content Styles */
+        /* Main Content */
         /* ----------------------------------- */
         .main-content {
             flex-grow: 1;
             padding: 30px;
             background-color: var(--light-gray);
-            /* Margem para o conteúdo não ficar por baixo do menu fixo */
             margin-left: 280px; 
             width: calc(100% - 280px); 
         }
         
         /* ----------------------------------- */
-        /* Seção de Busca (Frase Impactante + Lupa) */
+        /* Search Hero */
         /* ----------------------------------- */
         .search-hero {
             text-align: center;
@@ -164,55 +155,217 @@
         }
         
         /* ----------------------------------- */
-        /* Professor Card Grid */
+        /* Professor Card Grid — SIMPLIFICADO */
         /* ----------------------------------- */
         .professor-header {
-             color: var(--text-dark); 
-             font-size: 1.5em;
-             margin-bottom: 20px;
+            color: var(--text-dark); 
+            font-size: 1.5em;
+            margin-bottom: 20px;
         }
         
         .professor-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 25px;
         }
 
         .professor-card {
             background-color: var(--white);
             border-radius: 12px;
-            padding: 20px;
+            padding: 24px 20px;
             box-shadow: var(--shadow-light);
             transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+        }
+
+        .professor-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--vibrant-purple);
         }
 
         .prof-avatar {
             background-color: var(--primary-purple); 
-            width: 60px;
-            height: 60px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--white);
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            margin-right: 15px;
+            margin-bottom: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
         }
-        
+
+        .professor-card h3 {
+            font-size: 1.05em;
+            color: var(--text-dark);
+            font-weight: 700;
+            margin: 0;
+        }
+
         .prof-badge {
             background-color: var(--vibrant-purple); 
             display: inline-block;
             color: var(--white);
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 50px;
             font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .prof-meta {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .prof-hint {
+            font-size: 0.75em;
+            color: var(--vibrant-purple);
+            margin-top: 4px;
             font-weight: 500;
-            margin-top: 10px;
         }
 
         /* ----------------------------------- */
-        /* Modal de Filtros (ESTILO MODERNO) */
+        /* Modal de Detalhes do Professor      */
+        /* ----------------------------------- */
+        .professor-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.65);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .professor-modal-overlay.active {
+            display: flex;
+        }
+
+        .professor-modal-box {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 36px 32px 28px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            position: relative;
+            animation: modalFadeIn 0.25s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .professor-modal-box .modal-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.6em;
+            color: var(--text-light);
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .professor-modal-box .modal-close-btn:hover {
+            color: var(--danger-color);
+        }
+
+        .professor-modal-box .modal-avatar {
+            background-color: var(--primary-purple);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 16px;
+            overflow: hidden;
+        }
+
+        .professor-modal-box h2 {
+            text-align: center;
+            color: var(--text-dark);
+            font-size: 1.3em;
+            margin-bottom: 4px;
+        }
+
+        .professor-modal-box .modal-especialidade {
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .professor-modal-box .modal-meta {
+            text-align: center;
+            font-size: 0.88em;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .professor-modal-box hr {
+            border: none;
+            border-top: 1px solid var(--border-light);
+            margin: 0 0 18px;
+        }
+
+        .professor-modal-box .modal-bio-label {
+            font-size: 0.8em;
+            font-weight: 700;
+            color: var(--vibrant-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 8px;
+        }
+
+        .professor-modal-box .modal-bio-text {
+            font-size: 0.95em;
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .professor-modal-box .btn-curriculo {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 13px;
+            background-color: var(--vibrant-purple);
+            color: var(--white);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: background-color 0.2s;
+        }
+
+        .professor-modal-box .btn-curriculo:hover {
+            background-color: var(--primary-purple);
+        }
+
+        /* ----------------------------------- */
+        /* Modal de Filtros */
         /* ----------------------------------- */
         .filter-modal {
             position: fixed;
@@ -260,9 +413,7 @@
             font-size: 1.6em;
         }
 
-        .filter-group {
-            margin-bottom: 20px;
-        }
+        .filter-group { margin-bottom: 20px; }
 
         .filter-group label {
             display: block;
@@ -304,81 +455,53 @@
         }
 
         #close-filter, #clear-filter {
-            background-color: transparent; /* Botões secundários como link/outline */
+            background-color: transparent;
             color: var(--text-light);
             border: 2px solid var(--border-light);
         }
         
-        #clear-filter:hover {
-            background-color: var(--light-gray);
-        }
+        #clear-filter:hover { background-color: var(--light-gray); }
 
-        #apply-filter {
-            background-color: var(--vibrant-purple);
-            color: var(--white);
-        }
-
-        #apply-filter:hover {
-            background-color: var(--primary-purple);
-        }
+        #apply-filter { background-color: var(--vibrant-purple); color: var(--white); }
+        #apply-filter:hover { background-color: var(--primary-purple); }
 
         /* ----------------------------------- */
-        /* Responsividade (Mobile) */
+        /* Responsividade */
         /* ----------------------------------- */
         @media (max-width: 768px) {
-            
-            .menu-toggle {
-                display: block;
-            }
+            .menu-toggle { display: block; }
             
             .sidebar {
-                
                 width: 70%; 
                 transform: translateX(-100%);
             }
             
-            .sidebar.active {
-                transform: translateX(0);
-            }
+            .sidebar.active { transform: translateX(0); }
             
             .main-content {
-                /* Remove a margem no mobile para ocupar a tela toda */
                 margin-left: 0;
                 width: 100%; 
-                padding-top: 70px; /* Espaço para o ícone de menu */
+                padding-top: 70px;
             }
             
-            .sidebar-logo {
-                display: block;
-                text-align: left;
-                margin-left: 30px;
-            }
-            
-            .sidebar-logout {
-                display: block;
-            }
-
-            .professor-grid {
-                 /* Uma coluna em telas pequenas */
-                grid-template-columns: 1fr; 
-            }
+            .professor-grid { grid-template-columns: 1fr; }
             
             .modal-actions {
                 flex-direction: column;
                 gap: 15px;
             }
             
-            .modal-actions button {
-                width: 100%;
+            .modal-actions button { width: 100%; }
+
+            .professor-modal-box {
+                padding: 28px 20px 22px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="menu-toggle" id="menu-toggle">
-        &#9776; 
-    </div>
+    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
 
     <aside class="sidebar" id="sidebar-menu">
         <div class="sidebar-top">
@@ -413,7 +536,6 @@
         <div class="search-hero">
             <h1>Encontre o Match Perfeito para o seu Aprendizado.</h1>
             <p>Utilize o filtro para buscar professores por matéria, didática, idade e mais.</p>
-            
             <div class="search-container">
                 <div class="search-icon" id="open-filter-modal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg>
@@ -421,15 +543,58 @@
             </div>
         </div>
 
-        
         <h2 class="professor-header">Sugestões de Professores para Você</h2>
         
-        <div class="professor-grid">
-            
-            </div>
+        <div class="professor-grid"></div>
 
     </main>
 
+    <!-- ============================================ -->
+    <!-- MODAL DE DETALHES DO PROFESSOR               -->
+    <!-- ============================================ -->
+    <div class="professor-modal-overlay" id="professor-modal-overlay">
+        <div class="professor-modal-box">
+            <button class="modal-close-btn" id="modal-close-btn" title="Fechar">&times;</button>
+        <button id="modal-btn-curtir" onclick="toggleCurtirModal()" title="Curtir" style="position:absolute;top:16px;left:20px;background:none;border:none;font-size:1.8em;cursor:pointer;line-height:1;transition:transform 0.2s;">&#x1F90D;</button>
+
+            <div class="modal-avatar" id="modal-avatar">?</div>
+            <h2 id="modal-nome">—</h2>
+            <p class="modal-especialidade">
+                <span class="prof-badge" id="modal-especialidade">—</span>
+            </p>
+            <p class="modal-meta" id="modal-idade-sexo">—</p>
+
+            <hr>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;">
+                <div>
+                    <p class="modal-bio-label">Localização</p>
+                    <p class="modal-bio-text" id="modal-localizacao" style="margin-bottom:0;">—</p>
+                </div>
+                <div>
+                    <p class="modal-bio-label">Experiência</p>
+                    <p class="modal-bio-text" id="modal-experiencia" style="margin-bottom:0;">—</p>
+                </div>
+                <div style="grid-column:1/-1;">
+                    <p class="modal-bio-label">Forma Didática</p>
+                    <p class="modal-bio-text" id="modal-didatica" style="margin-bottom:0;">—</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <p class="modal-bio-label">Biografia</p>
+            <p class="modal-bio-text" id="modal-biografia">—</p>
+
+            <a href="#" class="btn-curriculo" id="modal-curriculo-btn" target="_blank" download>
+                ⬇ Baixar Currículo
+            </a>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL DE FILTROS                             -->
+    <!-- ============================================ -->
     <div class="filter-modal" id="filter-modal">
         <div class="modal-content">
             <h2>Filtros de Busca</h2>
@@ -464,7 +629,7 @@
                     <option value="geografia">Geografia</option>
                     <option value="fisica">Física</option>
                     <option value="quimica">Química</option>
-                    <option option value="ingles">Inglês</option>
+                    <option value="ingles">Inglês</option>
                     <option value="informatica">Informática</option>
                 </select>
             </div>
@@ -478,6 +643,9 @@
                     <option value="debate">Debates e Discussões</option>
                     <option value="projetos">Aprendizado por Projetos</option>
                     <option value="gamificacao">Gamificação</option>
+                    <option value="musica">Música</option>
+                    <option value="desenho">Desenho e Artes Visuais</option>
+                    <option value="doutorado">Doutorado</option>
                 </select>
             </div>
             
@@ -489,13 +657,42 @@
         </div>
     </div>
 
-
     <script>
         const API_URL = 'http://localhost:8080/api/professores';
+
+        function getStorageKey(nome) {
+            const uid = localStorage.getItem('userId') || 'anonimo';
+            return uid + '_' + nome;
+        }
+
+        function getCurtidos() {
+            return JSON.parse(localStorage.getItem(getStorageKey('curtidos')) || '[]');
+        }
+
+        function toggleCurtir(index, btn) {
+            const prof = professoresCache[index];
+            if (!prof) return;
+            let curtidos = getCurtidos();
+            const ja = curtidos.findIndex(p => p.id === prof.id);
+            if (ja >= 0) {
+                curtidos.splice(ja, 1);
+                btn.innerText = String.fromCodePoint(0x1f90d);
+            } else {
+                curtidos.push(prof);
+                btn.innerText = String.fromCodePoint(0x2764) + String.fromCodePoint(0xfe0f);
+            }
+            localStorage.setItem(getStorageKey('curtidos'), JSON.stringify(curtidos));
+        }
+
+        function atualizarCoracoes() {
+            const curtidos = getCurtidos();
+            document.querySelectorAll('.btn-curtir').forEach(btn => {
+                const idx = parseInt(btn.dataset.index);
+                const prof = professoresCache[idx];
+                btn.innerText = (prof && curtidos.find(p => p.id === prof.id)) ? String.fromCodePoint(0x2764) + String.fromCodePoint(0xfe0f) : String.fromCodePoint(0x1f90d);
+            });
+        }
         
-        // ----------------------------------------------------
-        // FUNÇÃO 1: RENDERIZA OS CARDS NA TELA
-        // ----------------------------------------------------
         let professoresCache = [];
 
         function calcularIdade(dataNascimento) {
@@ -504,214 +701,246 @@
             const nascimento = new Date(dataNascimento);
             let idade = hoje.getFullYear() - nascimento.getFullYear();
             const m = hoje.getMonth() - nascimento.getMonth();
-            if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
-                idade--;
-            }
+            if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) idade--;
             return idade;
         }
 
         function formatarSexo(sexo) {
-            if (!sexo) return 'Nao informado';
-            const mapa = { masculino: 'Masculino', feminino: 'Feminino', outro: 'Outro' };
+            if (!sexo) return 'Não informado';
+            const mapa = { masculino: 'Masculino', feminino: 'Feminino', outro: 'Outro', m: 'Masculino', f: 'Feminino', o: 'Outro' };
             return mapa[sexo.toLowerCase()] || sexo;
         }
 
+        // ----------------------------------------
+        // RENDERIZA CARDS — só nome, matéria, idade e sexo
+        // ----------------------------------------
         function renderProfessors(professores) {
             const grid = document.querySelector('.professor-grid');
             grid.innerHTML = '';
             professoresCache = professores || [];
 
             if (!professores || professores.length === 0) {
-                grid.innerHTML = '<p style="text-align: center; color: var(--text-dark);">Nenhum professor encontrado com os filtros selecionados.</p>';
+                grid.innerHTML = '<p style="text-align:center;color:var(--text-dark);grid-column:1/-1;">Nenhum professor encontrado com os filtros selecionados.</p>';
                 return;
             }
 
             professores.forEach((prof, index) => {
                 const card = document.createElement('div');
                 card.className = 'professor-card';
-                card.style.cursor = 'pointer';
                 card.onclick = () => abrirModalProfessor(index);
 
                 const idade = calcularIdade(prof.dataNascimento);
+                const avatarConteudo = prof.fotoUrl
+                    ? `<img src="http://localhost:8080${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+                    : (prof.nome ? prof.nome.charAt(0).toUpperCase() : '?');
 
                 card.innerHTML = `
-                    <div class="prof-avatar">${prof.fotoUrl ? `<img src="http://localhost:8080${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : (prof.nome ? prof.nome.charAt(0) : '?')}</div>
-                    <div class="prof-info">
-                        <h3>Prof. ${prof.nome || 'Nome Desconhecido'}</h3>
-                        <p>Especialista em ${prof.especialidade || 'Nao informada'}</p>
-                        <p style="margin-top: 6px; font-size: 0.9em; color: var(--text-light);">${idade !== null ? idade + ' anos' : 'Idade nao informada'} - ${formatarSexo(prof.sexo)}</p>
-                    </div>
+                    <div class="prof-avatar">${avatarConteudo}</div>
+                    <h3>Prof. ${prof.nome || 'Nome Desconhecido'}</h3>
+                    <span class="prof-badge">${prof.especialidade || 'Matéria não informada'}</span>
+                    <p class="prof-meta">${idade !== null ? idade + ' anos' : 'Idade não informada'} &middot; ${formatarSexo(prof.sexo)}</p>
+                    <p class="prof-hint">Clique para ver mais</p>
+                    <button class="btn-curtir" data-index="${index}" onclick="event.stopPropagation(); toggleCurtir(${index}, this)" style="margin-top:8px; background:none; border:none; cursor:pointer; font-size:1.4em;">🤍</button>
                 `;
                 grid.appendChild(card);
             });
+            atualizarCoracoes();
         }
 
+        // ----------------------------------------
+        // ABRE MODAL DE DETALHES (biografia + currículo)
+        // ----------------------------------------
         function abrirModalProfessor(index) {
             const prof = professoresCache[index];
             if (!prof) return;
 
             const idade = calcularIdade(prof.dataNascimento);
-            const cidade = prof.cidade || 'N/A';
+
+            // Avatar
+            const avatarEl = document.getElementById('modal-avatar');
+            avatarEl.innerHTML = prof.fotoUrl
+                ? `<img src="http://localhost:8080${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+                : (prof.nome ? prof.nome.charAt(0).toUpperCase() : '?');
+
+            document.getElementById('modal-nome').innerText = 'Prof. ' + (prof.nome || 'Nome Desconhecido');
+            document.getElementById('modal-especialidade').innerText = prof.especialidade || 'Matéria não informada';
+            document.getElementById('modal-idade-sexo').innerText =
+                `${idade !== null ? idade + ' anos' : 'Idade não informada'} · ${formatarSexo(prof.sexo)}`;
+            // Localização
+            const cidade = prof.cidade || null;
             const estado = prof.estado || '';
             const pais = prof.pais || '';
-            let localizacaoDisplay = "Localizacao nao informada";
-            if (cidade !== 'N/A') {
-                localizacaoDisplay = `${cidade}${estado ? '/' + estado : ''}${pais ? ' - ' + pais : ''}`;
-            }
+            document.getElementById('modal-localizacao').innerText = cidade
+                ? cidade + (estado ? '/' + estado : '') + (pais ? ' - ' + pais : '')
+                : 'Não informada';
 
-            document.getElementById('modal-avatar').innerHTML = prof.fotoUrl
-                ? `<img src="http://localhost:8080${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
-                : (prof.nome ? prof.nome.charAt(0) : '?');
-            document.getElementById('modal-nome').innerText = 'Prof. ' + (prof.nome || 'Nome Desconhecido');
-            document.getElementById('modal-especialidade').innerText = prof.especialidade || 'Nao informada';
-            document.getElementById('modal-idade-sexo').innerText = `${idade !== null ? idade + ' anos' : 'Idade nao informada'} - ${formatarSexo(prof.sexo)}`;
-            document.getElementById('modal-didatica').innerText = prof.didatica || 'Padrao';
-            document.getElementById('modal-experiencia').innerText = (prof.experiencia || '0') + ' anos';
-            document.getElementById('modal-localizacao').innerText = localizacaoDisplay;
-            document.getElementById('modal-biografia').innerText = prof.biografia || 'Este professor ainda nao adicionou uma biografia.';
+            // Experiência
+            document.getElementById('modal-experiencia').innerText =
+                prof.experiencia ? prof.experiencia + ' anos' : 'Não informada';
+
+            // Didática
+            const mapDidatica = {
+                pratica: 'Foco Prático/Laboratório',
+                teorica: 'Foco Teórico/Aprofundamento',
+                debate: 'Debates e Discussões',
+                projetos: 'Aprendizado por Projetos',
+                gamificacao: 'Gamificação'
+            };
+            document.getElementById('modal-didatica').innerText =
+                (prof.didatica && mapDidatica[prof.didatica.toLowerCase()])
+                    ? mapDidatica[prof.didatica.toLowerCase()]
+                    : (prof.didatica || 'Não informada');
+
+            document.getElementById('modal-biografia').innerText =
+                prof.biografia || 'Este professor ainda não adicionou uma biografia.';
 
             const curriculoBtn = document.getElementById('modal-curriculo-btn');
             if (prof.curriculoUrl) {
                 curriculoBtn.href = `http://localhost:8080${prof.curriculoUrl}`;
-                curriculoBtn.style.display = 'inline-block';
+                curriculoBtn.style.display = 'block';
             } else {
                 curriculoBtn.style.display = 'none';
             }
 
-            document.getElementById('professor-modal-overlay').style.display = 'flex';
+            modalIndexAtual = index;
+
+            // Salva no historico (max 5)
+            let historico = JSON.parse(localStorage.getItem(getStorageKey('historico')) || '[]');
+            historico = historico.filter(h => h.id !== prof.id);
+            historico.unshift({ id: prof.id, nome: prof.nome, especialidade: prof.especialidade, didatica: prof.didatica, fotoUrl: prof.fotoUrl || null, dataNascimento: prof.dataNascimento || null, sexo: prof.sexo || null, visitadoEm: new Date().toISOString() });
+            if (historico.length > 5) historico = historico.slice(0, 5);
+            localStorage.setItem(getStorageKey('historico'), JSON.stringify(historico));
+            const curtidos = getCurtidos();
+            const jaCurtido = curtidos.find(p => p.id === prof.id);
+            const btnCurtir = document.getElementById('modal-btn-curtir');
+            if (jaCurtido) {
+                btnCurtir.innerHTML = '&#x2764;&#xFE0F;';
+                btnCurtir.style.transform = 'scale(1.2)';
+            } else {
+                btnCurtir.innerHTML = '&#x1F90D;';
+                btnCurtir.style.transform = 'scale(1)';
+            }
+
+            const overlay = document.getElementById('professor-modal-overlay');
+            overlay.classList.add('active');
+            overlay.style.display = 'flex';
+        }
+
+        let modalIndexAtual = null;
+
+        function toggleCurtirModal() {
+            if (modalIndexAtual === null) return;
+            const prof = professoresCache[modalIndexAtual];
+            if (!prof) return;
+            let curtidos = getCurtidos();
+            const ja = curtidos.findIndex(p => p.id === prof.id);
+            const btn = document.getElementById('modal-btn-curtir');
+            if (ja >= 0) {
+                curtidos.splice(ja, 1);
+                btn.innerHTML = '&#x1F90D;';
+                btn.style.transform = 'scale(1)';
+            } else {
+                curtidos.push(prof);
+                btn.innerHTML = '&#x2764;&#xFE0F;';
+                btn.style.transform = 'scale(1.2)';
+            }
+            localStorage.setItem(getStorageKey('curtidos'), JSON.stringify(curtidos));
+            atualizarCoracoes();
         }
 
         function fecharModalProfessor() {
-            document.getElementById('professor-modal-overlay').style.display = 'none';
+            const overlay = document.getElementById('professor-modal-overlay');
+            overlay.classList.remove('active');
+            overlay.style.display = 'none';
         }
 
-
-        // ----------------------------------------------------
-        // FUNÇÃO 2: EXECUTA A BUSCA NA API
-        // ----------------------------------------------------
-        async function performSearch(filters = {}) {
+        // ----------------------------------------
+        // BUSCA NA API
+        // ----------------------------------------
+        async function performSearch(filters = {}) { return new Promise(async (resolve) => {
             let url = `${API_URL}/search?`;
-            
-            // Adiciona filtros de texto
             if (filters.nome) url += `nome=${encodeURIComponent(filters.nome)}&`;
-        
             if (filters.materia) url += `especialidade=${encodeURIComponent(filters.materia)}&`;
-           
+            if (filters.didatica) url += `didatica=${encodeURIComponent(filters.didatica)}&`;
             url = url.endsWith('&') ? url.slice(0, -1) : url;
-            
-          
-            if (url.endsWith('search?')) {
-                url = url.slice(0, -7); 
-                url += 'search';
-            }
-
-            console.log("Chamando API:", url);
+            if (url.endsWith('search?')) url = url.slice(0, -7) + 'search';
 
             try {
                 const response = await fetch(url);
-
-                if (response.status === 204 || response.status === 404) { 
-                    renderProfessors(null);
-                    return;
-                }
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('API Error:', errorText);
-                    alert(`❌ Erro na API: ${response.status}. Verifique o console do IntelliJ.`);
-                    return;
-                }
-
-                const professores = await response.json();
-                renderProfessors(professores);
-
+                if (response.status === 204 || response.status === 404) { renderProfessors(null); return; }
+                if (!response.ok) { alert(`❌ Erro na API: ${response.status}.`); return; }
+                renderProfessors(await response.json());
             } catch (error) {
-                console.error('Erro de conexão:', error);
                 alert('❌ Erro de rede: O Back-End está offline ou o CORS está bloqueando.');
             }
-        }
+            resolve();
+        }); }
 
-
-        // ----------------------------------------------------
-        // LÓGICA DE EVENTOS (ON LOAD)
-        // ----------------------------------------------------
+        // ----------------------------------------
+        // EVENTOS
+        // ----------------------------------------
         document.addEventListener('DOMContentLoaded', function() {
-            const logoutButton = document.getElementById('logout-button');
-            const openFilterModal = document.getElementById('open-filter-modal');
-            const closeFilterButton = document.getElementById('close-filter');
-            const filterModal = document.getElementById('filter-modal');
-            const menuToggle = document.getElementById('menu-toggle');
-            const sidebar = document.getElementById('sidebar-menu');
-            
-            // 1. Chamada inicial para carregar todos os professores ao abrir a página
-            performSearch(); 
 
-            // 2. Lógica de Logout com Confirmação 
+            const urlParams = new URLSearchParams(window.location.search);
+            const abrirId = urlParams.get('abrirProfessor');
+
+            performSearch().then(() => {
+                if (abrirId) {
+                    const idx = professoresCache.findIndex(p => String(p.id) === String(abrirId));
+                    if (idx >= 0) abrirModalProfessor(idx);
+                }
+            });
+
+            // Fechar modal de professor
+            document.getElementById('modal-close-btn').addEventListener('click', fecharModalProfessor);
+            document.getElementById('professor-modal-overlay').addEventListener('click', function(e) {
+                if (e.target === this) fecharModalProfessor();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') fecharModalProfessor();
+            });
+
+            // Logout
+            const logoutButton = document.getElementById('logout-button');
             if (logoutButton) {
                 logoutButton.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const confirmation = window.confirm("Você tem certeza de que quer sair? (Clique em OK para sair)");
-                    if (confirmation) {
-                        window.location.href = 'index.html'; 
-                    }
+                    if (window.confirm("Você tem certeza de que quer sair?")) window.location.href = 'index.html';
                 });
             }
             
-            // 3. Lógica do Modal de Filtros
-            if (openFilterModal && filterModal && closeFilterButton) {
-                openFilterModal.addEventListener('click', function() {
-                    filterModal.classList.add('active');
-                });
+            // Modal de filtros
+            const filterModal = document.getElementById('filter-modal');
+            document.getElementById('open-filter-modal').addEventListener('click', () => filterModal.classList.add('active'));
+            document.getElementById('close-filter').addEventListener('click', () => filterModal.classList.remove('active'));
+            filterModal.addEventListener('click', e => { if (e.target.id === 'filter-modal') filterModal.classList.remove('active'); });
 
-                closeFilterButton.addEventListener('click', function() {
-                    filterModal.classList.remove('active');
+            document.getElementById('apply-filter').addEventListener('click', function() {
+                performSearch({
+                    nome: document.getElementById('filter-nome').value,
+                    materia: document.getElementById('filter-materia').value,
+                    didatica: document.getElementById('filter-didatica').value,
                 });
-                
-                filterModal.addEventListener('click', function(e) {
-                    if (e.target.id === 'filter-modal') {
-                        filterModal.classList.remove('active');
-                    }
-                });
+                filterModal.classList.remove('active');
+            });
+            
+            document.getElementById('clear-filter').addEventListener('click', function() {
+                document.getElementById('filter-nome').value = '';
+                document.getElementById('filter-sexo').value = '';
+                document.getElementById('filter-idade').value = 18;
+                document.getElementById('filter-materia').value = '';
+                document.getElementById('filter-didatica').value = '';
+                performSearch();
+                filterModal.classList.remove('active');
+            });
 
-                // AÇÃO DE APLICAR FILTROS (CHAMADA REAL À API)
-                document.getElementById('apply-filter').addEventListener('click', function() {
-                    const filtros = {
-                        nome: document.getElementById('filter-nome').value,
-                        materia: document.getElementById('filter-materia').value,
-                        
-                    };
-                    
-                    performSearch(filtros); // Chama a API
-                    filterModal.classList.remove('active');
-                });
-                
-                // AÇÃO DE LIMPAR FILTROS
-                document.getElementById('clear-filter').addEventListener('click', function() {
-                    // Limpa os campos visuais
-                    document.getElementById('filter-nome').value = "";
-                    document.getElementById('filter-sexo').value = "";
-                    document.getElementById('filter-idade').value = 18;
-                    document.getElementById('filter-materia').value = "";
-                    document.getElementById('filter-didatica').value = "";
-                    
-                    performSearch(); // Executa busca sem filtros
-                    filterModal.classList.remove('active');
-                    alert('Filtros limpos e busca reiniciada.');
-                });
-            }
-
-            // 4. Lógica do Menu Mobile 
+            // Menu mobile
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar-menu');
             if (menuToggle && sidebar) {
-                 menuToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('active');
-                });
-                const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
-                sidebarLinks.forEach(link => {
-                    link.addEventListener('click', () => {
-                        if (window.innerWidth <= 768) {
-                            sidebar.classList.remove('active');
-                        }
-                    });
+                menuToggle.addEventListener('click', () => sidebar.classList.toggle('active'));
+                sidebar.querySelectorAll('.sidebar-link').forEach(link => {
+                    link.addEventListener('click', () => { if (window.innerWidth <= 768) sidebar.classList.remove('active'); });
                 });
             }
         });

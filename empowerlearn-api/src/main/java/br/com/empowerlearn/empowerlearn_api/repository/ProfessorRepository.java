@@ -11,16 +11,16 @@ import java.util.List;
 @Repository
 public interface ProfessorRepository extends JpaRepository<Professor, Long> {
     boolean existsByEmail(String email);
+    Professor findByEmail(String email);
     Professor findByEmailAndSenha(String email, String senha);
 
-    // NOVO MÉTODO PARA BUSCA DINÂMICA
     @Query("SELECT p FROM Professor p WHERE " +
-            // Filtra pelo Nome (se o parâmetro :nome NÃO for NULL)
             "(:nome IS NULL OR LOWER(p.nome) LIKE LOWER(CONCAT('%', :nome, '%'))) AND " +
-            // Filtra pela Especialidade (se o parâmetro :especialidade NÃO for NULL)
-            "(:especialidade IS NULL OR LOWER(p.especialidade) LIKE LOWER(CONCAT('%', :especialidade, '%')))")
+            "(:especialidade IS NULL OR LOWER(p.especialidade) LIKE LOWER(CONCAT('%', :especialidade, '%'))) AND " +
+            "(:didatica IS NULL OR LOWER(p.didatica) LIKE LOWER(CONCAT('%', :didatica, '%')))")
     List<Professor> buscarProfessoresPorFiltro(
             @Param("nome") String nome,
-            @Param("especialidade") String especialidade // Assumindo que a entidade Professor tem o campo 'especialidade'
+            @Param("especialidade") String especialidade,
+            @Param("didatica") String didatica
     );
 }

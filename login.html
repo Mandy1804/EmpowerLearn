@@ -106,6 +106,7 @@
                             <label for="aluno-confirmar-senha">Confirmar Senha</label>
                             <input type="password" id="aluno-confirmar-senha" name="aluno-confirmar-senha" required>
                         </div>
+                        <div class="lgpd-check"><input type="checkbox" id="lgpd-aluno" required><label for="lgpd-aluno">Li e concordo com a <a href="politica-privacidade.html" target="_blank">Política de Privacidade</a> e os Termos de Uso, conforme a LGPD (Lei nº 13.709/2018).</label></div>
                         <button type="submit" class="btn-primary">Cadastrar como Aluno</button>
                     </form>
 
@@ -146,7 +147,16 @@
                         </div>
                         <div class="form-group">
                             <label for="prof-didatica">Qual sua forma didática?</label>
-                            <textarea id="prof-didatica" name="prof-didatica" rows="3" required></textarea>
+                            <select id="prof-didatica" name="prof-didatica" required>
+                                <option value="">Selecione...</option>
+                                <option value="pratica">Foco Prático/Laboratório</option>
+                                <option value="teorica">Foco Teórico/Aprofundamento</option>
+                                <option value="debate">Debates e Discussões</option>
+                                <option value="projetos">Aprendizado por Projetos</option>
+                                <option value="gamificacao">Gamificação</option>
+                                <option value="musica">Música</option>
+                                <option value="desenho">Desenho e Artes Visuais</option>
+                                </select>
                         </div>
                         <div class="form-group">
                             <label for="prof-experiencia">Anos de experiência (Anos)</label>
@@ -160,6 +170,7 @@
                             <label for="prof-confirmar-senha">Confirmar Senha</label>
                             <input type="password" id="prof-confirmar-senha" name="prof-confirmar-senha" required>
                         </div>
+                        <div class="lgpd-check"><input type="checkbox" id="lgpd-prof" required><label for="lgpd-prof">Li e concordo com a <a href="politica-privacidade.html" target="_blank">Política de Privacidade</a> e os Termos de Uso, conforme a LGPD (Lei nº 13.709/2018).</label></div>
                         <button type="submit" class="btn-primary">Cadastrar como Professor</button>
                     </form>
 
@@ -185,6 +196,7 @@
                             <label for="inst-confirmar-senha">Confirmar Senha</label>
                             <input type="password" id="inst-confirmar-senha" name="inst-confirmar-senha" required>
                         </div>
+                        <div class="lgpd-check"><input type="checkbox" id="lgpd-inst" required><label for="lgpd-inst">Li e concordo com a <a href="politica-privacidade.html" target="_blank">Política de Privacidade</a> e os Termos de Uso, conforme a LGPD (Lei nº 13.709/2018).</label></div>
                         <button type="submit" class="btn-primary">Cadastrar como Instituição</button>
                     </form>
                 </div>
