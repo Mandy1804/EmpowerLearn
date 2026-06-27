@@ -145,7 +145,10 @@
         }
         /* Responsividade (Mantida) */
         @media (max-width: 768px) { .main-content { margin-left: 0; width: 100%; padding-top: 20px; } .sidebar { transform: translateX(-100%); } }
-    </style>
+        .estrela { color: #ccc; transition: color 0.2s; }
+    .estrela.ativa { color: #f5a623; }
+    .estrela:hover, .estrela.hover { color: #f5a623; }
+</style>
 </head>
 <body>
 
@@ -246,6 +249,30 @@
                         <span class="detail-label">Forma Didática:</span>
                         <span class="detail-value" id="prof-didatica"></span>
                     </div>
+                </div>
+
+                <!-- SISTEMA DE AVALIAÇÃO -->
+                <div class="profile-card" id="secao-feedback" style="display:none;">
+                    <h3 class="section-title">Avaliação</h3>
+                    <div style="text-align:center; padding: 10px 0;">
+                        <div id="media-estrelas" style="font-size:2em; color:#f5a623; letter-spacing:4px;"></div>
+                        <div id="media-numero" style="font-size:1.1em; color:#555; margin-top:4px;"></div>
+                    </div>
+                    <div id="minha-avaliacao" style="display:none; margin-top:16px;">
+                        <p style="font-size:0.9em; color:#555; margin-bottom:8px; text-align:center;">Sua avaliação:</p>
+                        <div id="estrelas-input" style="display:flex; justify-content:center; gap:8px; font-size:2em; cursor:pointer;">
+                            <span class="estrela" data-nota="1">☆</span>
+                            <span class="estrela" data-nota="2">☆</span>
+                            <span class="estrela" data-nota="3">☆</span>
+                            <span class="estrela" data-nota="4">☆</span>
+                            <span class="estrela" data-nota="5">☆</span>
+                        </div>
+                        <p id="feedback-msg" style="text-align:center; font-size:0.85em; color:#4A00B7; margin-top:8px;"></p>
+                    </div>
+                </div>
+
+                <div style="display:none;"><!-- dummy fechamento -->
+                    </div>
                     <div class="detail-item" style="flex-direction: column; align-items: flex-start;">
                         <span class="detail-label" style="margin-bottom: 8px;">Biografia:</span>
                         <textarea id="prof-biografia-input" maxlength="280" rows="4" style="width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 0.95em; font-family: inherit; resize: vertical; color: var(--text-dark);" placeholder="Conte um pouco sobre sua trajetoria, especialidades e metodo de ensino..."></textarea>
@@ -302,7 +329,8 @@
     console.log("Chamando API em:", url); // Log para ver se o endereço está correto
 
     try {
-        const response = await fetch(url);
+        const token = localStorage.getItem('token');
+        const response = await fetch(url, { headers: token ? { 'Authorization': 'Bearer ' + token } : {} });
 
         if (!response.ok) {
             throw new Error(`Erro ${response.status}: Falha ao carregar o perfil.`);
@@ -314,6 +342,7 @@
         console.log("Dados do usuário carregados:", userData); 
         
         renderProfile(userData, userType);
+        await carregarFeedbacks(userId, userType);
         
     } catch (error) {
         console.error('Erro ao buscar perfil:', error);
@@ -405,7 +434,8 @@ avatarElement.innerHTML = `<img src="${SERVER_BASE_URL}${data.fotoUrl}" alt="Fot
             
             try {
                 const url = `${API_BASE_URL}/${getEntityPlural(userType)}/${userId}`;
-                const response = await fetch(url, { method: 'DELETE' });
+                const token = localStorage.getItem('token');
+                const response = await fetch(url, { method: 'DELETE', headers: token ? { 'Authorization': 'Bearer ' + token } : {} });
 
                 if (response.status === 204) {
                     alert('✅ Conta excluída com sucesso! Redirecionando.');
@@ -467,7 +497,9 @@ avatarElement.innerHTML = `<img src="${SERVER_BASE_URL}${data.fotoUrl}" alt="Fot
                 curriculoButton.disabled = true;
 
                 try {
+                    const token = localStorage.getItem('token');
                     const response = await fetch(uploadUrl, {
+                        headers: token ? { 'Authorization': 'Bearer ' + token } : {},
                         method: 'POST',
                         body: formData
                     });
@@ -505,7 +537,9 @@ avatarElement.innerHTML = `<img src="${SERVER_BASE_URL}${data.fotoUrl}" alt="Fot
                 uploadButton.disabled = true;
 
                 try {
+                    const token = localStorage.getItem('token');
                     const response = await fetch(uploadUrl, {
+                        headers: token ? { 'Authorization': 'Bearer ' + token } : {},
                         method: 'POST',
                         body: formData
                     });
@@ -543,7 +577,9 @@ avatarElement.innerHTML = `<img src="${SERVER_BASE_URL}${data.fotoUrl}" alt="Fot
                 botao.disabled = true;
 
                 try {
+                    const token = localStorage.getItem('token');
                     const response = await fetch(`${API_BASE_URL}/${getEntityPlural(userType)}/${userId}/biografia`, {
+                        headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': 'Bearer ' + token } : {}) },
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ biografia: bioInput.value })
@@ -564,7 +600,83 @@ avatarElement.innerHTML = `<img src="${SERVER_BASE_URL}${data.fotoUrl}" alt="Fot
         });
 
         // Inicia a busca dos dados ao carregar a página
-        document.addEventListener('DOMContentLoaded', fetchUserData);
+        async function carregarFeedbacks(profId, tipo) {
+            const API_BASE_URL = 'http://localhost:8080/api';
+            const token = localStorage.getItem('token');
+            const myId = localStorage.getItem('userId');
+
+            // Busca média pública
+            const res = await fetch(`${API_BASE_URL}/feedbacks/professor/${profId}`);
+            if (!res.ok) return;
+            const data = await res.json();
+
+            const secao = document.getElementById('secao-feedback');
+            secao.style.display = 'block';
+
+            // Renderiza média
+            const media = data.media || 0;
+            const total = data.total || 0;
+            const estrelasFull = Math.round(media);
+            document.getElementById('media-estrelas').innerText =
+                '★'.repeat(estrelasFull) + '☆'.repeat(5 - estrelasFull);
+            document.getElementById('media-numero').innerText =
+                total > 0 ? `${media} / 5 (${total} avaliação${total !== 1 ? 'ões' : ''})` : 'Sem avaliações ainda';
+
+            // Só mostra input se não for professor
+            if (tipo !== 'professor') {
+                document.getElementById('minha-avaliacao').style.display = 'block';
+
+                // Busca nota atual do usuário
+                const resM = await fetch(`${API_BASE_URL}/feedbacks/meu-feedback?professorId=${profId}&autorId=${myId}`, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (resM.ok) {
+                    const meuDado = await resM.json();
+                    if (meuDado.nota > 0) marcarEstrelas(meuDado.nota);
+                }
+
+                // Interação com estrelas
+                const estrelas = document.querySelectorAll('.estrela');
+                estrelas.forEach(e => {
+                    e.addEventListener('mouseover', () => {
+                        const n = parseInt(e.dataset.nota);
+                        estrelas.forEach(s => s.classList.toggle('hover', parseInt(s.dataset.nota) <= n));
+                    });
+                    e.addEventListener('mouseout', () => estrelas.forEach(s => s.classList.remove('hover')));
+                    e.addEventListener('click', async () => {
+                        const nota = parseInt(e.dataset.nota);
+                        marcarEstrelas(nota);
+                        const r = await fetch(`${API_BASE_URL}/feedbacks`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                            body: JSON.stringify({ professorId: parseInt(profId), autorId: parseInt(myId), nota })
+                        });
+                        if (r.ok) {
+                            document.getElementById('feedback-msg').innerText = 'Avaliação salva!';
+                            setTimeout(() => carregarFeedbacks(profId, tipo), 500);
+                        }
+                    });
+                });
+            }
+        }
+
+        function marcarEstrelas(nota) {
+            document.querySelectorAll('.estrela').forEach(s => {
+                const n = parseInt(s.dataset.nota);
+                s.classList.toggle('ativa', n <= nota);
+                s.innerText = n <= nota ? '★' : '☆';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const _userId = localStorage.getItem('userId');
+            const _token = localStorage.getItem('token');
+            if (!_userId || !_token) {
+                window.location.href = '../EmpowerLearn/login.html';
+                return;
+            }
+            fetchUserData();
+        });
         
     </script>
 </body>

@@ -138,12 +138,46 @@
                             <input type="text" id="prof-cep" name="prof-cep" required>
                         </div>
                         <div class="form-group">
-                            <label for="prof-materia">Qual a matéria que leciona?</label>
-                            <input type="text" id="prof-materia" name="prof-materia" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="prof-multiplas-materias">Leciona mais de uma matéria? (Se sim, quais?)</label>
-                            <textarea id="prof-multiplas-materias" name="prof-multiplas-materias" rows="3"></textarea>
+                            <label>Matérias que leciona (selecione uma ou mais)</label>
+                            <div id="prof-materia-container" style="border:1px solid #ccc; border-radius:8px; padding:12px; display:flex; flex-wrap:wrap; gap:8px; background:#fff;">
+                                <style>
+                                    .materia-check { display:none; }
+                                    .materia-label {
+                                        padding:6px 14px; border-radius:20px; border:1px solid #ccc;
+                                        cursor:pointer; font-size:0.85em; user-select:none;
+                                        transition: all 0.2s;
+                                    }
+                                    .materia-check:checked + .materia-label {
+                                        background:#4A00B7; color:#fff; border-color:#4A00B7;
+                                    }
+                                </style>
+                                <input type="checkbox" class="materia-check" id="m1" value="Matemática"><label class="materia-label" for="m1">Matemática</label>
+                                <input type="checkbox" class="materia-check" id="m2" value="Português"><label class="materia-label" for="m2">Português</label>
+                                <input type="checkbox" class="materia-check" id="m3" value="Inglês"><label class="materia-label" for="m3">Inglês</label>
+                                <input type="checkbox" class="materia-check" id="m4" value="Espanhol"><label class="materia-label" for="m4">Espanhol</label>
+                                <input type="checkbox" class="materia-check" id="m5" value="Física"><label class="materia-label" for="m5">Física</label>
+                                <input type="checkbox" class="materia-check" id="m6" value="Química"><label class="materia-label" for="m6">Química</label>
+                                <input type="checkbox" class="materia-check" id="m7" value="Biologia"><label class="materia-label" for="m7">Biologia</label>
+                                <input type="checkbox" class="materia-check" id="m8" value="História"><label class="materia-label" for="m8">História</label>
+                                <input type="checkbox" class="materia-check" id="m9" value="Geografia"><label class="materia-label" for="m9">Geografia</label>
+                                <input type="checkbox" class="materia-check" id="m10" value="Filosofia"><label class="materia-label" for="m10">Filosofia</label>
+                                <input type="checkbox" class="materia-check" id="m11" value="Sociologia"><label class="materia-label" for="m11">Sociologia</label>
+                                <input type="checkbox" class="materia-check" id="m12" value="Artes"><label class="materia-label" for="m12">Artes</label>
+                                <input type="checkbox" class="materia-check" id="m13" value="Educação Física"><label class="materia-label" for="m13">Educação Física</label>
+                                <input type="checkbox" class="materia-check" id="m14" value="Música"><label class="materia-label" for="m14">Música</label>
+                                <input type="checkbox" class="materia-check" id="m15" value="Informática"><label class="materia-label" for="m15">Informática</label>
+                                <input type="checkbox" class="materia-check" id="m16" value="Programação"><label class="materia-label" for="m16">Programação</label>
+                                <input type="checkbox" class="materia-check" id="m17" value="Redação"><label class="materia-label" for="m17">Redação</label>
+                                <input type="checkbox" class="materia-check" id="m18" value="Literatura"><label class="materia-label" for="m18">Literatura</label>
+                                <input type="checkbox" class="materia-check" id="m19" value="Contabilidade"><label class="materia-label" for="m19">Contabilidade</label>
+                                <input type="checkbox" class="materia-check" id="m20" value="Direito"><label class="materia-label" for="m20">Direito</label>
+                                <input type="checkbox" class="materia-check" id="m21" value="Psicologia"><label class="materia-label" for="m21">Psicologia</label>
+                                <input type="checkbox" class="materia-check" id="m22" value="Pedagogia"><label class="materia-label" for="m22">Pedagogia</label>
+                                <input type="checkbox" class="materia-check" id="m-outros" value="outros" onchange="document.getElementById('outros-container').style.display=this.checked?'block':'none'"><label class="materia-label" for="m-outros">+ Outros</label>
+                            </div>
+                            <div id="outros-container" style="display:none; margin-top:10px;">
+                                <input type="text" id="prof-materia-outros" placeholder="Digite a matéria..." style="width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; font-size:0.9em;">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="prof-didatica">Qual sua forma didática?</label>
@@ -261,9 +295,11 @@
                 }
             }
 
-            if (userData && userData.id) {
+            const userObj = userData.professor || userData.aluno || userData.instituicao || userData;
+            if (userData && (userObj.id)) {
                 // SALVAMENTO DA SESSÃO: Chave para carregar o perfil
-                localStorage.setItem('userId', userData.id); 
+                localStorage.setItem('userId', userObj.id);
+                localStorage.setItem('token', userData.token); 
                 localStorage.setItem('userType', userType);
                 
                 showMessage(document.getElementById('form-login-api'), 'success', `Login como ${userType} bem-sucedido! Redirecionando...`);
@@ -402,8 +438,15 @@
                     confirmarSenha: document.getElementById('prof-confirmar-senha'),
                     cep: document.getElementById('prof-cep'),
                     specificData: {
-                        especialidade: document.getElementById('prof-materia').value,
-                        multiplasMaterias: document.getElementById('prof-multiplas-materias').value,
+                        especialidade: (() => {
+                            const selecionadas = Array.from(document.querySelectorAll('.materia-check:checked'))
+                                .filter(o => o.value !== 'outros')
+                                .map(o => o.value);
+                            const outros = document.getElementById('prof-materia-outros').value.trim();
+                            if (outros) selecionadas.push(outros);
+                            return selecionadas.join(', ');
+                        })(),
+                        
                         didatica: document.getElementById('prof-didatica').value,
                         experiencia: parseInt(document.getElementById('prof-experiencia').value),
                         dataNascimento: document.getElementById('prof-nascimento').value,

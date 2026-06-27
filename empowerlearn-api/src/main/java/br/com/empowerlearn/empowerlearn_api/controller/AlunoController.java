@@ -47,6 +47,15 @@ public class AlunoController {
             return new ResponseEntity<>("Erro: Nome obrigatório.", HttpStatus.BAD_REQUEST);
         }
         aluno.setSenha(passwordEncoder.encode(aluno.getSenha()));
+        if (aluno.getNome() != null) {
+            String nome = aluno.getNome().trim().toLowerCase();
+            String[] palavras = nome.split("\\s+");
+            StringBuilder sb = new StringBuilder();
+            for (String p : palavras) {
+                if (p.length() > 0) sb.append(Character.toUpperCase(p.charAt(0))).append(p.substring(1)).append(" ");
+            }
+            aluno.setNome(sb.toString().trim());
+        }
         try {
             JsonNode endereco = cepService.buscarEnderecoPorCep(aluno.getCep());
             if (endereco == null) return new ResponseEntity<>("Erro: CEP inválido.", HttpStatus.BAD_REQUEST);

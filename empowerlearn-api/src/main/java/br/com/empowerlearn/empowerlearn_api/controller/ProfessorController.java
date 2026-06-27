@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import br.com.empowerlearn.empowerlearn_api.dto.ProfessorResponseDTO;
 import java.util.Map;
 
 @RestController
@@ -54,6 +55,15 @@ public class ProfessorController {
             }
         }
         professor.setSenha(passwordEncoder.encode(professor.getSenha()));
+        if (professor.getNome() != null) {
+            String nome = professor.getNome().trim().toLowerCase();
+            String[] palavras = nome.split("\\s+");
+            StringBuilder sb = new StringBuilder();
+            for (String p : palavras) {
+                if (p.length() > 0) sb.append(Character.toUpperCase(p.charAt(0))).append(p.substring(1)).append(" ");
+            }
+            professor.setNome(sb.toString().trim());
+        }
         try {
             JsonNode endereco = cepService.buscarEnderecoPorCep(professor.getCep());
             if (endereco == null) {
@@ -67,7 +77,7 @@ public class ProfessorController {
         }
         Professor novoProfessor = professorRepository.save(professor);
         String token = jwtService.gerarToken(novoProfessor.getEmail(), "professor");
-        return new ResponseEntity<>(Map.of("professor", novoProfessor, "token", token), HttpStatus.CREATED);
+        return new ResponseEntity<>(Map.of("professor", new ProfessorResponseDTO(novoProfessor), "token", token), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -80,7 +90,7 @@ public class ProfessorController {
             return new ResponseEntity<>("Credenciais inválidas.", HttpStatus.UNAUTHORIZED);
         }
         String token = jwtService.gerarToken(professor.getEmail(), "professor");
-        return new ResponseEntity<>(Map.of("professor", professor, "token", token), HttpStatus.OK);
+        return new ResponseEntity<>(Map.of("professor", new ProfessorResponseDTO(professor), "token", token), HttpStatus.OK);
     }
 
     @PostMapping("/{id}/upload-foto")

@@ -1,0 +1,16 @@
+br/com/empowerlearn/empowerlearn_api/repository/AlunoRepository.class
+br/com/empowerlearn/empowerlearn_api/security/JwtAuthFilter.class
+br/com/empowerlearn/empowerlearn_api/repository/ProfessorRepository.class
+br/com/empowerlearn/empowerlearn_api/service/CepService.class
+br/com/empowerlearn/empowerlearn_api/dto/ProfessorResponseDTO.class
+br/com/empowerlearn/empowerlearn_api/repository/InstituicaoRepository.class
+br/com/empowerlearn/empowerlearn_api/controller/ProfessorController.class
+br/com/empowerlearn/empowerlearn_api/model/Instituicao.class
+br/com/empowerlearn/empowerlearn_api/config/WebConfig.class
+br/com/empowerlearn/empowerlearn_api/security/SecurityConfig.class
+br/com/empowerlearn/empowerlearn_api/security/JwtService.class
+br/com/empowerlearn/empowerlearn_api/controller/AlunoController.class
+br/com/empowerlearn/empowerlearn_api/model/Professor.class
+br/com/empowerlearn/empowerlearn_api/EmpowerLearnApiApplication.class
+br/com/empowerlearn/empowerlearn_api/controller/InstituicaoController.class
+br/com/empowerlearn/empowerlearn_api/model/Aluno.class

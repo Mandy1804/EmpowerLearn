@@ -33,9 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
             uploadButton.disabled = true;
 
             try {
+                const token = localStorage.getItem('token');
                 const response = await fetch(uploadUrl, {
                     method: 'POST',
-                    body: formData // O FormData envia o arquivo
+                    headers: token ? { 'Authorization': 'Bearer ' + token } : {},
+                    body: formData
                 });
 
                 if (response.ok) {

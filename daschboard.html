@@ -507,7 +507,7 @@
         <div class="sidebar-top">
             <a href="dashboard.html" class="sidebar-logo">EmpowerLearn</a>
             
-            <nav class="sidebar-nav">
+            <nav class="sidebar-nav" id="sidebar-nav">
                 <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Consultar Perfil
@@ -519,6 +519,14 @@
                 <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     Histórico de Perfis
+                </a>
+                <a href="../EmpowerLearn/contratados.html" class="sidebar-link" id="link-contratados" style="display:none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Contratados
+                </a>
+                <a href="../EmpowerLearn/minhas-contratacoes.html" class="sidebar-link" id="link-contratacoes-prof" style="display:none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                    Minhas Contratações
                 </a>
             </nav>
         </div>
@@ -559,6 +567,7 @@
 
             <div class="modal-avatar" id="modal-avatar">?</div>
             <h2 id="modal-nome">—</h2>
+            <div id="modal-estrelas" style="color:#f5a623;font-size:1.2em;margin:4px 0;">☆☆☆☆☆</div>
             <p class="modal-especialidade">
                 <span class="prof-badge" id="modal-especialidade">—</span>
             </p>
@@ -589,6 +598,20 @@
             <a href="#" class="btn-curriculo" id="modal-curriculo-btn" target="_blank" download>
                 ⬇ Baixar Currículo
             </a>
+            <div id="modal-contratar-container" style="display:none;margin-top:12px;">
+                <button onclick="contratarProfessorModal()" style="width:100%;background:#4A00B7;color:white;border:none;border-radius:8px;padding:12px;font-size:1em;cursor:pointer;font-weight:600;">✅ Contratar Professor</button>
+            </div>
+            <div id="modal-feedback-container" style="display:none;margin-top:16px;">
+                <p style="font-size:0.9em;color:#555;text-align:center;margin-bottom:8px;">Você contratou este professor. Avalie:</p>
+                <div id="modal-estrelas-input" style="display:flex;justify-content:center;gap:8px;font-size:1.8em;cursor:pointer;">
+                    <span class="modal-estrela" data-nota="1">☆</span>
+                    <span class="modal-estrela" data-nota="2">☆</span>
+                    <span class="modal-estrela" data-nota="3">☆</span>
+                    <span class="modal-estrela" data-nota="4">☆</span>
+                    <span class="modal-estrela" data-nota="5">☆</span>
+                </div>
+                <p id="modal-feedback-msg" style="text-align:center;font-size:0.85em;color:#4A00B7;margin-top:6px;"></p>
+            </div>
         </div>
     </div>
 
@@ -659,6 +682,7 @@
 
     <script>
         const API_URL = 'http://localhost:8080/api/professores';
+        const userType = localStorage.getItem('userType');
 
         function getStorageKey(nome) {
             const uid = localStorage.getItem('userId') || 'anonimo';
@@ -737,11 +761,25 @@
                 card.innerHTML = `
                     <div class="prof-avatar">${avatarConteudo}</div>
                     <h3>Prof. ${prof.nome || 'Nome Desconhecido'}</h3>
+                    <div id="card-estrelas-${prof.id}" style="color:#f5a623;font-size:1em;margin:2px 0;">☆☆☆☆☆</div>
                     <span class="prof-badge">${prof.especialidade || 'Matéria não informada'}</span>
                     <p class="prof-meta">${idade !== null ? idade + ' anos' : 'Idade não informada'} &middot; ${formatarSexo(prof.sexo)}</p>
                     <p class="prof-hint">Clique para ver mais</p>
-                    <button class="btn-curtir" data-index="${index}" onclick="event.stopPropagation(); toggleCurtir(${index}, this)" style="margin-top:8px; background:none; border:none; cursor:pointer; font-size:1.4em;">🤍</button>
+                    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;">
+                        <button class="btn-curtir" data-index="${index}" onclick="event.stopPropagation(); toggleCurtir(${index}, this)" style="background:none; border:none; cursor:pointer; font-size:1.4em;">🤍</button>
+                        ${userType !== 'professor' ? `<button onclick="event.stopPropagation(); contratarProfessor(${prof.id}, '${prof.nome}')" style="background:#4A00B7;color:white;border:none;border-radius:20px;padding:6px 14px;font-size:0.8em;cursor:pointer;">Contratar</button>` : ''}
+                    </div>
                 `;
+                // Carrega estrelas do card
+                fetch('http://localhost:8080/api/feedbacks/professor/' + prof.id)
+                    .then(r => r.json())
+                    .then(d => {
+                        const el = document.getElementById('card-estrelas-' + prof.id);
+                        if (el) {
+                            const m = Math.round(d.media || 0);
+                            el.innerText = '★'.repeat(m) + '☆'.repeat(5-m) + (d.total > 0 ? ' ' + d.media : '');
+                        }
+                    }).catch(()=>{});
                 grid.appendChild(card);
             });
             atualizarCoracoes();
@@ -753,6 +791,22 @@
         function abrirModalProfessor(index) {
             const prof = professoresCache[index];
             if (!prof) return;
+            modalProfAtual = { id: prof.id, nome: prof.nome };
+            
+            const contratados = JSON.parse(localStorage.getItem('contratados_' + localStorage.getItem('userId')) || '[]');
+            const jaContratou = contratados.find(c => c.id === prof.id);
+            const podeContratar = userType !== 'professor';
+            document.getElementById('modal-contratar-container').style.display = podeContratar && !jaContratou ? 'block' : 'none';
+            document.getElementById('modal-feedback-container').style.display = podeContratar && jaContratou ? 'block' : 'none';
+            if (podeContratar && jaContratou) configurarEstrelasModal(prof.id);
+            // Carrega estrelas no modal
+            fetch('http://localhost:8080/api/feedbacks/professor/' + prof.id)
+                .then(r => r.json())
+                .then(d => {
+                    const m = Math.round(d.media || 0);
+                    const el = document.getElementById('modal-estrelas');
+                    if (el) el.innerText = '★'.repeat(m) + '☆'.repeat(5-m) + (d.total > 0 ? '  ' + d.media + '/5 (' + d.total + ' aval.)' : '  Sem avaliações');
+                }).catch(()=>{});
 
             const idade = calcularIdade(prof.dataNascimento);
 
@@ -866,12 +920,15 @@
             if (url.endsWith('search?')) url = url.slice(0, -7) + 'search';
 
             try {
-                const response = await fetch(url);
+                const _tok = localStorage.getItem('token');
+                const response = await fetch(url, {
+                    headers: _tok ? { 'Authorization': 'Bearer ' + _tok } : {}
+                });
                 if (response.status === 204 || response.status === 404) { renderProfessors(null); return; }
                 if (!response.ok) { alert(`❌ Erro na API: ${response.status}.`); return; }
                 renderProfessors(await response.json());
             } catch (error) {
-                alert('❌ Erro de rede: O Back-End está offline ou o CORS está bloqueando.');
+                console.error('Erro de rede ao carregar professores.');
             }
             resolve();
         }); }
@@ -880,6 +937,20 @@
         // EVENTOS
         // ----------------------------------------
         document.addEventListener('DOMContentLoaded', function() {
+            // Mostra links corretos no sidebar
+            if (userType === 'professor') {
+                document.getElementById('link-contratacoes-prof').style.display = 'flex';
+            } else {
+                document.getElementById('link-contratados').style.display = 'flex';
+            }
+            // Proteção de rota — redireciona para login se não houver sessão
+            const _userId = localStorage.getItem('userId');
+            const _token = localStorage.getItem('token');
+            if (!_userId || !_token) {
+                window.location.href = '../EmpowerLearn/login.html';
+                return;
+            }
+            
 
             const urlParams = new URLSearchParams(window.location.search);
             const abrirId = urlParams.get('abrirProfessor');
@@ -908,7 +979,45 @@
                     if (window.confirm("Você tem certeza de que quer sair?")) window.location.href = 'index.html';
                 });
             }
-            
+
+        // ---- SISTEMA DE CONTRATAÇÃO ----
+
+        let modalProfAtual = null;
+
+        window.contratarProfessor = function(profId, profNome) {
+
+            const userId = localStorage.getItem('userId');
+
+            let contratados = JSON.parse(localStorage.getItem('contratados_' + userId) || '[]');
+
+            if (!contratados.find(c => String(c.id) === String(profId))) {
+
+                contratados.push({ id: profId, nome: profNome });
+
+                localStorage.setItem('contratados_' + userId, JSON.stringify(contratados));
+
+            }
+
+            alert('✅ Prof. ' + profNome + ' contratado! Acesse "Contratados" para avaliar.');
+
+        };
+
+        window.contratarProfessorModal = function() {
+
+            if (!modalProfAtual) return;
+
+            window.contratarProfessor(modalProfAtual.id, modalProfAtual.nome);
+
+            const contratarBox = document.getElementById('modal-contratar-container');
+
+            const feedbackBox = document.getElementById('modal-feedback-container');
+
+            if (contratarBox) contratarBox.style.display = 'none';
+
+            if (feedbackBox) feedbackBox.style.display = 'block';
+
+        };
+
             // Modal de filtros
             const filterModal = document.getElementById('filter-modal');
             document.getElementById('open-filter-modal').addEventListener('click', () => filterModal.classList.add('active'));
