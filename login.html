@@ -99,6 +99,15 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="aluno-tipo-ensino">Tipo de Ensino Preferido</label>
+                            <select id="aluno-tipo-ensino" name="aluno-tipo-ensino" required>
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="presencial">Presencial</option>
+                                <option value="ead">EAD</option>
+                                <option value="hibrido">Híbrido</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="aluno-senha">Senha</label>
                             <input type="password" id="aluno-senha" name="aluno-senha" required>
                         </div>
@@ -252,7 +261,7 @@
     <script>
         const API_BASE_URL = 'http://localhost:8080/api';
         // CORRIGIDO: Página de destino (se necessário, verifique o caminho)
-        const PAGINA_DESTINO = 'daschboard.html'; 
+         
 
         // ----------------------------------------------------
         // FUNÇÕES AUXILIARES
@@ -305,7 +314,7 @@
                 showMessage(document.getElementById('form-login-api'), 'success', `Login como ${userType} bem-sucedido! Redirecionando...`);
                 
                 setTimeout(() => {
-                    window.location.href = PAGINA_DESTINO; 
+                    window.location.href = (localStorage.getItem('userType') === 'professor') ? 'daschboard-professor.html' : 'daschboard.html'; 
                 }, 1000); 
 
             } else {
@@ -425,6 +434,7 @@
                     specificData: {
                         dataNascimento: document.getElementById('aluno-nascimento').value,
                         sexo: document.getElementById('aluno-sexo').value,
+                        tipoEnsino: document.getElementById('aluno-tipo-ensino').value,
                     }
                 });
             });

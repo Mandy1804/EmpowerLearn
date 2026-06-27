@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmpowerLearn - Painel do Professor</title>
+    <link rel="stylesheet" href="../EmpowerLearn/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-purple:#4A00B7; --vibrant-purple:#8B5CF6; --light-gray:#F0F2F5; --white:#FFFFFF; --text-dark:#300090; }
+        body { display:flex; min-height:100vh; background:var(--light-gray); margin:0; font-family:'Poppins',sans-serif; }
+        .sidebar { width:280px; background:var(--primary-purple); color:white; padding:20px 0; display:flex; flex-direction:column; justify-content:space-between; position:fixed; left:0; top:0; height:100vh; z-index:900; }
+        .sidebar-logo { text-align:center; padding-bottom:30px; font-size:1.6em; font-weight:700; border-bottom:1px solid rgba(255,255,255,0.2); margin:0 20px; display:block; color:white; text-decoration:none; }
+        .sidebar-nav { flex-grow:1; padding:20px 0; }
+        .sidebar-link { display:flex; align-items:center; gap:12px; padding:15px 30px; text-decoration:none; color:white; font-size:0.95em; cursor:pointer; transition:background 0.3s; }
+        .sidebar-link:hover, .sidebar-link.active { background:var(--vibrant-purple); }
+        .sidebar-logout { border-top:1px solid rgba(255,255,255,0.2); padding-top:20px; }
+        .sidebar-logout .sidebar-link { color:#E74C3C; font-weight:600; }
+        .main-content { margin-left:280px; padding:40px; flex:1; }
+        .search-hero { background:white; border-radius:16px; padding:40px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.08); margin-bottom:32px; }
+        .search-hero h1 { color:var(--text-dark); font-size:1.8em; margin-bottom:8px; }
+        .filter-bar { display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
+        .filter-bar select { padding:10px 16px; border:2px solid #ddd; border-radius:8px; font-size:0.9em; cursor:pointer; }
+        .filter-bar button { padding:10px 24px; background:var(--primary-purple); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:24px; }
+        .card { background:white; border-radius:16px; padding:24px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.08); transition:transform 0.2s; }
+        .card:hover { transform:translateY(-4px); }
+        .avatar { width:80px; height:80px; border-radius:50%; margin:0 auto 12px; background:var(--primary-purple); color:white; display:flex; align-items:center; justify-content:center; font-size:1.8em; font-weight:700; overflow:hidden; }
+        .avatar img { width:100%; height:100%; object-fit:cover; }
+        .card h3 { color:var(--text-dark); margin:0 0 4px; }
+        .badge { display:inline-block; background:var(--primary-purple); color:white; border-radius:20px; padding:3px 12px; font-size:0.8em; margin:4px 0; }
+        .badge.inst { background:#8B5CF6; }
+        .card-meta { color:#888; font-size:0.85em; margin:6px 0; }
+        .card-actions { display:flex; gap:8px; justify-content:center; margin-top:12px; }
+        .btn-contratar { background:var(--primary-purple); color:white; border:none; border-radius:20px; padding:8px 18px; cursor:pointer; font-size:0.85em; font-weight:600; }
+        .btn-curtir { background:none; border:none; font-size:1.4em; cursor:pointer; }
+        h2.section-title { color:var(--text-dark); margin-bottom:20px; }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-top">
+        <a href="daschboard-professor.html" class="sidebar-logo">EmpowerLearn</a>
+        <nav class="sidebar-nav">
+            <a href="../EmpowerLearn/daschboard-professor.html" class="sidebar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Home
+            </a>
+            <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Consultar Perfil
+            </a>
+            <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                Ver Curtidas
+            </a>
+            <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Histórico de Perfis
+            </a>
+            <a href="../EmpowerLearn/minhas-contratacoes.html" class="sidebar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Minhas Contratações
+            </a>
+        </nav>
+    </div>
+    <div class="sidebar-logout">
+        <a href="#" onclick="if(confirm('Sair?')){localStorage.clear();window.location.href='login.html';}" class="sidebar-link" style="color:#E74C3C;font-weight:600;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+            Sair
+        </a>
+    </div>
+</aside>
+
+<main class="main-content">
+    <div class="search-hero">
+        <h1>Encontre Alunos e Instituições</h1>
+        <p>Filtre por tipo de ensino para encontrar o match ideal</p>
+        <div class="filter-bar">
+            <select id="filtro-tipo-ensino">
+                <option value="">Todos os tipos de ensino</option>
+                <option value="presencial">Presencial</option>
+                <option value="ead">EAD</option>
+                <option value="hibrido">Híbrido</option>
+            </select>
+            <select id="filtro-tipo-usuario">
+                <option value="">Alunos e Instituições</option>
+                <option value="aluno">Somente Alunos</option>
+                <option value="instituicao">Somente Instituições</option>
+            </select>
+            <button onclick="buscar()">🔍 Buscar</button>
+        </div>
+    </div>
+
+    <h2 class="section-title">Sugestões para Você</h2>
+    <div class="grid" id="grid-clientes"></div>
+</main>
+
+<script>
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    const userType = localStorage.getItem('userType');
+    const SERVER = 'http://localhost:8080';
+    const API = 'http://localhost:8080/api';
+
+    if (!userId || !token || userType !== 'professor') {
+        window.location.href = 'login.html';
+    }
+
+    let todosClientes = [];
+    let curtidos = JSON.parse(localStorage.getItem('curtidos_prof_' + userId) || '[]');
+
+    async function carregar() {
+        const res = await fetch(API + '/painel-professor/clientes', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) return;
+        todosClientes = await res.json();
+        renderizar(todosClientes);
+    }
+
+    function buscar() {
+        const tipoEnsino = document.getElementById('filtro-tipo-ensino').value;
+        const tipoUsuario = document.getElementById('filtro-tipo-usuario').value;
+        let filtrados = todosClientes;
+        if (tipoEnsino) filtrados = filtrados.filter(c => c.tipoEnsino === tipoEnsino || c.tipo === 'instituicao');
+        if (tipoUsuario) filtrados = filtrados.filter(c => c.tipo === tipoUsuario);
+        renderizar(filtrados);
+    }
+
+    function renderizar(clientes) {
+        const grid = document.getElementById('grid-clientes');
+        grid.innerHTML = '';
+        if (!clientes || clientes.length === 0) {
+            grid.innerHTML = '<p style="color:#aaa;grid-column:1/-1;text-align:center;">Nenhum resultado encontrado.</p>';
+            return;
+        }
+        clientes.forEach(c => {
+            const avatarHTML = c.fotoUrl
+                ? `<img src="${SERVER}${c.fotoUrl}" alt="${c.nome}">`
+                : (c.nome || '?').charAt(0).toUpperCase();
+            const isCurtido = curtidos.includes(c.tipo + '_' + c.id);
+            const badgeClass = c.tipo === 'instituicao' ? 'badge inst' : 'badge';
+            const badgeLabel = c.tipo === 'instituicao' ? '🏫 Instituição' : '🎓 Aluno';
+            const tipoEnsino = c.tipoEnsino ? `<p class="card-meta">📚 ${c.tipoEnsino.charAt(0).toUpperCase() + c.tipoEnsino.slice(1)}</p>` : '';
+            let idadeStr = '';
+            if (c.dataNascimento) {
+                const nasc = new Date(c.dataNascimento);
+                const hoje = new Date();
+                let idade = hoje.getFullYear() - nasc.getFullYear();
+                const m = hoje.getMonth() - nasc.getMonth();
+                if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
+                idadeStr = idade + ' anos';
+            }
+            const sexoStr = c.sexo ? (c.sexo.charAt(0).toUpperCase() + c.sexo.slice(1)) : '';
+            const infoLine = [idadeStr, sexoStr].filter(Boolean).join(' · ');
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="avatar">${avatarHTML}</div>
+                <h3>${c.nome}</h3>
+                <span class="${badgeClass}">${badgeLabel}</span>
+                ${infoLine ? `<p class="card-meta">${infoLine}</p>` : ''}
+                ${tipoEnsino}
+                <p class="card-meta">${c.cidade || ''} ${c.estado ? '/ ' + c.estado : ''}</p>
+                <div class="card-actions">
+                    <button class="btn-curtir" onclick="toggleCurtir('${c.tipo}_${c.id}', this)">${isCurtido ? '❤️' : '🤍'}</button>
+                    <button class="btn-contratar" onclick="contratar(${c.id}, '${c.nome}', '${c.tipo}')">Entrar em Contato</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function toggleCurtir(key, btn) {
+        if (curtidos.includes(key)) {
+            curtidos = curtidos.filter(k => k !== key);
+            btn.innerText = '🤍';
+        } else {
+            curtidos.push(key);
+            btn.innerText = '❤️';
+        }
+        localStorage.setItem('curtidos_prof_' + userId, JSON.stringify(curtidos));
+    }
+
+    function contratar(clienteId, clienteNome, clienteTipo) {
+        let contratacoes = JSON.parse(localStorage.getItem('contratacoes_prof_' + userId) || '[]');
+        if (!contratacoes.find(c => c.id === clienteId && c.tipo === clienteTipo)) {
+            contratacoes.push({ id: clienteId, nome: clienteNome, tipo: clienteTipo });
+            localStorage.setItem('contratacoes_prof_' + userId, JSON.stringify(contratacoes));
+        }
+        alert('✅ ' + clienteNome + ' adicionado às suas contratações!');
+    }
+
+    carregar();
+</script>
+</body>
+</html>

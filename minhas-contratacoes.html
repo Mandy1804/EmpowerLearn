@@ -3,233 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EmpowerLearn - Perfis Curtidos</title>
-    <link rel="stylesheet" href="../EmpowerLearn/css/style.css"> 
+    <title>EmpowerLearn - Minhas Contratações</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { display: flex; min-height: 100vh; background-color: var(--light-gray); margin: 0; font-family: "Poppins", sans-serif; overflow-x: hidden; }
-        .sidebar { width: 280px; background-color: var(--primary-purple); color: var(--white); padding: 20px 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; position: fixed; left: 0; top: 0; height: 100vh; z-index: 900; transition: transform 0.3s ease-in-out; }
-        .sidebar-logo { text-align: center; padding-bottom: 30px; font-size: 1.6em; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.2); margin: 0 20px; display: block; color: var(--white); text-decoration: none; }
-        .sidebar-nav { flex-grow: 1; padding: 20px 0; }
-        .sidebar-link { display: flex; align-items: center; padding: 15px 30px; text-decoration: none; color: var(--white); transition: background-color 0.3s; font-size: 0.95em; cursor: pointer; }
-        .sidebar-link:hover, .sidebar-link.active { background-color: var(--vibrant-purple); }
-        .sidebar-link svg { margin-right: 15px; width: 20px; height: 20px; stroke: var(--white); stroke-width: 2; }
-        .sidebar-logout { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; }
-        .sidebar-logout .sidebar-link { color: var(--danger-color, #E74C3C); font-weight: 600; }
-        .menu-toggle { display: none; position: fixed; top: 20px; left: 20px; z-index: 1001; color: var(--primary-purple); font-size: 2em; cursor: pointer; }
-        .main-content { flex-grow: 1; padding: 30px; background-color: var(--light-gray); margin-left: 280px; width: calc(100% - 280px); }
-        .main-content h1 { color: var(--text-dark); font-size: 2.2em; margin-bottom: 5px; }
-        .main-content > p { color: var(--text-light); margin-bottom: 30px; }
-        .professor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; }
-        .professor-card { background-color: var(--white); border-radius: 12px; padding: 24px 20px; box-shadow: var(--shadow-light); border: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
-        .prof-avatar { background-color: var(--primary-purple); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 1.6rem; font-weight: 700; overflow: hidden; flex-shrink: 0; }
-        .professor-card h3 { font-size: 1.05em; color: var(--text-dark); font-weight: 700; margin: 0; }
-        .prof-badge { background-color: var(--vibrant-purple); display: inline-block; color: var(--white); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; }
-        .prof-meta { font-size: 0.85em; color: var(--text-light); margin: 0; }
-        .remove-btn { background-color: var(--danger-color, #E74C3C); color: var(--white); padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; margin-top: 8px; transition: background-color 0.3s; font-size: 0.88em; }
-        .remove-btn:hover { background-color: #C0392B; }
-        .empty-msg { text-align: center; color: var(--text-light); grid-column: 1/-1; padding: 40px 0; font-size: 1.1em; }
-        @media (max-width: 768px) { .menu-toggle { display: block; } .sidebar { width: 70%; transform: translateX(-100%); } .sidebar.active { transform: translateX(0); } .main-content { margin-left: 0; width: 100%; padding-top: 70px; } .professor-grid { grid-template-columns: 1fr; } }
+        :root { --primary:#4A00B7; --vibrant:#8B5CF6; --bg:#F0F2F5; --white:#fff; --text:#300090; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { display:flex; min-height:100vh; background:var(--bg); font-family:'Poppins',sans-serif; }
+        .sidebar { width:280px; background:var(--primary); color:white; display:flex; flex-direction:column; justify-content:space-between; position:fixed; left:0; top:0; height:100vh; z-index:900; }
+        .sidebar-top { display:flex; flex-direction:column; }
+        .sidebar-logo { text-align:center; padding:20px; font-size:1.4em; font-weight:700; border-bottom:1px solid rgba(255,255,255,0.2); color:white; text-decoration:none; display:block; }
+        .sidebar-nav { padding:20px 0; display:flex; flex-direction:column; }
+        .sidebar-link { display:flex; align-items:center; gap:12px; padding:15px 30px; text-decoration:none; color:white; font-size:0.95em; cursor:pointer; transition:background 0.3s; }
+        .sidebar-link:hover, .sidebar-link.active { background:var(--vibrant); }
+        .sidebar-link svg { width:20px; height:20px; flex-shrink:0; stroke:white; fill:none; }
+        .sidebar-logout { border-top:1px solid rgba(255,255,255,0.2); padding:20px 0; }
+        .sidebar-logout .sidebar-link { color:#E74C3C; }
+        .main-content { margin-left:280px; padding:40px; flex:1; }
+        h1 { color:var(--text); margin-bottom:8px; }
+        .subtitle { color:#888; margin-bottom:32px; }
+        .card { background:white; border-radius:16px; padding:24px; box-shadow:0 4px 15px rgba(0,0,0,0.08); margin-bottom:20px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+        .avatar { width:64px; height:64px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:1.5em; font-weight:700; flex-shrink:0; overflow:hidden; }
+        .avatar img { width:100%;height:100%;object-fit:cover; }
+        .info { flex:1; min-width:180px; }
+        .info h3 { color:var(--text); margin-bottom:4px; }
+        .badge { display:inline-block; background:var(--vibrant); color:white; border-radius:20px; padding:2px 10px; font-size:0.75em; margin-bottom:8px; }
+        .stars { display:flex; gap:4px; font-size:1.4em; cursor:pointer; margin-top:6px; }
+        .star { color:#ddd; transition:color 0.2s; }
+        .star.ativa { color:#f5a623; }
+        .feedback-msg { font-size:0.8em; color:var(--primary); margin-top:4px; }
+        .btn-feedback { background:var(--primary); color:white; border:none; border-radius:8px; padding:8px 16px; cursor:pointer; font-size:0.85em; margin-top:8px; }
+        .empty { text-align:center; color:#aaa; margin-top:80px; font-size:1.1em; }
     </style>
 </head>
 <body>
-    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
-
     <aside class="sidebar" id="sidebar-menu">
         <div class="sidebar-top">
-            <a href="../EmpowerLearn/daschboard.html" class="sidebar-logo">EmpowerLearn</a>
+            <a href="../EmpowerLearn/daschboard-professor.html" class="sidebar-logo">EmpowerLearn</a>
             <nav class="sidebar-nav">
-                <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    Consultar Perfil
-                </a>
-                <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link active">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                    Ver Curtidas
-                </a>
-                <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    Historico de Perfis
-                </a>
+                <a href="../EmpowerLearn/daschboard-professor.html" class="sidebar-link"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+                <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Consultar Perfil</a>
+                <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg> Ver Curtidas</a>
+                <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Histórico de Perfis</a>
+                <a href="../EmpowerLearn/minhas-contratacoes.html" class="sidebar-link active"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Minhas Contratações</a>
             </nav>
         </div>
         <div class="sidebar-logout">
-            <a href="#" class="sidebar-link" id="logout-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-                Sair
-            </a>
+            <a href="#" onclick="if(confirm('Sair?')){localStorage.clear();window.location.href='login.html';}" class="sidebar-link"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg> Sair</a>
         </div>
     </aside>
 
     <main class="main-content">
         <h1>Minhas Contratações</h1>
-        <p>Estes sao os perfis que voce marcou como favoritos. Fale com eles quando quiser!</p>
-        <div class="professor-grid" id="curtidos-grid"></div>
+        <p class="subtitle">Veja quem te contratou e avalie a experiência.</p>
+        <div id="lista-contratantes"></div>
     </main>
 
     <script>
-        function calcularIdade(dataNascimento) {
-            if (!dataNascimento) return null;
-            const hoje = new Date();
-            const nasc = new Date(dataNascimento);
-            let idade = hoje.getFullYear() - nasc.getFullYear();
-            const m = hoje.getMonth() - nasc.getMonth();
-            if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
-            return idade;
+        const userId = localStorage.getItem('userId');
+        const token = localStorage.getItem('token');
+        const userType = localStorage.getItem('userType');
+        const API = 'http://localhost:8080/api';
+
+        if (!userId || !token || userType !== 'professor') {
+            window.location.href = 'login.html';
         }
 
-        function formatarSexo(sexo) {
-            if (!sexo) return "Nao informado";
-            const mapa = { masculino: "Masculino", feminino: "Feminino", outro: "Outro", m: "Masculino", f: "Feminino", o: "Outro" };
-            return mapa[sexo.toLowerCase()] || sexo;
+        const contratantes = JSON.parse(localStorage.getItem('contratantes_prof_' + userId) || '[]');
+        const feedbacks = JSON.parse(localStorage.getItem('feedbacks_prof_dados_' + userId) || '{}');
+
+        async function carregarContratante(c) {
+            try {
+                const endpoint = c.tipo === 'instituicao' ? '/instituicoes/' : '/alunos/';
+                const res = await fetch(API + endpoint + c.id, { headers: { 'Authorization': 'Bearer ' + token } });
+                if (!res.ok) return null;
+                return await res.json();
+            } catch { return null; }
         }
 
-        function removerCurtida(id) {
-            let curtidos = JSON.parse(localStorage.getItem((localStorage.getItem("userId") || "anonimo") + "_curtidos") || "[]");
-            curtidos = curtidos.filter(p => p.id !== id);
-            localStorage.setItem((localStorage.getItem("userId") || "anonimo") + "_curtidos", JSON.stringify(curtidos));
-            renderCurtidos();
+        function renderEstrelas(cId, nota) {
+            let html = '<div class="stars" id="stars_' + cId + '">';
+            for (let i = 1; i <= 5; i++) {
+                html += '<span class="star ' + (i <= nota ? 'ativa' : '') + '" onclick="setNota(' + cId + ', ' + i + ')">★</span>';
+            }
+            return html + '</div>';
         }
 
-        function renderCurtidos() {
-            const grid = document.getElementById("curtidos-grid");
-            const curtidos = JSON.parse(localStorage.getItem((localStorage.getItem("userId") || "anonimo") + "_curtidos") || "[]");
-            grid.innerHTML = "";
+        window.setNota = function(cId, nota) {
+            feedbacks[cId] = nota;
+            localStorage.setItem('feedbacks_prof_dados_' + userId, JSON.stringify(feedbacks));
+            document.querySelectorAll('#stars_' + cId + ' .star').forEach((s, i) => {
+                s.classList.toggle('ativa', i < nota);
+            });
+            document.getElementById('msg_' + cId).textContent = 'Avaliação salva: ' + nota + '★';
+        };
 
-            if (curtidos.length === 0) {
-                grid.innerHTML = "<p class=\"empty-msg\">Voce ainda nao curtiu nenhum professor. Volte ao dashboard e curta alguns!</p>";
+        async function render() {
+            const lista = document.getElementById('lista-contratantes');
+            if (!contratantes.length) {
+                lista.innerHTML = '<p class="empty">Ninguém te contratou ainda.</p>';
                 return;
             }
+            for (const c of contratantes) {
+                const dados = await carregarContratante(c);
+                const nome = dados?.nome || c.nome || 'Usuário';
+                const foto = dados?.fotoUrl ? 'http://localhost:8080' + dados.fotoUrl : null;
+                const nota = feedbacks[c.id] || 0;
+                const badge = c.tipo === 'instituicao' ? '🏫 Instituição' : '🎓 Aluno';
+                const avatarHtml = foto
+                    ? '<img src="' + foto + '" alt="' + nome + '">'
+                    : nome.charAt(0).toUpperCase();
 
-            curtidos.forEach(prof => {
-                const idade = calcularIdade(prof.dataNascimento);
-                const avatar = prof.fotoUrl
-                    ? "<img src=\"http://localhost:8080" + prof.fotoUrl + "\" style=\"width:100%;height:100%;object-fit:cover;border-radius:50%;\">"
-                    : (prof.nome ? prof.nome.charAt(0).toUpperCase() : "?");
-
-                const card = document.createElement("div");
-                card.className = "professor-card";
-                card.style.cursor = "pointer";
-                card.onclick = function(e) { if (!e.target.classList.contains("remove-btn")) window.location.href = "daschboard.html?abrirProfessor=" + prof.id; };
-                card.style.cursor = "pointer";
-                card.onclick = function(e) { if (!e.target.classList.contains("remove-btn")) abrirModal(prof); };
-                card.innerHTML =
-                    "<div class=\"prof-avatar\">" + avatar + "</div>" +
-                    "<h3>Prof. " + (prof.nome || "Nome Desconhecido") + "</h3>" +
-                    "<span class=\"prof-badge\">" + (prof.especialidade || "Materia nao informada") + "</span>" +
-                    "<p class=\"prof-meta\">" + (idade !== null ? idade + " anos" : "Idade nao informada") + " &middot; " + formatarSexo(prof.sexo) + "</p>" +
-                    "<button class=\"remove-btn\" onclick=\"removerCurtida(" + prof.id + ")\">Ver Contratação</button>";
-                grid.appendChild(card);
-            });
-        }
-
-        function calcularIdade(dataNascimento) {
-            if (!dataNascimento) return null;
-            const hoje = new Date(); const nasc = new Date(dataNascimento);
-            let idade = hoje.getFullYear() - nasc.getFullYear();
-            const m = hoje.getMonth() - nasc.getMonth();
-            if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
-            return idade;
-        }
-
-        function abrirModal(prof) {
-            const overlay = document.getElementById('prof-modal-overlay');
-            const idade = calcularIdade(prof.dataNascimento);
-            const avatarEl = document.getElementById('pm-avatar');
-            avatarEl.innerHTML = prof.fotoUrl
-                ? '<img src="http://localhost:8080' + prof.fotoUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
-                : (prof.nome ? prof.nome.charAt(0).toUpperCase() : '?');
-            document.getElementById('pm-nome').innerText = 'Prof. ' + (prof.nome || '');
-            document.getElementById('pm-badge').innerText = prof.especialidade || 'N/A';
-            document.getElementById('pm-meta').innerText = (idade ? idade + ' anos' : 'Idade não informada') + ' · ' + (prof.sexo || 'Não informado');
-            const cidade = prof.cidade || null;
-            document.getElementById('pm-loc').innerText = cidade ? cidade + (prof.estado ? '/' + prof.estado : '') : 'Não informada';
-            document.getElementById('pm-exp').innerText = prof.experiencia ? prof.experiencia + ' anos' : 'Não informada';
-            document.getElementById('pm-did').innerText = prof.didatica || 'Não informada';
-            document.getElementById('pm-bio').innerText = prof.biografia || 'Sem biografia.';
-            const curr = document.getElementById('pm-curriculo');
-            if (prof.curriculoUrl) { curr.href = 'http://localhost:8080' + prof.curriculoUrl; curr.style.display = 'block'; } else { curr.style.display = 'none'; }
-            overlay.style.display = 'flex';
-        }
-
-        function fecharModal() {
-            document.getElementById('prof-modal-overlay').style.display = 'none';
-        }
-
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
-
-        function calcularIdade(dataNascimento) {
-            if (!dataNascimento) return null;
-            const hoje = new Date(); const nasc = new Date(dataNascimento);
-            let idade = hoje.getFullYear() - nasc.getFullYear();
-            const m = hoje.getMonth() - nasc.getMonth();
-            if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
-            return idade;
-        }
-
-        function abrirModal(prof) {
-            const overlay = document.getElementById('prof-modal-overlay');
-            const idade = calcularIdade(prof.dataNascimento);
-            const avatarEl = document.getElementById('pm-avatar');
-            avatarEl.innerHTML = prof.fotoUrl
-                ? '<img src="http://localhost:8080' + prof.fotoUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
-                : (prof.nome ? prof.nome.charAt(0).toUpperCase() : '?');
-            document.getElementById('pm-nome').innerText = 'Prof. ' + (prof.nome || '');
-            document.getElementById('pm-badge').innerText = prof.especialidade || 'N/A';
-            document.getElementById('pm-meta').innerText = (idade ? idade + ' anos' : 'Idade não informada') + ' · ' + (prof.sexo || 'Não informado');
-            const cidade = prof.cidade || null;
-            document.getElementById('pm-loc').innerText = cidade ? cidade + (prof.estado ? '/' + prof.estado : '') : 'Não informada';
-            document.getElementById('pm-exp').innerText = prof.experiencia ? prof.experiencia + ' anos' : 'Não informada';
-            document.getElementById('pm-did').innerText = prof.didatica || 'Não informada';
-            document.getElementById('pm-bio').innerText = prof.biografia || 'Sem biografia.';
-            const curr = document.getElementById('pm-curriculo');
-            if (prof.curriculoUrl) { curr.href = 'http://localhost:8080' + prof.curriculoUrl; curr.style.display = 'block'; } else { curr.style.display = 'none'; }
-            overlay.style.display = 'flex';
-        }
-
-        function fecharModal() {
-            document.getElementById('prof-modal-overlay').style.display = 'none';
-        }
-
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            renderCurtidos();
-
-            document.getElementById("logout-button").addEventListener("click", function(e) {
-                e.preventDefault();
-                if (window.confirm("Voce tem certeza de que quer sair?")) window.location.href = "index.html";
-            });
-
-            const menuToggle = document.getElementById("menu-toggle");
-            const sidebar = document.getElementById("sidebar-menu");
-            if (menuToggle && sidebar) {
-                menuToggle.addEventListener("click", function() { sidebar.classList.toggle("active"); });
-                sidebar.querySelectorAll(".sidebar-link").forEach(link => {
-                    link.addEventListener("click", () => { if (window.innerWidth <= 768) sidebar.classList.remove("active"); });
-                });
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.innerHTML = '<div class="avatar">' + avatarHtml + '</div>'
+                    + '<div class="info">'
+                    + '<h3>' + nome + '</h3>'
+                    + '<span class="badge">' + badge + '</span>'
+                    + '<p style="font-size:0.85em;color:#888;">' + (dados?.cidade || '') + (dados?.estado ? ' / ' + dados.estado : '') + '</p>'
+                    + renderEstrelas(c.id, nota)
+                    + '<p class="feedback-msg" id="msg_' + c.id + '">' + (nota ? 'Avaliação salva: ' + nota + '★' : 'Clique nas estrelas para avaliar') + '</p>'
+                    + '</div>';
+                lista.appendChild(div);
             }
-        });
-    </script>
+        }
 
-    <div id="prof-modal-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);z-index:2000;justify-content:center;align-items:center;padding:20px;">
-        <div style="background:#fff;border-radius:16px;padding:36px 32px 28px;width:100%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,0.25);position:relative;animation:modalFadeIn 0.25s ease;">
-            <style>@keyframes modalFadeIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}</style>
-            <button onclick="fecharModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.6em;color:#555;cursor:pointer;">&times;</button>
-            <div id="pm-avatar" style="background:#4A00B7;width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem;font-weight:700;margin:0 auto 16px;overflow:hidden;"></div>
-            <h2 id="pm-nome" style="text-align:center;color:#300090;font-size:1.3em;margin-bottom:4px;"></h2>
-            <p style="text-align:center;margin-bottom:4px;"><span id="pm-badge" style="background:#8B5CF6;color:#fff;padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:600;"></span></p>
-            <p id="pm-meta" style="text-align:center;font-size:0.88em;color:#555;margin-bottom:20px;"></p>
-            <hr style="border:none;border-top:1px solid #E0E0E0;margin-bottom:18px;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;">
-                <div><p style="font-size:0.8em;font-weight:700;color:#8B5CF6;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Localização</p><p id="pm-loc" style="font-size:0.95em;color:#555;"></p></div>
-                <div><p style="font-size:0.8em;font-weight:700;color:#8B5CF6;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Experiência</p><p id="pm-exp" style="font-size:0.95em;color:#555;"></p></div>
-                <div style="grid-column:1/-1;"><p style="font-size:0.8em;font-weight:700;color:#8B5CF6;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Forma Didática</p><p id="pm-did" style="font-size:0.95em;color:#555;"></p></div>
-            </div>
-            <hr style="border:none;border-top:1px solid #E0E0E0;margin-bottom:18px;">
-            <p style="font-size:0.8em;font-weight:700;color:#8B5CF6;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Biografia</p>
-            <p id="pm-bio" style="font-size:0.95em;color:#555;line-height:1.7;margin-bottom:24px;"></p>
-            <a id="pm-curriculo" href="#" target="_blank" style="display:none;width:100%;text-align:center;padding:13px;background:#8B5CF6;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.95em;">⬇ Baixar Currículo</a>
-        </div>
-    </div>
+        render();
+    </script>
 </body>
 </html>

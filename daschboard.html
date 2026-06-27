@@ -950,6 +950,10 @@
                 window.location.href = '../EmpowerLearn/login.html';
                 return;
             }
+            if (localStorage.getItem('userType') === 'professor') {
+                window.location.href = '../EmpowerLearn/daschboard-professor.html';
+                return;
+            }
             
 
             const urlParams = new URLSearchParams(window.location.search);
@@ -985,21 +989,25 @@
         let modalProfAtual = null;
 
         window.contratarProfessor = function(profId, profNome) {
-
             const userId = localStorage.getItem('userId');
+            const userName = localStorage.getItem('userName') || 'Usuário';
+            const userType = localStorage.getItem('userType') || 'aluno';
 
+            // Salva no lado do aluno/instituição
             let contratados = JSON.parse(localStorage.getItem('contratados_' + userId) || '[]');
-
             if (!contratados.find(c => String(c.id) === String(profId))) {
-
                 contratados.push({ id: profId, nome: profNome });
-
                 localStorage.setItem('contratados_' + userId, JSON.stringify(contratados));
+            }
 
+            // Salva no lado do professor
+            let contratantes = JSON.parse(localStorage.getItem('contratantes_prof_' + profId) || '[]');
+            if (!contratantes.find(c => String(c.id) === String(userId))) {
+                contratantes.push({ id: userId, nome: userName, tipo: userType });
+                localStorage.setItem('contratantes_prof_' + profId, JSON.stringify(contratantes));
             }
 
             alert('✅ Prof. ' + profNome + ' contratado! Acesse "Contratados" para avaliar.');
-
         };
 
         window.contratarProfessorModal = function() {

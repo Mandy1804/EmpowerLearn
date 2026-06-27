@@ -20,6 +20,7 @@ public class Aluno {
     private String cep;
     private LocalDate dataNascimento;
     private String sexo;
+    private String tipoEnsino;
 
     // CAMPOS DE LOCALIZAÇÃO (Preenchidos via ViaCEP no Controller)
     private String cidade;
@@ -46,6 +47,8 @@ public class Aluno {
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
     public String getSexo() { return sexo; }
     public void setSexo(String sexo) { this.sexo = sexo; }
+    public String getTipoEnsino() { return tipoEnsino; }
+    public void setTipoEnsino(String tipoEnsino) { this.tipoEnsino = tipoEnsino; }
     public LocalDate getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
     public String getCidade() { return cidade; }

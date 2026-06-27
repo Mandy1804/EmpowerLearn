@@ -30,25 +30,34 @@
         .empty-msg { text-align: center; color: var(--text-light); grid-column: 1/-1; padding: 40px 0; font-size: 1.1em; }
         @media (max-width: 768px) { .menu-toggle { display: block; } .sidebar { width: 70%; transform: translateX(-100%); } .sidebar.active { transform: translateX(0); } .main-content { margin-left: 0; width: 100%; padding-top: 70px; } .professor-grid { grid-template-columns: 1fr; } }
     </style>
+
 </head>
 <body>
     <div class="menu-toggle" id="menu-toggle">&#9776;</div>
 
-    <aside class="sidebar" id="sidebar-menu">
+        <aside class="sidebar" id="sidebar-menu">
         <div class="sidebar-top">
-            <a href="../EmpowerLearn/daschboard.html" class="sidebar-logo">EmpowerLearn</a>
-            <nav class="sidebar-nav">
-                <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link">
+            <a href="#" class="sidebar-logo" id="nav-logo">EmpowerLearn</a>
+            <nav class="sidebar-nav" id="sidebar-nav">
+                <a href="#" class="sidebar-link" id="nav-home">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Home
+                </a>
+                <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link" id="nav-perfil">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Consultar Perfil
                 </a>
-                <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link active">
+                <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link active" id="nav-curtidas">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                     Ver Curtidas
                 </a>
-                <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link">
+                <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link" id="nav-historico">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    Historico de Perfis
+                    Histórico de Perfis
+                </a>
+                <a href="#" class="sidebar-link" id="nav-contratos">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Contratados
                 </a>
             </nav>
         </div>
@@ -61,8 +70,8 @@
     </aside>
 
     <main class="main-content">
-        <h1>Seus Professores Curtidos</h1>
-        <p>Estes sao os perfis que voce marcou como favoritos. Fale com eles quando quiser!</p>
+        <h1 id="titulo-curtidas">Seus Favoritos</h1>
+        <p id="subtitulo-curtidas">Estes são os perfis que você marcou como favoritos.</p>
         <div class="professor-grid" id="curtidos-grid"></div>
     </main>
 
@@ -231,5 +240,43 @@
             <a id="pm-curriculo" href="#" target="_blank" style="display:none;width:100%;text-align:center;padding:13px;background:#8B5CF6;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.95em;">⬇ Baixar Currículo</a>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ut = localStorage.getItem('userType');
+            var homeLink = document.getElementById('nav-home');
+            var logo = document.getElementById('nav-logo');
+            var contratosLink = document.getElementById('nav-contratos');
+            var homeHref = ut === 'professor' ? '../EmpowerLearn/daschboard-professor.html' : '../EmpowerLearn/daschboard.html';
+            if (homeLink) homeLink.href = homeHref;
+            if (logo) logo.href = homeHref;
+            if (contratosLink) {
+                if (ut === 'professor') {
+                    contratosLink.href = '../EmpowerLearn/minhas-contratacoes.html';
+                    contratosLink.lastChild.textContent = ' Minhas Contratações';
+                } else {
+                    contratosLink.href = '../EmpowerLearn/contratados.html';
+                    contratosLink.lastChild.textContent = ' Contratados';
+                }
+            }
+        });
+    </script>
+
+    <script>
+        (function() {
+            var ut = localStorage.getItem('userType');
+            var titulo = document.getElementById('titulo-curtidas');
+            var sub = document.getElementById('subtitulo-curtidas');
+            if (titulo) {
+                if (ut === 'professor') {
+                    titulo.textContent = 'Seus Alunos e Instituições Curtidos';
+                    if (sub) sub.textContent = 'Alunos e instituições que você marcou como favoritos.';
+                } else {
+                    titulo.textContent = 'Seus Professores Curtidos';
+                    if (sub) sub.textContent = 'Professores que você marcou como favoritos.';
+                }
+            }
+        })();
+    </script>
 </body>
 </html>

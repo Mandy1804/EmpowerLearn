@@ -9,6 +9,10 @@
         body { display:flex; min-height:100vh; background:#F0F2F5; margin:0; font-family:'Poppins',sans-serif; }
         .sidebar { width:280px; background:#4A00B7; color:white; padding:20px 0; display:flex; flex-direction:column; position:fixed; left:0; top:0; height:100vh; z-index:900; }
         .sidebar-logo { text-align:center; padding-bottom:30px; font-size:1.6em; font-weight:700; border-bottom:1px solid rgba(255,255,255,0.2); margin:0 20px; display:block; color:white; text-decoration:none; }
+        .sidebar-top { display:flex; flex-direction:column; }
+        .sidebar-nav { flex-grow:1; padding:20px 0; display:flex; flex-direction:column; }
+        .sidebar-link svg { margin-right:12px; width:20px; height:20px; flex-shrink:0; }
+        .sidebar-logout { border-top:1px solid rgba(255,255,255,0.2); padding-top:20px; margin-top:auto; }
         .sidebar-link { display:flex; align-items:center; padding:15px 30px; text-decoration:none; color:white; font-size:0.95em; cursor:pointer; transition:background 0.3s; }
         .sidebar-link:hover, .sidebar-link.active { background:#8B5CF6; }
         .main-content { margin-left:280px; padding:40px; flex:1; }
@@ -26,16 +30,19 @@
     </style>
 </head>
 <body>
-<aside class="sidebar">
-    <a href="daschboard.html" class="sidebar-logo">EmpowerLearn</a>
-    <nav style="flex-grow:1;padding:20px 0;">
-        <a href="ver-perfil.html" class="sidebar-link">👤 Consultar Perfil</a>
-        <a href="ver-curtidas.html" class="sidebar-link">❤️ Curtidas</a>
-        <a href="historico-perfis.html" class="sidebar-link">🕘 Histórico de Perfis</a>
-        <a href="contratados.html" class="sidebar-link active">✅ Contratados</a>
-    </nav>
-    <div style="border-top:1px solid rgba(255,255,255,0.2);padding-top:20px;">
-        <a onclick="if(confirm('Sair?')){localStorage.clear();window.location.href='login.html';}" class="sidebar-link" style="color:#E74C3C;cursor:pointer;">🚪 Sair</a>
+<aside class="sidebar" id="sidebar-menu">
+    <div class="sidebar-top">
+        <a href="#" class="sidebar-logo" id="nav-logo">EmpowerLearn</a>
+        <nav class="sidebar-nav" id="sidebar-nav">
+            <a href="#" class="sidebar-link" id="nav-home"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+            <a href="ver-perfil.html" class="sidebar-link" id="nav-perfil"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Consultar Perfil</a>
+            <a href="ver-curtidas.html" class="sidebar-link" id="nav-curtidas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg> Ver Curtidas</a>
+            <a href="historico-perfis.html" class="sidebar-link" id="nav-historico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Histórico de Perfis</a>
+            <a href="contratados.html" class="sidebar-link active" id="nav-contratos"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Contratados</a>
+        </nav>
+    </div>
+    <div class="sidebar-logout">
+        <a onclick="if(confirm('Sair?')){localStorage.clear();window.location.href='login.html';}" class="sidebar-link" style="color:#E74C3C;cursor:pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg> Sair</a>
     </div>
 </aside>
 
@@ -139,6 +146,17 @@
     }
 
     carregarContratados();
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var ut = localStorage.getItem('userType');
+        var homeLink = document.getElementById('nav-home');
+        var logo = document.getElementById('nav-logo');
+        var homeHref = ut === 'professor' ? 'daschboard-professor.html' : 'daschboard.html';
+        if (homeLink) homeLink.href = homeHref;
+        if (logo) logo.href = homeHref;
+    });
 </script>
 </body>
 </html>
