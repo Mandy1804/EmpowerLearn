@@ -9,3 +9,10 @@ correcao_final_empowerlearn*/
 *.ERRADO.bak
 *.QUEBRADO.bak
 *.bak
+node_modules/
+empowerlearn-api/node_modules/
+_backup_antes_*/
+hotfix_*/
+restaurar_*/
+*.bak8081
+.env
