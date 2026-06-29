@@ -1,4 +1,4 @@
-const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
+const API_BASE_URL = 'http://localhost:8080/api';
 const PAGINA_DESTINO = 'daschboard.html';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('userId', userData.id);
             localStorage.setItem('userType', userData.tipo);
             localStorage.setItem('token', userData.token);
+            localStorage.setItem('userName', userData.nome || userData.nomeInstituicao || userData.email || email);
+            localStorage.setItem('email', userData.email || email);
             
             showMessage(messageDivLogin, 'success', 'Login bem-sucedido! Redirecionando...');
             

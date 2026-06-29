@@ -498,9 +498,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../EmpowerLearn/css/empowerlearn-ajustes-v4.css">
 </head>
 <body>
-    <script src="js/config.js"></script>
 
     <div class="menu-toggle" id="menu-toggle">&#9776;</div>
 
@@ -528,6 +528,11 @@
                 <a href="../EmpowerLearn/minhas-contratacoes.html" class="sidebar-link" id="link-contratacoes-prof" style="display:none;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
                     Minhas Contratações
+                </a>
+            
+                <a href="../EmpowerLearn/notificacoes.html" class="sidebar-link" id="nav-notificacoes">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    Notificações
                 </a>
             </nav>
         </div>
@@ -682,7 +687,7 @@
     </div>
 
     <script>
-        const API_URL = window.APP_CONFIG.API_BASE_URL + '/professores';
+        const API_URL = 'http://localhost:8080/api/professores';
         const userType = localStorage.getItem('userType');
 
         function getStorageKey(nome) {
@@ -756,7 +761,7 @@
 
                 const idade = calcularIdade(prof.dataNascimento);
                 const avatarConteudo = prof.fotoUrl
-                    ? `<img src="${window.APP_CONFIG.SERVER_BASE_URL}${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+                    ? `<img src="http://localhost:8080${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
                     : (prof.nome ? prof.nome.charAt(0).toUpperCase() : '?');
 
                 card.innerHTML = `
@@ -772,7 +777,7 @@
                     </div>
                 `;
                 // Carrega estrelas do card
-                fetch(window.APP_CONFIG.API_BASE_URL + '/feedbacks/professor/' + prof.id)
+                fetch('http://localhost:8080/api/feedbacks/professor/' + prof.id)
                     .then(r => r.json())
                     .then(d => {
                         const el = document.getElementById('card-estrelas-' + prof.id);
@@ -801,7 +806,7 @@
             document.getElementById('modal-feedback-container').style.display = podeContratar && jaContratou ? 'block' : 'none';
             if (podeContratar && jaContratou) configurarEstrelasModal(prof.id);
             // Carrega estrelas no modal
-            fetch(window.APP_CONFIG.API_BASE_URL + '/feedbacks/professor/' + prof.id)
+            fetch('http://localhost:8080/api/feedbacks/professor/' + prof.id)
                 .then(r => r.json())
                 .then(d => {
                     const m = Math.round(d.media || 0);
@@ -814,7 +819,7 @@
             // Avatar
             const avatarEl = document.getElementById('modal-avatar');
             avatarEl.innerHTML = prof.fotoUrl
-                ? `<img src="${window.APP_CONFIG.SERVER_BASE_URL}${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+                ? `<img src="http://localhost:8080${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
                 : (prof.nome ? prof.nome.charAt(0).toUpperCase() : '?');
 
             document.getElementById('modal-nome').innerText = 'Prof. ' + (prof.nome || 'Nome Desconhecido');
@@ -851,7 +856,7 @@
 
             const curriculoBtn = document.getElementById('modal-curriculo-btn');
             if (prof.curriculoUrl) {
-                curriculoBtn.href = `${window.APP_CONFIG.SERVER_BASE_URL}${prof.curriculoUrl}`;
+                curriculoBtn.href = `http://localhost:8080${prof.curriculoUrl}`;
                 curriculoBtn.style.display = 'block';
             } else {
                 curriculoBtn.style.display = 'none';
@@ -981,13 +986,49 @@
             if (logoutButton) {
                 logoutButton.addEventListener('click', function(e) {
                     e.preventDefault();
-                    if (window.confirm("Você tem certeza de que quer sair?")) window.location.href = 'index.html';
+                    if (window.confirm("Você tem certeza de que quer sair?")) elLogout('login.html');
                 });
             }
 
         // ---- SISTEMA DE CONTRATAÇÃO ----
 
         let modalProfAtual = null;
+
+
+        function elCriarNotificacaoProfessor(profId, profNome) {
+            try {
+                const alunoNome = localStorage.getItem('userName') || localStorage.getItem('nome') || 'Aluno';
+                const titulo = 'Nova contratação';
+                const mensagem = alunoNome + ' contratou seu perfil.';
+                const data = new Date().toLocaleString('pt-BR');
+                const chaves = [
+                    'notificacoes_professor-' + profId,
+                    'notificacoes_professor_' + profId,
+                    'notificacoes_professor_' + String(profId)
+                ];
+                chaves.forEach(function(chave) {
+                    const lista = JSON.parse(localStorage.getItem(chave) || '[]');
+                    lista.unshift({ titulo, mensagem, data, profId: Number(profId), origem: alunoNome });
+                    localStorage.setItem(chave, JSON.stringify(lista.slice(0, 50)));
+                });
+
+                const apiBase = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL) ? window.APP_CONFIG.API_BASE_URL : 'http://localhost:8080/api';
+                fetch(apiBase + '/notificacoes/enviar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        destinoTipo: 'professor',
+                        destinoId: Number(profId),
+                        titulo,
+                        mensagem
+                    })
+                }).catch(function(e) {
+                    console.warn('Notificação em tempo real indisponível, mas foi salva localmente.', e);
+                });
+            } catch (e) {
+                console.warn('Falha ao salvar notificação local do professor:', e);
+            }
+        }
 
         window.contratarProfessor = function(profId, profNome) {
             const userId = localStorage.getItem('userId');
@@ -1006,6 +1047,7 @@
             if (!contratantes.find(c => String(c.id) === String(userId))) {
                 contratantes.push({ id: userId, nome: userName, tipo: userType });
                 localStorage.setItem('contratantes_prof_' + profId, JSON.stringify(contratantes));
+                elCriarNotificacaoProfessor(profId, profNome);
             }
 
             alert('✅ Prof. ' + profNome + ' contratado! Acesse "Contratados" para avaliar.');
@@ -1063,5 +1105,6 @@
             }
         });
     </script>
+    <script src="../EmpowerLearn/js/empowerlearn-v4-utils.js"></script>
 </body>
 </html>

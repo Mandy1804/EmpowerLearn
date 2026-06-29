@@ -1,0 +1,115 @@
+
+/* EmpowerLearn ajustes finais V4 - seguro, sem apertar cards */
+.main-content {
+  box-sizing: border-box;
+}
+
+.search-hero,
+.hero-notif,
+.painel,
+.profile-card,
+.notifications-wrap {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.professor-header,
+.main-content > h1,
+.main-content > .subtitle,
+.main-content > p {
+  text-align: center;
+}
+
+.professor-grid,
+.grid,
+#grid-clientes,
+#curtidos-grid,
+#historico-lista {
+  max-width: 1120px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+}
+
+.professor-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 300px)) !important;
+}
+
+.grid,
+#grid-clientes {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 300px)) !important;
+}
+
+.card,
+.professor-card {
+  width: 100% !important;
+  max-width: 300px;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.card h3,
+.professor-card h3,
+.info h3 {
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.25 !important;
+  text-align: center;
+}
+
+.card-actions {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+#lista-contratados,
+#lista-contratantes {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+#lista-contratados .card,
+#lista-contratantes .card {
+  max-width: 980px;
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+#lista-contratados .card .info,
+#lista-contratantes .card .info {
+  flex: 1 1 280px;
+  min-width: 260px;
+  text-align: center;
+}
+
+#lista-contratados .card button,
+#lista-contratantes .card button {
+  flex: 0 0 auto;
+}
+
+.profile-card {
+  max-width: 760px !important;
+}
+
+@media (max-width: 768px) {
+  .professor-grid,
+  .grid,
+  #grid-clientes {
+    grid-template-columns: 1fr !important;
+  }
+  .card,
+  .professor-card {
+    max-width: 100%;
+  }
+}

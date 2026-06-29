@@ -57,6 +57,8 @@ public class SecurityConfig {
                 .requestMatchers("/uploads/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/feedbacks/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/painel-professor/**").permitAll()
+                .requestMatchers("/ws", "/ws/**").permitAll()
+                .requestMatchers("/api/notificacoes/**").permitAll()
                 // Tudo mais exige autenticação
                 .anyRequest().authenticated()
             )
@@ -72,7 +74,7 @@ public class SecurityConfig {
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));
-        config.setAllowCredentials(false);
+        config.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

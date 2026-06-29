@@ -36,9 +36,9 @@
         .btn-curtir { background:none; border:none; font-size:1.4em; cursor:pointer; }
         h2.section-title { color:var(--text-dark); margin-bottom:20px; }
     </style>
+    <link rel="stylesheet" href="../EmpowerLearn/css/empowerlearn-ajustes-v4.css">
 </head>
 <body>
-    <script src="js/config.js"></script>
 
 <aside class="sidebar">
     <div class="sidebar-top">
@@ -64,10 +64,15 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 Minhas Contratações
             </a>
-        </nav>
+        
+                <a href="../EmpowerLearn/notificacoes.html" class="sidebar-link" id="nav-notificacoes">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    Notificações
+                </a>
+            </nav>
     </div>
     <div class="sidebar-logout">
-        <a href="#" onclick="if(confirm('Sair?')){localStorage.clear();window.location.href='login.html';}" class="sidebar-link" style="color:#E74C3C;font-weight:600;">
+        <a href="#" onclick="if(confirm('Sair?')){elLogout('login.html');}" class="sidebar-link" style="color:#E74C3C;font-weight:600;">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
             Sair
         </a>
@@ -102,8 +107,8 @@
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
     const userType = localStorage.getItem('userType');
-    const SERVER = window.APP_CONFIG.SERVER_BASE_URL;
-    const API = window.APP_CONFIG.API_BASE_URL;
+    const SERVER = 'http://localhost:8080';
+    const API = 'http://localhost:8080/api';
 
     if (!userId || !token || userType !== 'professor') {
         window.location.href = 'login.html';
@@ -184,6 +189,19 @@
             btn.innerText = '❤️';
         }
         localStorage.setItem('curtidos_prof_' + userId, JSON.stringify(curtidos));
+        try {
+            const cliente = todosClientes.find(c => (c.tipo + '_' + c.id) === key);
+            let detalhes = JSON.parse(localStorage.getItem(userId + '_curtidos') || '[]');
+            if (cliente) {
+                if (curtidos.includes(key)) {
+                    detalhes = detalhes.filter(c => !((c.tipo + '_' + c.id) === key));
+                    detalhes.unshift(cliente);
+                } else {
+                    detalhes = detalhes.filter(c => !((c.tipo + '_' + c.id) === key));
+                }
+                localStorage.setItem(userId + '_curtidos', JSON.stringify(detalhes.slice(0, 50)));
+            }
+        } catch(e) { console.warn('Falha ao espelhar favorito:', e); }
     }
 
     function contratar(clienteId, clienteNome, clienteTipo) {
@@ -192,10 +210,18 @@
             contratacoes.push({ id: clienteId, nome: clienteNome, tipo: clienteTipo });
             localStorage.setItem('contratacoes_prof_' + userId, JSON.stringify(contratacoes));
         }
+        try {
+            let historico = JSON.parse(localStorage.getItem(userId + '_historico') || '[]');
+            const cliente = todosClientes.find(c => String(c.id) === String(clienteId) && c.tipo === clienteTipo) || { id: clienteId, nome: clienteNome, tipo: clienteTipo };
+            historico = historico.filter(h => !(String(h.id) === String(clienteId) && h.tipo === clienteTipo));
+            historico.unshift({ ...cliente, visitadoEm: new Date().toISOString() });
+            localStorage.setItem(userId + '_historico', JSON.stringify(historico.slice(0, 10)));
+        } catch(e) { console.warn('Falha ao salvar histórico:', e); }
         alert('✅ ' + clienteNome + ' adicionado às suas contratações!');
     }
 
     carregar();
 </script>
+    <script src="../EmpowerLearn/js/empowerlearn-v4-utils.js"></script>
 </body>
 </html>
