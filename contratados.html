@@ -30,6 +30,7 @@
     </style>
 </head>
 <body>
+    <script src="js/config.js"></script>
 <aside class="sidebar" id="sidebar-menu">
     <div class="sidebar-top">
         <a href="#" class="sidebar-logo" id="nav-logo">EmpowerLearn</a>
@@ -57,8 +58,8 @@
     const userType = localStorage.getItem('userType');
     if (!userId || !token) window.location.href = 'login.html';
 
-    const API = 'http://localhost:8080/api';
-    const SERVER = 'http://localhost:8080';
+    const API = window.APP_CONFIG.API_BASE_URL;
+    const SERVER = window.APP_CONFIG.SERVER_BASE_URL;
 
     async function carregarContratados() {
         const contratados = JSON.parse(localStorage.getItem('contratados_' + userId) || '[]');

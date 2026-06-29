@@ -38,6 +38,7 @@
     </style>
 </head>
 <body>
+    <script src="js/config.js"></script>
 
 <aside class="sidebar">
     <div class="sidebar-top">
@@ -101,8 +102,8 @@
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
     const userType = localStorage.getItem('userType');
-    const SERVER = 'http://localhost:8080';
-    const API = 'http://localhost:8080/api';
+    const SERVER = window.APP_CONFIG.SERVER_BASE_URL;
+    const API = window.APP_CONFIG.API_BASE_URL;
 
     if (!userId || !token || userType !== 'professor') {
         window.location.href = 'login.html';

@@ -31,6 +31,7 @@
 
 </head>
 <body>
+    <script src="js/config.js"></script>
     <div class="menu-toggle" id="menu-toggle">&#9776;</div>
 
         <aside class="sidebar" id="sidebar-menu">
@@ -118,7 +119,7 @@
             const overlay = document.getElementById('prof-modal-overlay');
             const avatarEl = document.getElementById('pm-avatar');
             avatarEl.innerHTML = item.fotoUrl
-                ? '<img src="http://localhost:8080' + item.fotoUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
+                ? '<img src="' + window.APP_CONFIG.SERVER_BASE_URL + item.fotoUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
                 : (item.nome ? item.nome.charAt(0).toUpperCase() : '?');
             document.getElementById('pm-nome').innerText = 'Prof. ' + (item.nome || '');
             document.getElementById('pm-badge').innerText = item.especialidade || 'N/A';

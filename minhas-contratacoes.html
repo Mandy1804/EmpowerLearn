@@ -36,6 +36,7 @@
     </style>
 </head>
 <body>
+    <script src="js/config.js"></script>
     <aside class="sidebar" id="sidebar-menu">
         <div class="sidebar-top">
             <a href="../EmpowerLearn/daschboard-professor.html" class="sidebar-logo">EmpowerLearn</a>
@@ -62,7 +63,7 @@
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
         const userType = localStorage.getItem('userType');
-        const API = 'http://localhost:8080/api';
+        const API = window.APP_CONFIG.API_BASE_URL;
 
         if (!userId || !token || userType !== 'professor') {
             window.location.href = 'login.html';
@@ -106,7 +107,7 @@
             for (const c of contratantes) {
                 const dados = await carregarContratante(c);
                 const nome = dados?.nome || c.nome || 'Usuário';
-                const foto = dados?.fotoUrl ? 'http://localhost:8080' + dados.fotoUrl : null;
+                const foto = dados?.fotoUrl ? window.APP_CONFIG.SERVER_BASE_URL + dados.fotoUrl : null;
                 const nota = feedbacks[c.id] || 0;
                 const badge = c.tipo === 'instituicao' ? '🏫 Instituição' : '🎓 Aluno';
                 const avatarHtml = foto

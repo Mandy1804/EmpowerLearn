@@ -152,6 +152,7 @@
 
 </head>
 <body>
+    <script src="js/config.js"></script>
 
     <div class="menu-toggle" id="menu-toggle">
         &#9776; 
@@ -302,7 +303,7 @@
     </main>
 
     <script>
-        const API_BASE_URL = 'http://localhost:8080/api';
+        const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
 
         function getEntityPlural(tipo) {
             const mapa = { 'professor': 'professores', 'aluno': 'alunos', 'instituicao': 'instituicoes' };
@@ -366,8 +367,8 @@
     const avatarElement = document.getElementById('prof-initial');
 
     if (data.fotoUrl && data.fotoUrl.startsWith('/uploads/')) { 
-        // Adicionamos o API_BASE_URL para que o navegador busque em localhost:8080
-        const SERVER_BASE_URL = 'http://localhost:8080';
+        // Usamos SERVER_BASE_URL para montar a URL dos arquivos enviados
+        const SERVER_BASE_URL = window.APP_CONFIG.SERVER_BASE_URL;
 avatarElement.innerHTML = `<img src="${SERVER_BASE_URL}${data.fotoUrl}" alt="Foto de Perfil">`;
     } else {
         // Se não houver foto, exibe a inicial do nome
@@ -382,7 +383,7 @@ avatarElement.innerHTML = `<img src="${SERVER_BASE_URL}${data.fotoUrl}" alt="Fot
     const curriculoLinkEl = document.getElementById('curriculo-link');
     if (curriculoLinkEl) {
         if (type === 'professor' && data.curriculoUrl) {
-            curriculoLinkEl.href = 'http://localhost:8080' + data.curriculoUrl;
+            curriculoLinkEl.href = window.APP_CONFIG.SERVER_BASE_URL + data.curriculoUrl;
             curriculoLinkEl.style.display = 'inline';
         } else {
             curriculoLinkEl.style.display = 'none';
@@ -609,7 +610,7 @@ avatarElement.innerHTML = `<img src="${SERVER_BASE_URL}${data.fotoUrl}" alt="Fot
 
         // Inicia a busca dos dados ao carregar a página
         async function carregarFeedbacks(profId, tipo) {
-            const API_BASE_URL = 'http://localhost:8080/api';
+            const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
             const token = localStorage.getItem('token');
             const myId = localStorage.getItem('userId');
 
