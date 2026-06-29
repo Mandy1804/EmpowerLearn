@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planos e limites | EmpowerLearn</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/empowerlearn-pagamentos-stripe.css" />
+</head>
+<body class="el-pagamentos-page el-planos-page">
+  <header>
+        <div class="container">
+            <div class="logo">
+                <img src="../EmpowerLearn/imagens/Logo.PNG" alt="EmpowerLearn Logo">
+                <h1>EmpowerLearn</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="../EmpowerLearn/index.html">Início</a></li>
+                    <li><a href="../EmpowerLearn/sobre.html">Sobre Nós</a></li>
+                    <li><a href="../EmpowerLearn/como-funcionna.html">Como Funciona</a></li>
+                    <li><a href="../EmpowerLearn/diferenciais.html">Diferenciais</a></li>
+                    <li><a href="../EmpowerLearn/contato.html">Contato</a></li>
+                    <li><a href="../EmpowerLearn/planos.html">Planos</a></li>
+                    <li><a href="../EmpowerLearn/login.html">Login</a></li>
+
+                </ul>
+                <div class="burger">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+  <main>
+    <section class="el-planos-hero-index">
+      <div class="el-hero-glow el-hero-glow-a"></div>
+      <div class="el-hero-glow el-hero-glow-b"></div>
+
+      <div class="el-planos-hero-content">
+        <p class="el-eyebrow">Acesso flexível</p>
+        <h1>Comece grátis. Amplie quando sua demanda crescer.</h1>
+        <p>
+          A EmpowerLearn permite buscar professores, analisar perfis e iniciar contratações sem cobrança.
+          Os planos pagos existem apenas para quem precisa de mais contratações, filtros completos e organização.
+        </p>
+        <div class="el-hero-actions">
+          <a href="#el-planos-grid" class="el-btn-hero-primary">Ver planos</a>
+          <a href="daschboard.html" class="el-btn-hero-secondary">Voltar ao dashboard</a>
+        </div>
+      </div>
+
+      <aside class="el-planos-hero-card" aria-label="Resumo do modelo de cobrança">
+        <div class="el-logo-showcase">
+          <img src="imagens/Logo.PNG" alt="Logo EmpowerLearn" />
+          <strong>EmpowerLearn</strong>
+          <span>Planos para cada momento</span>
+        </div>
+        <div class="el-hero-mini-grid">
+          <div><strong>Professor</strong><span>usa grátis</span></div>
+          <div><strong>Busca inicial</strong><span>sem cobrança</span></div>
+          <div><strong>Planos</strong><span>mais recursos</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="el-planos-wrapper el-planos-wrapper-wide">
+      <section class="el-modelo-negocio el-modelo-negocio-wide">
+        <article>
+          <strong>Professor usa gratuitamente</strong>
+          <span>Crie seu perfil, apareça para contratantes e receba oportunidades sem pagar para estar na plataforma.</span>
+        </article>
+        <article>
+          <strong>Aluno e responsável começam sem cobrança</strong>
+          <span>Pesquise professores, favorite perfis e faça sua primeira contratação dentro do limite gratuito.</span>
+        </article>
+        <article>
+          <strong>Instituições ampliam conforme a demanda</strong>
+          <span>Quando houver mais vagas ou contratações recorrentes, escolha um plano com mais limites e organização.</span>
+        </article>
+      </section>
+
+      <section class="el-planos-section-title">
+        <p class="el-eyebrow">Planos para cada momento</p>
+        <h2>Escolha o acesso ideal para sua rotina</h2>
+        <p>O acesso gratuito já permite usar a plataforma. Os planos pagos ampliam contratações, favoritos, filtros e recursos para quem precisa de mais volume.</p>
+      </section>
+
+      <div id="el-alerta-planos" class="el-alerta"></div>
+      <section id="el-planos-grid" class="el-planos-grid el-planos-grid-wide"></section>
+
+      <section class="el-pagamento-info">
+        <article>
+          <span class="el-info-icon">💳</span>
+          <h3>Pagamento seguro e simples</h3>
+          <p>Ao escolher um plano pago, você é direcionado para uma página segura de pagamento e retorna automaticamente para a EmpowerLearn.</p>
+        </article>
+        <article>
+          <span class="el-info-icon">✅</span>
+          <h3>Comece sem compromisso</h3>
+          <p>O plano gratuito permite conhecer a plataforma, testar a busca e iniciar o uso sem informar dados de pagamento.</p>
+        </article>
+        <article>
+          <span class="el-info-icon">🧩</span>
+          <h3>Pensado para crescer com você</h3>
+          <p>Alunos, responsáveis e instituições podem começar simples e ampliar o acesso conforme a necessidade aumentar.</p>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <footer class="el-pay-footer">
+    <strong>EmpowerLearn</strong>
+    <span>© 2026 EmpowerLearn. Todos os direitos reservados.</span>
+    <small>Acesso flexível com integração Stripe em ambiente de teste.</small>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/pagamentos-stripe.js"></script>
+</body>
+</html>

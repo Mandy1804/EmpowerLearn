@@ -59,6 +59,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/painel-professor/**").permitAll()
                 .requestMatchers("/ws", "/ws/**").permitAll()
                 .requestMatchers("/api/notificacoes/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/planos/**").permitAll()
+                .requestMatchers("/api/pagamentos/stripe/**").permitAll()
                 // Tudo mais exige autenticação
                 .anyRequest().authenticated()
             )
