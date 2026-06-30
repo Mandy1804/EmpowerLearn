@@ -1,5 +1,5 @@
 (function () {
-  const API_BASE_URL = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL) || 'http://localhost:8080/api';
+  const API_BASE_URL = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL) || 'https://empowerlearn-production.up.railway.app/api';
 
   function obterUsuarioAtual() {
     return {
