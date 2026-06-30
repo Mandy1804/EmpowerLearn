@@ -43,23 +43,23 @@
     <div class="sidebar-top">
         <a href="daschboard-professor.html" class="sidebar-logo">EmpowerLearn</a>
         <nav class="sidebar-nav">
-            <a href="../EmpowerLearn/daschboard-professor.html" class="sidebar-link">
+            <a href="/daschboard-professor.html" class="sidebar-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 Home
             </a>
-            <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link">
+            <a href="/ver-perfil.html" class="sidebar-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 Consultar Perfil
             </a>
-            <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link">
+            <a href="/ver-curtidas.html" class="sidebar-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                 Ver Curtidas
             </a>
-            <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link">
+            <a href="/historico-perfis.html" class="sidebar-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 Histórico de Perfis
             </a>
-            <a href="../EmpowerLearn/minhas-contratacoes.html" class="sidebar-link">
+            <a href="/minhas-contratacoes.html" class="sidebar-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 Minhas Contratações
             </a>
@@ -101,8 +101,8 @@
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
     const userType = localStorage.getItem('userType');
-    const SERVER = 'http://localhost:8080';
-    const API = 'http://localhost:8080/api';
+    const SERVER = 'https://empowerlearn-production.up.railway.app';
+    const API = 'https://empowerlearn-production.up.railway.app/api';
 
     if (!userId || !token || userType !== 'professor') {
         window.location.href = 'login.html';

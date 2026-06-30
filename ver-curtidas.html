@@ -43,15 +43,15 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     Home
                 </a>
-                <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link" id="nav-perfil">
+                <a href="/ver-perfil.html" class="sidebar-link" id="nav-perfil">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Consultar Perfil
                 </a>
-                <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link active" id="nav-curtidas">
+                <a href="/ver-curtidas.html" class="sidebar-link active" id="nav-curtidas">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                     Ver Curtidas
                 </a>
-                <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link" id="nav-historico">
+                <a href="/historico-perfis.html" class="sidebar-link" id="nav-historico">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     Histórico de Perfis
                 </a>
@@ -112,7 +112,7 @@
             curtidos.forEach(prof => {
                 const idade = calcularIdade(prof.dataNascimento);
                 const avatar = prof.fotoUrl
-                    ? "<img src=\"http://localhost:8080" + prof.fotoUrl + "\" style=\"width:100%;height:100%;object-fit:cover;border-radius:50%;\">"
+                    ? "<img src=\"https://empowerlearn-production.up.railway.app" + prof.fotoUrl + "\" style=\"width:100%;height:100%;object-fit:cover;border-radius:50%;\">"
                     : (prof.nome ? prof.nome.charAt(0).toUpperCase() : "?");
 
                 const card = document.createElement("div");
@@ -145,7 +145,7 @@
             const idade = calcularIdade(prof.dataNascimento);
             const avatarEl = document.getElementById('pm-avatar');
             avatarEl.innerHTML = prof.fotoUrl
-                ? '<img src="http://localhost:8080' + prof.fotoUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
+                ? '<img src="https://empowerlearn-production.up.railway.app' + prof.fotoUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
                 : (prof.nome ? prof.nome.charAt(0).toUpperCase() : '?');
             document.getElementById('pm-nome').innerText = 'Prof. ' + (prof.nome || '');
             document.getElementById('pm-badge').innerText = prof.especialidade || 'N/A';
@@ -156,7 +156,7 @@
             document.getElementById('pm-did').innerText = prof.didatica || 'Não informada';
             document.getElementById('pm-bio').innerText = prof.biografia || 'Sem biografia.';
             const curr = document.getElementById('pm-curriculo');
-            if (prof.curriculoUrl) { curr.href = 'http://localhost:8080' + prof.curriculoUrl; curr.style.display = 'block'; } else { curr.style.display = 'none'; }
+            if (prof.curriculoUrl) { curr.href = 'https://empowerlearn-production.up.railway.app' + prof.curriculoUrl; curr.style.display = 'block'; } else { curr.style.display = 'none'; }
             overlay.style.display = 'flex';
         }
 
@@ -180,7 +180,7 @@
             const idade = calcularIdade(prof.dataNascimento);
             const avatarEl = document.getElementById('pm-avatar');
             avatarEl.innerHTML = prof.fotoUrl
-                ? '<img src="http://localhost:8080' + prof.fotoUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
+                ? '<img src="https://empowerlearn-production.up.railway.app' + prof.fotoUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
                 : (prof.nome ? prof.nome.charAt(0).toUpperCase() : '?');
             document.getElementById('pm-nome').innerText = 'Prof. ' + (prof.nome || '');
             document.getElementById('pm-badge').innerText = prof.especialidade || 'N/A';
@@ -191,7 +191,7 @@
             document.getElementById('pm-did').innerText = prof.didatica || 'Não informada';
             document.getElementById('pm-bio').innerText = prof.biografia || 'Sem biografia.';
             const curr = document.getElementById('pm-curriculo');
-            if (prof.curriculoUrl) { curr.href = 'http://localhost:8080' + prof.curriculoUrl; curr.style.display = 'block'; } else { curr.style.display = 'none'; }
+            if (prof.curriculoUrl) { curr.href = 'https://empowerlearn-production.up.railway.app' + prof.curriculoUrl; curr.style.display = 'block'; } else { curr.style.display = 'none'; }
             overlay.style.display = 'flex';
         }
 
@@ -247,15 +247,15 @@
             var homeLink = document.getElementById('nav-home');
             var logo = document.getElementById('nav-logo');
             var contratosLink = document.getElementById('nav-contratos');
-            var homeHref = ut === 'professor' ? '../EmpowerLearn/daschboard-professor.html' : '../EmpowerLearn/daschboard.html';
+            var homeHref = ut === 'professor' ? '/daschboard-professor.html' : '/daschboard.html';
             if (homeLink) homeLink.href = homeHref;
             if (logo) logo.href = homeHref;
             if (contratosLink) {
                 if (ut === 'professor') {
-                    contratosLink.href = '../EmpowerLearn/minhas-contratacoes.html';
+                    contratosLink.href = '/minhas-contratacoes.html';
                     contratosLink.lastChild.textContent = ' Minhas Contratações';
                 } else {
-                    contratosLink.href = '../EmpowerLearn/contratados.html';
+                    contratosLink.href = '/contratados.html';
                     contratosLink.lastChild.textContent = ' Contratados';
                 }
             }
