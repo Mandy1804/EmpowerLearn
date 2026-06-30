@@ -1,1 +1,18 @@
+
+# Arquivos locais / temporários
+.vscode/
 empowerlearn-api/target/
+empowerlearn-api/uploads/
+_backup_antes_correcao*/
+correcao_final_empowerlearn*/
+*.BACKUP_AGORA.html
+*.ERRADO.bak
+*.QUEBRADO.bak
+*.bak
+node_modules/
+empowerlearn-api/node_modules/
+_backup_antes_*/
+hotfix_*/
+restaurar_*/
+*.bak8081
+.env

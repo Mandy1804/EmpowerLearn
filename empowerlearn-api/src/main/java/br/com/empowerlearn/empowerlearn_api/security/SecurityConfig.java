@@ -57,6 +57,10 @@ public class SecurityConfig {
                 .requestMatchers("/uploads/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/feedbacks/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/painel-professor/**").permitAll()
+                .requestMatchers("/ws", "/ws/**").permitAll()
+                .requestMatchers("/api/notificacoes/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/planos/**").permitAll()
+                .requestMatchers("/api/pagamentos/stripe/**").permitAll()
                 // Tudo mais exige autenticação
                 .anyRequest().authenticated()
             )
@@ -68,17 +72,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of(
-            "http://127.0.0.1:5500",
-            "http://localhost:5500",
-            "https://empower-learn-nine.vercel.app",
-            "https://*.vercel.app",
-            "null"
-        ));
+        config.setAllowedOriginPatterns(List.of("http://127.0.0.1:5500", "http://localhost:5500", "http://localhost:5500", "null"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));
-        config.setAllowCredentials(false);
+        config.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

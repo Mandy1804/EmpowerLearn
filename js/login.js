@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('userId', userData.id);
             localStorage.setItem('userType', userData.tipo);
             localStorage.setItem('token', userData.token);
+            localStorage.setItem('userName', userData.nome || userData.nomeInstituicao || userData.email || email);
+            localStorage.setItem('email', userData.email || email);
             
             showMessage(messageDivLogin, 'success', 'Login bem-sucedido! Redirecionando...');
             

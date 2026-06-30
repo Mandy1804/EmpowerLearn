@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retorno do pagamento | EmpowerLearn</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/empowerlearn-pagamentos-stripe.css" />
+</head>
+<body class="el-pagamentos-page el-retorno-page">
+  <header>
+        <div class="container">
+            <div class="logo">
+                <img src="../EmpowerLearn/imagens/Logo.PNG" alt="EmpowerLearn Logo">
+                <h1>EmpowerLearn</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="../EmpowerLearn/index.html">Início</a></li>
+                    <li><a href="../EmpowerLearn/sobre.html">Sobre Nós</a></li>
+                    <li><a href="../EmpowerLearn/como-funcionna.html">Como Funciona</a></li>
+                    <li><a href="../EmpowerLearn/diferenciais.html">Diferenciais</a></li>
+                    <li><a href="../EmpowerLearn/contato.html">Contato</a></li>
+                    <li><a href="../EmpowerLearn/planos.html">Planos</a></li>
+                    <li><a href="../EmpowerLearn/login.html">Login</a></li>
+
+                </ul>
+                <div class="burger">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+  <main class="el-retorno-layout">
+    <section class="el-retorno-card el-retorno-card-glow">
+      <div class="el-retorno-logo">
+        <img src="imagens/Logo.PNG" alt="EmpowerLearn" />
+      </div>
+      <p class="el-eyebrow">Stripe Checkout</p>
+      <h1>Status da assinatura</h1>
+      <p id="el-status-pagamento">Consultando retorno do pagamento...</p>
+      <div class="el-retorno-actions">
+        <a href="planos.html" class="el-btn-secundario">Voltar aos planos</a>
+        <a href="daschboard.html" class="el-btn-primario">Ir para o dashboard</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/pagamentos-stripe.js"></script>
+</body>
+</html>

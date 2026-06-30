@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmpowerLearn - Notificações</title>
+  <link rel="stylesheet" href="../EmpowerLearn/css/style.css">
+  <link rel="stylesheet" href="../EmpowerLearn/css/empowerlearn-ajustes-v4.css">
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+  <style>
+    body { display:flex; min-height:100vh; background-color:var(--light-gray); margin:0; font-family:"Poppins", sans-serif; overflow-x:hidden; }
+    .sidebar { width:280px; background-color:var(--primary-purple); color:var(--white); padding:20px 0; box-shadow:2px 0 5px rgba(0,0,0,.1); display:flex; flex-direction:column; justify-content:space-between; position:fixed; left:0; top:0; height:100vh; z-index:900; }
+    .sidebar-logo { text-align:center; padding-bottom:30px; font-size:1.6em; font-weight:700; border-bottom:1px solid rgba(255,255,255,.2); margin:0 20px; display:block; color:var(--white); text-decoration:none; }
+    .sidebar-nav { flex-grow:1; padding:20px 0; }
+    .sidebar-link { display:flex; align-items:center; gap:12px; padding:15px 30px; text-decoration:none; color:var(--white); transition:background-color .3s; font-size:.95em; cursor:pointer; }
+    .sidebar-link:hover, .sidebar-link.active { background-color:var(--vibrant-purple); }
+    .sidebar-logout { border-top:1px solid rgba(255,255,255,.2); padding-top:20px; }
+    .main-content { flex-grow:1; padding:34px; background-color:var(--light-gray); margin-left:280px; width:calc(100% - 280px); }
+    .notifications-wrap { max-width:920px; margin:0 auto; }
+    .hero-notif { background:#fff; border-radius:18px; padding:34px 28px; text-align:center; box-shadow:0 6px 18px rgba(0,0,0,.08); border:1px solid rgba(0,0,0,.06); margin-bottom:24px; }
+    .hero-notif .icon { width:70px; height:70px; border-radius:50%; background:var(--primary-purple); color:#fff; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; font-size:2rem; }
+    .hero-notif h1 { color:var(--text-dark); margin:0 0 8px; font-size:2.1rem; }
+    .hero-notif p { color:var(--text-light); margin:0; }
+    .status-pill { display:inline-flex; align-items:center; gap:8px; margin-top:16px; padding:8px 14px; border-radius:999px; background:#F3EEFF; color:var(--primary-purple); font-weight:700; font-size:.9rem; }
+    .status-dot { width:9px; height:9px; border-radius:50%; background:#2ECC71; display:inline-block; }
+    .painel { background:#fff; border-radius:18px; padding:26px; box-shadow:0 6px 18px rgba(0,0,0,.08); border:1px solid rgba(0,0,0,.06); }
+    .painel-head { display:flex; align-items:center; justify-content:space-between; gap:16px; border-bottom:1px solid #eee; padding-bottom:16px; margin-bottom:18px; }
+    .painel-head h2 { color:var(--text-dark); margin:0; font-size:1.45rem; }
+    .btn-limpar { border:1px solid var(--primary-purple); color:var(--primary-purple); background:#fff; border-radius:10px; padding:8px 14px; cursor:pointer; font-weight:700; }
+    .empty-state { text-align:center; padding:42px 12px; color:var(--text-light); }
+    .empty-state .big { font-size:2.4rem; margin-bottom:8px; }
+    .notificacao { border-left:5px solid var(--primary-purple); background:#FAFAFF; border-radius:14px; padding:16px 18px; margin-bottom:14px; text-align:left; }
+    .notificacao h3 { margin:0 0 8px; color:var(--text-dark); }
+    .notificacao p { margin:0 0 8px; color:#555; line-height:1.45; }
+    .notificacao small { color:#8B5CF6; font-weight:600; }
+    @media (max-width:768px){ .sidebar{transform:translateX(-100%);} .main-content{margin-left:0;width:100%;padding:22px;} .painel-head{flex-direction:column;align-items:center;} }
+  </style>
+</head>
+<body>
+  <script src="js/config.js"></script>
+  <aside class="sidebar" id="sidebar-menu">
+    <div class="sidebar-top">
+      <a href="daschboard.html" class="sidebar-logo">EmpowerLearn</a>
+      <nav class="sidebar-nav">
+        <a href="daschboard.html" class="sidebar-link" id="nav-home">⌂ Home</a>
+        <a href="ver-perfil.html" class="sidebar-link" id="nav-perfil">♙ Consultar Perfil</a>
+        <a href="ver-curtidas.html" class="sidebar-link" id="nav-curtidas">♡ Ver Curtidas</a>
+        <a href="historico-perfis.html" class="sidebar-link" id="nav-historico">◷ Histórico de Perfis</a>
+        <a href="contratados.html" class="sidebar-link" id="nav-contratos">✓ Contratados</a>
+        <a href="minhas-contratacoes.html" class="sidebar-link" id="nav-minhas-contratacoes">✓ Minhas Contratações</a>
+        <a href="notificacoes.html" class="sidebar-link active" id="nav-notificacoes">♢ Notificações</a>
+      </nav>
+    </div>
+    <div class="sidebar-logout">
+      <a onclick="if(confirm('Sair?')){elLogout('login.html');}" class="sidebar-link" style="color:#E74C3C;cursor:pointer;">↪ Sair</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="notifications-wrap">
+      <section class="hero-notif">
+        <div class="icon">🔔</div>
+        <h1>Central de Notificações</h1>
+        <p>Veja avisos de contratações, contatos e atualizações importantes do sistema.</p>
+        <div class="status-pill"><span class="status-dot"></span><span id="status-text">Recebendo avisos em tempo real</span></div>
+      </section>
+
+      <section class="painel">
+        <div class="painel-head">
+          <h2>Notificações recebidas</h2>
+          <button class="btn-limpar" onclick="limparNotificacoes()">Limpar notificações</button>
+        </div>
+        <div id="lista-notificacoes"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="../EmpowerLearn/js/empowerlearn-v4-utils.js"></script>
+  <script>
+    const SERVER_BASE = (window.APP_CONFIG && window.APP_CONFIG.SERVER_BASE_URL) ? window.APP_CONFIG.SERVER_BASE_URL : 'http://localhost:8080';
+    const userType = (localStorage.getItem('userType') || 'professor').toLowerCase();
+    const userId = localStorage.getItem('userId') || '1';
+    const topicKey = userType + '-' + userId;
+    const storageKeys = [
+      'notificacoes_' + topicKey,
+      'notificacoes_' + userType + '_' + userId
+    ];
+    let stompClient = null;
+
+    function getNotificacoes() {
+      let todas = [];
+      storageKeys.forEach(function(chave) {
+        try {
+          const lista = JSON.parse(localStorage.getItem(chave) || '[]');
+          if (Array.isArray(lista)) todas = todas.concat(lista);
+        } catch(e) {}
+      });
+      const vistos = new Set();
+      return todas.filter(function(n) {
+        const k = (n.titulo || '') + '|' + (n.mensagem || '') + '|' + (n.data || '');
+        if (vistos.has(k)) return false;
+        vistos.add(k);
+        return true;
+      }).slice(0, 30);
+    }
+
+    function setNotificacoes(lista) {
+      storageKeys.forEach(function(chave) {
+        localStorage.setItem(chave, JSON.stringify(lista.slice(0, 30)));
+      });
+    }
+
+    function renderNotificacoes() {
+      const listaEl = document.getElementById('lista-notificacoes');
+      const lista = getNotificacoes();
+      if (!lista.length) {
+        listaEl.innerHTML = '<div class="empty-state"><div class="big">📭</div><strong>Nenhuma notificação recebida ainda.</strong><br><span>Quando alguém contratar seu perfil ou houver aviso do sistema, ele aparecerá aqui.</span></div>';
+        return;
+      }
+      listaEl.innerHTML = '';
+      lista.forEach(function(n) {
+        const div = document.createElement('div');
+        div.className = 'notificacao';
+        div.innerHTML = '<h3>' + (n.titulo || 'Nova notificação') + '</h3><p>' + (n.mensagem || '') + '</p><small>' + (n.data || '') + '</small>';
+        listaEl.appendChild(div);
+      });
+    }
+
+    function salvarNotificacao(n) {
+      const lista = getNotificacoes();
+      lista.unshift({ titulo: n.titulo || 'Nova notificação', mensagem: n.mensagem || '', data: new Date().toLocaleString('pt-BR') });
+      setNotificacoes(lista.slice(0, 30));
+      renderNotificacoes();
+    }
+
+    function limparNotificacoes() {
+      if (!confirm('Limpar notificações recebidas?')) return;
+      storageKeys.forEach(function(chave){ localStorage.removeItem(chave); });
+      renderNotificacoes();
+    }
+
+    function conectar() {
+      try {
+        const socket = new SockJS(SERVER_BASE + '/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.debug = null;
+        stompClient.connect({}, function() {
+          document.getElementById('status-text').innerText = 'Recebendo avisos em tempo real';
+          stompClient.subscribe('/topic/notificacoes/' + topicKey, function(message) {
+            const dados = JSON.parse(message.body);
+            salvarNotificacao(dados);
+          });
+        }, function() {
+          document.getElementById('status-text').innerText = 'Avisos salvos no sistema local';
+        });
+      } catch(e) {
+        document.getElementById('status-text').innerText = 'Avisos salvos no sistema local';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){ renderNotificacoes(); conectar(); });
+  </script>
+</body>
+</html>
