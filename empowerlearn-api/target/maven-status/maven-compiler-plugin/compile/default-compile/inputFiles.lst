@@ -4,6 +4,7 @@
 /Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/controller/FeedbackController.java
 /Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/controller/InstituicaoController.java
 /Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/controller/ProfessorController.java
+/Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/controller/ProfessorDashController.java
 /Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/dto/ProfessorResponseDTO.java
 /Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/model/Aluno.java
 /Users/lorenzogazola/Documents/GitHub/EmpowerLearn-/EmpowerLearn/empowerlearn-api/src/main/java/br/com/empowerlearn/empowerlearn_api/model/Feedback.java
