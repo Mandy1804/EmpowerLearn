@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EmpowerLearn - Painel do Usuário</title>
-    <link rel="stylesheet" href="../EmpowerLearn/css/style.css"> 
+    <link rel="stylesheet" href="/css/style.css"> 
 
     <style>
     
@@ -498,7 +498,7 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="../EmpowerLearn/css/empowerlearn-ajustes-v4.css">
+    <link rel="stylesheet" href="/css/empowerlearn-ajustes-v4.css">
 </head>
 <body>
 
@@ -509,32 +509,32 @@
             <a href="dashboard.html" class="sidebar-logo">EmpowerLearn</a>
             
             <nav class="sidebar-nav" id="sidebar-nav">
-                <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link">
+                <a href="/ver-perfil.html" class="sidebar-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Consultar Perfil
                 </a>
-                <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link">
+                <a href="/ver-curtidas.html" class="sidebar-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                     Ver Curtidas
                 </a>
-                <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link">
+                <a href="/historico-perfis.html" class="sidebar-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     Histórico de Perfis
                 </a>
-                <a href="../EmpowerLearn/contratados.html" class="sidebar-link" id="link-contratados" style="display:none;">
+                <a href="/contratados.html" class="sidebar-link" id="link-contratados" style="display:none;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     Contratados
                 </a>
-                <a href="../EmpowerLearn/minhas-contratacoes.html" class="sidebar-link" id="link-contratacoes-prof" style="display:none;">
+                <a href="/minhas-contratacoes.html" class="sidebar-link" id="link-contratacoes-prof" style="display:none;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
                     Minhas Contratações
                 </a>
             
-                <a href="../EmpowerLearn/notificacoes.html" class="sidebar-link" id="nav-notificacoes">
+                <a href="/notificacoes.html" class="sidebar-link" id="nav-notificacoes">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                     Notificações
                 </a>
-                <a href="../EmpowerLearn/planos.html" class="sidebar-link" id="nav-planos-assinatura">
+                <a href="/planos.html" class="sidebar-link" id="nav-planos-assinatura">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M7 15h.01M11 15h2"/></svg>
                     Planos e Assinatura
                 </a>
@@ -692,7 +692,7 @@
     </div>
 
     <script>
-        const API_URL = 'http://localhost:8080/api/professores';
+        const API_URL = 'https://empowerlearn-production.up.railway.app/api/professores';
         const userType = localStorage.getItem('userType');
 
         function getStorageKey(nome) {
@@ -766,7 +766,7 @@
 
                 const idade = calcularIdade(prof.dataNascimento);
                 const avatarConteudo = prof.fotoUrl
-                    ? `<img src="http://localhost:8080${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+                    ? `<img src="https://empowerlearn-production.up.railway.app${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
                     : (prof.nome ? prof.nome.charAt(0).toUpperCase() : '?');
 
                 card.innerHTML = `
@@ -782,7 +782,7 @@
                     </div>
                 `;
                 // Carrega estrelas do card
-                fetch('http://localhost:8080/api/feedbacks/professor/' + prof.id)
+                fetch('https://empowerlearn-production.up.railway.app/api/feedbacks/professor/' + prof.id)
                     .then(r => r.json())
                     .then(d => {
                         const el = document.getElementById('card-estrelas-' + prof.id);
@@ -811,7 +811,7 @@
             document.getElementById('modal-feedback-container').style.display = podeContratar && jaContratou ? 'block' : 'none';
             if (podeContratar && jaContratou) configurarEstrelasModal(prof.id);
             // Carrega estrelas no modal
-            fetch('http://localhost:8080/api/feedbacks/professor/' + prof.id)
+            fetch('https://empowerlearn-production.up.railway.app/api/feedbacks/professor/' + prof.id)
                 .then(r => r.json())
                 .then(d => {
                     const m = Math.round(d.media || 0);
@@ -824,7 +824,7 @@
             // Avatar
             const avatarEl = document.getElementById('modal-avatar');
             avatarEl.innerHTML = prof.fotoUrl
-                ? `<img src="http://localhost:8080${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+                ? `<img src="https://empowerlearn-production.up.railway.app${prof.fotoUrl}" alt="Foto de ${prof.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
                 : (prof.nome ? prof.nome.charAt(0).toUpperCase() : '?');
 
             document.getElementById('modal-nome').innerText = 'Prof. ' + (prof.nome || 'Nome Desconhecido');
@@ -861,7 +861,7 @@
 
             const curriculoBtn = document.getElementById('modal-curriculo-btn');
             if (prof.curriculoUrl) {
-                curriculoBtn.href = `http://localhost:8080${prof.curriculoUrl}`;
+                curriculoBtn.href = `https://empowerlearn-production.up.railway.app${prof.curriculoUrl}`;
                 curriculoBtn.style.display = 'block';
             } else {
                 curriculoBtn.style.display = 'none';
@@ -958,11 +958,11 @@
             const _userId = localStorage.getItem('userId');
             const _token = localStorage.getItem('token');
             if (!_userId || !_token) {
-                window.location.href = '../EmpowerLearn/login.html';
+                window.location.href = '/login.html';
                 return;
             }
             if (localStorage.getItem('userType') === 'professor') {
-                window.location.href = '../EmpowerLearn/daschboard-professor.html';
+                window.location.href = '/daschboard-professor.html';
                 return;
             }
             
@@ -1017,7 +1017,7 @@
                     localStorage.setItem(chave, JSON.stringify(lista.slice(0, 50)));
                 });
 
-                const apiBase = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL) ? window.APP_CONFIG.API_BASE_URL : 'http://localhost:8080/api';
+                const apiBase = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL) ? window.APP_CONFIG.API_BASE_URL : 'https://empowerlearn-production.up.railway.app/api';
                 fetch(apiBase + '/notificacoes/enviar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1110,6 +1110,6 @@
             }
         });
     </script>
-    <script src="../EmpowerLearn/js/empowerlearn-v4-utils.js"></script>
+    <script src="/js/empowerlearn-v4-utils.js"></script>
 </body>
 </html>

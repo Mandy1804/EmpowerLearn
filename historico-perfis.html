@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EmpowerLearn - Historico</title>
-    <link rel="stylesheet" href="../EmpowerLearn/css/style.css"> 
+    <link rel="stylesheet" href="/css/style.css"> 
     <style>
         body { display: flex; min-height: 100vh; background-color: var(--light-gray); margin: 0; font-family: "Poppins", sans-serif; overflow-x: hidden; }
         .sidebar { width: 280px; background-color: var(--primary-purple); color: var(--white); padding: 20px 0; box-shadow: 2px 0 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; position: fixed; left: 0; top: 0; height: 100vh; z-index: 900; transition: transform 0.3s ease-in-out; }
@@ -29,7 +29,7 @@
         @media (max-width: 768px) { .menu-toggle { display: block; } .sidebar { width: 70%; transform: translateX(-100%); } .sidebar.active { transform: translateX(0); } .main-content { margin-left: 0; width: 100%; padding-top: 70px; } .history-item { flex-direction: column; align-items: flex-start; gap: 8px; } }
     </style>
 
-    <link rel="stylesheet" href="../EmpowerLearn/css/empowerlearn-ajustes-v4.css">
+    <link rel="stylesheet" href="/css/empowerlearn-ajustes-v4.css">
 </head>
 <body>
     <div class="menu-toggle" id="menu-toggle">&#9776;</div>
@@ -42,15 +42,15 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     Home
                 </a>
-                <a href="../EmpowerLearn/ver-perfil.html" class="sidebar-link" id="nav-perfil">
+                <a href="/ver-perfil.html" class="sidebar-link" id="nav-perfil">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Consultar Perfil
                 </a>
-                <a href="../EmpowerLearn/ver-curtidas.html" class="sidebar-link" id="nav-curtidas">
+                <a href="/ver-curtidas.html" class="sidebar-link" id="nav-curtidas">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                     Ver Curtidas
                 </a>
-                <a href="../EmpowerLearn/historico-perfis.html" class="sidebar-link active" id="nav-historico">
+                <a href="/historico-perfis.html" class="sidebar-link active" id="nav-historico">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     Histórico de Perfis
                 </a>
@@ -59,7 +59,7 @@
                     Contratados
                 </a>
             
-                <a href="../EmpowerLearn/notificacoes.html" class="sidebar-link" id="nav-notificacoes">
+                <a href="/notificacoes.html" class="sidebar-link" id="nav-notificacoes">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                     Notificações
                 </a>
@@ -124,7 +124,7 @@
             const overlay = document.getElementById('prof-modal-overlay');
             const avatarEl = document.getElementById('pm-avatar');
             avatarEl.innerHTML = item.fotoUrl
-                ? '<img src="http://localhost:8080' + item.fotoUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
+                ? '<img src="https://empowerlearn-production.up.railway.app' + item.fotoUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
                 : (item.nome ? item.nome.charAt(0).toUpperCase() : '?');
             document.getElementById('pm-nome').innerText = 'Prof. ' + (item.nome || '');
             document.getElementById('pm-badge').innerText = item.especialidade || 'N/A';
@@ -178,15 +178,15 @@
             var homeLink = document.getElementById('nav-home');
             var logo = document.getElementById('nav-logo');
             var contratosLink = document.getElementById('nav-contratos');
-            var homeHref = ut === 'professor' ? '../EmpowerLearn/daschboard-professor.html' : '../EmpowerLearn/daschboard.html';
+            var homeHref = ut === 'professor' ? '/daschboard-professor.html' : '/daschboard.html';
             if (homeLink) homeLink.href = homeHref;
             if (logo) logo.href = homeHref;
             if (contratosLink) {
                 if (ut === 'professor') {
-                    contratosLink.href = '../EmpowerLearn/minhas-contratacoes.html';
+                    contratosLink.href = '/minhas-contratacoes.html';
                     contratosLink.lastChild.textContent = ' Minhas Contratações';
                 } else {
-                    contratosLink.href = '../EmpowerLearn/contratados.html';
+                    contratosLink.href = '/contratados.html';
                     contratosLink.lastChild.textContent = ' Contratados';
                 }
             }
@@ -209,6 +209,6 @@
             }
         })();
     </script>
-    <script src="../EmpowerLearn/js/empowerlearn-v4-utils.js"></script>
+    <script src="/js/empowerlearn-v4-utils.js"></script>
 </body>
 </html>

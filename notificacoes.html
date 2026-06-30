@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EmpowerLearn - Notificações</title>
-  <link rel="stylesheet" href="../EmpowerLearn/css/style.css">
-  <link rel="stylesheet" href="../EmpowerLearn/css/empowerlearn-ajustes-v4.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/empowerlearn-ajustes-v4.css">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
   <style>
@@ -76,9 +76,9 @@
     </div>
   </main>
 
-  <script src="../EmpowerLearn/js/empowerlearn-v4-utils.js"></script>
+  <script src="/js/empowerlearn-v4-utils.js"></script>
   <script>
-    const SERVER_BASE = (window.APP_CONFIG && window.APP_CONFIG.SERVER_BASE_URL) ? window.APP_CONFIG.SERVER_BASE_URL : 'http://localhost:8080';
+    const SERVER_BASE = (window.APP_CONFIG && window.APP_CONFIG.SERVER_BASE_URL) ? window.APP_CONFIG.SERVER_BASE_URL : 'https://empowerlearn-production.up.railway.app';
     const userType = (localStorage.getItem('userType') || 'professor').toLowerCase();
     const userId = localStorage.getItem('userId') || '1';
     const topicKey = userType + '-' + userId;
